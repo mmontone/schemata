@@ -34,4 +34,7 @@
            #:attribute-parser
            #:attribute-formatter
            #:attribute-documentation
-           #:attribute-external-name))
+           #:attribute-external-name
+
+           #:serializable-class
+           #:serializable-class-schema))
