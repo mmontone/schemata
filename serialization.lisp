@@ -79,7 +79,9 @@
                                         :stream stream)
           (cond
             ((getf options :serializer)
-             (funcall (getf options :serializer) attribute-value))
+             (serialize (funcall (getf options :serializer) attribute-value stream) serializer stream))
+            ((getf options :formatter)
+             (serialize (funcall (getf options :formatter) attribute-value) serializer stream))
             ((keywordp attribute-type)
              (serialize-attribute-value attribute-type attribute-value stream serializer))
             ((symbolp attribute-type)
