@@ -1,7 +1,13 @@
 (defpackage :schemata.tests
-  (:use :cl :schemata :stefil :generic-serializer))
+  (:use :cl :schemata :stefil :generic-serializer)
+  (:export :run-tests))
 
 (in-package :schemata.tests)
+
+(stefil:defsuite* schemata)
+
+(defun run-tests ()
+  (schemata))
 
 (defparameter *schema*
   (schema
