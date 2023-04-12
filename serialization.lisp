@@ -22,31 +22,19 @@
                                     schema serializer input stream)
   (serialize-schema-list schema serializer input stream))
 
-(defmethod %%serialize-with-schema ((schema-type (eql :option))
+(defmethod %%serialize-with-schema ((schema-type (eql 'cl:list))
                                     schema serializer input stream)
-  (serialize-value serializer input stream))
+  (serialize-schema-list schema serializer input stream))
 
 (defmethod %%serialize-with-schema ((schema-type (eql :object))
                                     schema serializer input stream)
   (serialize-schema-object schema serializer input stream))
 
-(defmethod %%serialize-with-schema ((schema-type (eql :integer))
-                                    schema serializer input stream)
-  (serialize-value serializer input stream))
-
-(defmethod %%serialize-with-schema ((schema-type (eql :boolean))
-                                    schema serializer input stream)
-  (serialize-value serializer input stream))
-
-(defmethod %%serialize-with-schema ((schema-type (eql :string))
-                                    schema serializer input stream)
-  (serialize-value serializer input stream))
-
-(defmethod %%serialize-with-schema ((schema-type (eql :timestamp))
-                                    schema serializer input stream)
-  (serialize-value serializer input stream))
-
 (defmethod %%serialize-with-schema ((schema-type (eql :keyword))
+                                    schema serializer input stream)
+  (serialize-value serializer (string-downcase (string input)) stream))
+
+(defmethod %%serialize-with-schema ((schema-type (eql 'keyword))
                                     schema serializer input stream)
   (serialize-value serializer (string-downcase (string input)) stream))
 
@@ -59,12 +47,12 @@
                   :serializer serializer
                   :stream stream)
       (loop for attribute in attributes
-         do
-           (serialize-schema-attribute attribute serializer input stream)))))
+            do
+               (serialize-schema-attribute attribute serializer input stream)))))
 
 (defun serialize-schema-attribute (schema-attribute serializer input stream)
   (destructuring-bind
-        (attribute-name attribute-type &rest options)
+      (attribute-name attribute-type &rest options)
       schema-attribute
     (let* ((reader (symbol-function (or (getf options :reader)
                                         (getf options :accessor)
@@ -82,21 +70,19 @@
              (serialize (funcall (getf options :serializer) attribute-value stream) serializer stream))
             ((getf options :formatter)
              (serialize (funcall (getf options :formatter) attribute-value) serializer stream))
-            ((keywordp attribute-type)
-             (serialize-attribute-value attribute-type attribute-value stream serializer))
             ((symbolp attribute-type)
              ;; It is a schema reference or a serializable class reference
              (let ((attribute-schema (find-schema attribute-type nil)))
                (if attribute-schema
                    (%serialize-with-schema attribute-schema serializer attribute-value stream)
-                                        ; else, try with a serializable class reference
+                   ;; else, try with a serializable class reference
                    (let ((serializable-class (find-class attribute-type nil)))
                      (if (and serializable-class
                               (typep serializable-class 'serializable-class))
                          (%serialize-with-schema (serializable-class-schema serializable-class)
                                                  serializer attribute-value stream)
-                                        ; else
-                         (error "Could not resolve reference ~A when serializing" attribute-type))))))
+                         ;; else, try to serialize the attribute value
+                         (serialize-attribute-value attribute-type attribute-value stream serializer))))))
             ((listp attribute-type)
              (%serialize-with-schema attribute-type
                                      serializer
@@ -129,32 +115,33 @@
         ((keywordp list-type)
          ;; It is a primitive type like :string, :boolean, etc
          (loop for elem in (coerce input 'list)
-            do
-              (add-list-member "ITEM" elem
-                               :serializer serializer
-                               :stream stream)))
+               do
+                  (add-list-member "ITEM" elem
+                                   :serializer serializer
+                                   :stream stream)))
         ((symbolp list-type)
          ;; It is a reference to a schema like 'user-schema'
          (let ((schema (find-schema list-type)))
            (loop for elem in (coerce input 'list)
-              do
-                (with-list-member ("ITEM" :serializer serializer
-                                          :stream stream)
-                  (%serialize-with-schema schema serializer elem stream)))))
+                 do
+                    (with-list-member ("ITEM" :serializer serializer
+                                              :stream stream)
+                      (%serialize-with-schema schema serializer elem stream)))))
         ((listp list-type)
          ;; It is some compound type, like :object, :list, or :option
          (let ((schema list-type))
            (loop for elem in (coerce input 'list)
-              do
-                (with-list-member ("ITEM" :serializer serializer
-                                          :stream stream)
-                  (%serialize-with-schema schema serializer elem stream)))))))))
+                 do
+                    (with-list-member ("ITEM" :serializer serializer
+                                              :stream stream)
+                      (%serialize-with-schema schema serializer elem stream)))))))))
 
 ;; Unserialization
 
 ;; (object-unserializer '(:object user () (:unserializer unserialize-user)))
 
 (defun unserialize-with-schema (schema data &optional (format :json))
+  (declare (ignore format))
   (unserialize-schema-object schema data))
 
 (defun unserialize-schema-object (object input)
@@ -176,17 +163,17 @@ See: parse-api-input (function)"
 (defun unserialize-schema-object-to-class (object input class)
   (let ((instance (allocate-instance (find-class class))))
     (loop for attribute in (object-attributes object)
-       do (let ((attribute-input (assoc (string (attribute-name attribute))
-                                        input
-                                        :test #'equalp
-                                        :key #'string)))
-            (when (and (not attribute-input)
-                       (not (attribute-optional-p attribute)))
-              (validation-error "~A not provided" (attribute-name attribute)))
-            (let ((attribute-value (unserialize-schema-attribute attribute (cdr attribute-input))))
-              (setf (slot-value instance (or (attribute-option :slot attribute)
-                                             (attribute-name attribute)))
-                    attribute-value))))
+          do (let ((attribute-input (assoc (string (attribute-name attribute))
+                                           input
+                                           :test #'equalp
+                                           :key #'string)))
+               (when (and (not attribute-input)
+                          (not (attribute-optional-p attribute)))
+                 (validation-error "~A not provided" (attribute-name attribute)))
+               (let ((attribute-value (unserialize-schema-attribute attribute (cdr attribute-input))))
+                 (setf (slot-value instance (or (attribute-option :slot attribute)
+                                                (attribute-name attribute)))
+                       attribute-value))))
     (initialize-instance instance)
     instance))
 
@@ -215,9 +202,23 @@ See: parse-api-input (function)"
     (if (integerp input)
         input
         (parse-integer input)))
+  (:method ((type-name (eql 'cl:integer)) attribute input)
+    (if (integerp input)
+        input
+        (parse-integer input)))
   (:method ((type-name (eql :string)) type input)
     input)
+  (:method ((type-name (eql 'string)) type input)
+    input)
   (:method ((type-name (eql :boolean)) type input)
+    (if (stringp input)
+        (let ((true-strings (list "true" "t" "yes" "on"))
+              (false-strings (list "false" "f" "no" "off")))
+          (assert (member input (append true-strings false-strings) :test #'equalp)
+                  nil "Invalid boolean ~A" input)
+          (member input true-strings :test #'equalp))
+        (not (null input))))
+  (:method ((type-name (eql 'boolean)) type input)
     (if (stringp input)
         (let ((true-strings (list "true" "t" "yes" "on"))
               (false-strings (list "false" "f" "no" "off")))
@@ -230,8 +231,14 @@ See: parse-api-input (function)"
   (:method ((type-name (eql :list)) type input)
     (let ((list-type (second type)))
       (loop for elem in input
-         collect (unserialize-schema-attribute-value list-type elem))))
+            collect (unserialize-schema-attribute-value list-type elem))))
+  (:method ((type-name (eql 'cl:list)) type input)
+    (let ((list-type (second type)))
+      (loop for elem in input
+            collect (unserialize-schema-attribute-value list-type elem))))
   (:method ((type-name (eql :option)) type input)
+    input)
+  (:method ((type-name (eql 'cl:member)) type input)
     input)
   (:method ((type-name symbol) type input)
     ;; Assume a schema reference
