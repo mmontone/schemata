@@ -45,17 +45,17 @@ Args:
         (*signal-validation-errors* error-p)
         (*validation-errors-collection* nil))
     (let ((validation-error
-           (handler-bind ((validation-error
-                           (lambda (validation-error)
-                             (cond
-                               (collect-errors
-                                (push validation-error *validation-errors-collection*)
-                                (invoke-restart (find-restart 'continue)))
-                               ((not error-p)
-                                (return-from validate-with-schema validation-error))
-                               (t
-                                (error validation-error))))))
-             (schema-validate schema data))))
+            (handler-bind ((validation-error
+                             (lambda (validation-error)
+                               (cond
+                                 (collect-errors
+                                  (push validation-error *validation-errors-collection*)
+                                  (invoke-restart (find-restart 'continue)))
+                                 ((not error-p)
+                                  (return-from validate-with-schema validation-error))
+                                 (t
+                                  (error validation-error))))))
+              (schema-validate schema data))))
       (if collect-errors
           *validation-errors-collection*
           validation-error))))
@@ -66,9 +66,8 @@ Args:
 (defmethod schema-validate (schema data &optional attribute)
   ;; If present, the attribute-validator replaces completely the default schema validation. To avoid replacing it, but adding more validation use :add-validator
   (flet ((schema-validator ()
-           (let ((schema (or (and (symbolp schema) (not (keywordp schema))
-                                  (find-schema schema))
-                             schema)))
+           ;; The schema to use is either a defined a schema, or a schema discriminator (typespec, etc)
+           (let ((schema (or (and (symbolp schema) (find-schema schema nil)) schema)))
              (%schema-validate (schema-type schema) schema data attribute))))
     (if (and attribute (attribute-validator attribute))
 
@@ -104,28 +103,28 @@ Args:
 
   ;; Validate each attribute of object
   (loop
-     :for schema-attribute :in (object-attributes schema)
-     :for data-attribute := (assoc (string (attribute-name schema-attribute))
-                                   data
-                                   :test #'equalp
-                                   :key #'string)
-     :do
-     (cond
-       ((and (not data-attribute)
-             (not (attribute-optional-p schema-attribute)))
-        (let ((error-msg (or (attribute-option :attribute-required-message schema-attribute)
-                             (format nil "Attribute required: ~a"
-                                     (or (attribute-external-name schema-attribute)
-                                         (attribute-name schema-attribute))))))
-          (validation-error error-msg)))
-       ((not data-attribute)
-        ;; Nothing to validate
-        )
-       ((not (and (attribute-optional-p schema-attribute)
-                     (null data-attribute)))
-       (schema-validate (attribute-type schema-attribute)
-                        (cdr data-attribute)
-                        schema-attribute)))))
+    :for schema-attribute :in (object-attributes schema)
+    :for data-attribute := (assoc (string (attribute-name schema-attribute))
+                                  data
+                                  :test #'equalp
+                                  :key #'string)
+    :do
+       (cond
+         ((and (not data-attribute)
+               (not (attribute-optional-p schema-attribute)))
+          (let ((error-msg (or (attribute-option :attribute-required-message schema-attribute)
+                               (format nil "Attribute required: ~a"
+                                       (or (attribute-external-name schema-attribute)
+                                           (attribute-name schema-attribute))))))
+            (validation-error error-msg)))
+         ((not data-attribute)
+          ;; Nothing to validate
+          )
+         ((not (and (attribute-optional-p schema-attribute)
+                    (null data-attribute)))
+          (schema-validate (attribute-type schema-attribute)
+                           (cdr data-attribute)
+                           schema-attribute)))))
 
 (defmethod %schema-validate ((schema-type (eql :list)) schema data &optional attribute)
   (when (not (listp data))
