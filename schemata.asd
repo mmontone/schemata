@@ -6,7 +6,6 @@
   :serial t
   :depends-on (:alexandria
                :cl-json
-               :cxml
                :local-time
                :chronicity
                :net-telent-date
