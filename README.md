@@ -42,6 +42,7 @@ This library is used by CL-REST-SERVER for API serialization and validation.
 Then you can validate data using that schema, and serialize/unserialize data too.
 
 ## Functions
+
 ### attribute-external-name
 
 ```lisp
@@ -49,10 +50,6 @@ Then you can validate data using that schema, and serialize/unserialize data too
 ```
 
 Name of the field that is shown in error messages (and in serialization?)
-
-
-
-
 
 ### find-schema
 
@@ -62,10 +59,6 @@ Name of the field that is shown in error messages (and in serialization?)
 
 Find a schema definition by name
 
-
-
-
-
 ### object-class
 
 ```lisp
@@ -73,10 +66,6 @@ Find a schema definition by name
 ```
 
 Returns the CLOS class associated with an object. May be null.
-
-
-
-
 
 ### patch-with-schema
 
@@ -90,9 +79,6 @@ Useful for PATCH rest api operations implementations.
 DATA should be an association list.
 
 
-
-
-
 ### populate-with-schema
 
 ```lisp
@@ -102,10 +88,6 @@ DATA should be an association list.
 Populate CLOS objects from data + schema.
 Attributes members of EXCLUDE parameter are not populated.
 
-
-
-
-
 ### serializable-class-schema
 
 ```lisp
@@ -113,10 +95,6 @@ Attributes members of EXCLUDE parameter are not populated.
 ```
 
 Generate a schema using the serializable class meta info
-
-
-
-
 
 ### validate-with-schema
 
@@ -146,10 +124,6 @@ Args:
 ```
 
 Define a schema
-
-
-
-
 
 ## Generic-Functions
 ### parse-with-schema
