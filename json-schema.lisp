@@ -1,6 +1,7 @@
 (defpackage :schemata.json-schema
   (:use :cl :schemata)
-  (:export :json-schema
+  (:export
+   :json-schema
    :render-json-schema
    :schema-from-json-schema))
 
@@ -25,9 +26,9 @@
     (json:as-object-member ("properties")
       (json:with-object ()
         (loop for attribute in (object-attributes schema)
-           do
-             (json:as-object-member ((attribute-name attribute))
-               (render-json-schema (attribute-type attribute) attribute)))))
+              do
+                 (json:as-object-member ((attribute-name attribute))
+                   (render-json-schema (attribute-type attribute) attribute)))))
     (json:encode-object-member "description" (object-documentation schema))))
 
 
@@ -58,7 +59,7 @@
   (let ((required-props (access:access json-schema :required)))
     `(:object ,(access:access json-schema "title")
               ,(loop for prop in (alist (access:access json-schema "properties"))
-                  collect (parse-json-schema-object-property prop (member (car prop) required-props :test 'equalp)))
+                     collect (parse-json-schema-object-property prop (member (car prop) required-props :test 'equalp)))
               (:documentation ,(access:access json-schema :description)))))
 
 (defun parse-json-schema-object-property (prop &optional (required-p t))
@@ -89,7 +90,7 @@
         (list :validator (read-from-string (access:access (cdr prop) "x-validator"))))
     ,@(when (access:access (cdr prop) "x-add-validator")
         (list :add-validator (read-from-string (access:access (cdr prop) "x-add-validator"))))
-     
+
     :documentation ,(access:access (cdr prop) "description")))
 
 (defun parse-json-schema-boolean (json-schema)
