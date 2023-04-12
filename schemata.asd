@@ -18,4 +18,5 @@
                (:file "serialization")
                (:file "parsing")
                (:file "serializable-class")
-               (:file "schemata")))
+               (:file "schemata"))
+  :in-order-to ((asdf:test-op (asdf:test-op :schemata-tests))))
