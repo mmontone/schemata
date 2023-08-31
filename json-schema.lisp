@@ -44,6 +44,19 @@
     (intern (json::simplified-camel-case-to-lisp schema-name))))
 
 (defun schema-from-json-schema (json-schema)
+  "Create a SCHEMA from JSON-SCHEMA.
+
+IMPORTANT:
+JSON-SCHEMA is an association list obtained from CL-JSON:DECODE-JSON-FROM-SOURCE, with CL-JSON:*IDENTIFIER-NAME-TO-KEY* and CL-JSON:*JSON-IDENTIFIER-NAME-TO-LISP* bound to NIL.
+
+Example:
+
+    (schema-from-json-schema
+        (let ((cl-json:*identifier-name-to-key* 'identity)
+              (cl-json:*json-identifier-name-to-lisp* 'identity))
+            (json:decode-json-from-string json-schema-string)))
+ "
+  
   (if (access:access json-schema "$ref")
       (parse-json-schema-ref (access:access json-schema "$ref"))
       (case (alexandria:make-keyword (string-upcase (access:access json-schema "type")))
