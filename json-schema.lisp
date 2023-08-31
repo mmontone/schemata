@@ -16,8 +16,8 @@
 
 (defun render-json-schema (schema &optional attribute)
   (ecase (schema-type schema)
-    (:object (render-object-json-schema schema attribute))
-    (:list (render-array-json-schema schema attribute))
+    (object (render-object-json-schema schema attribute))
+    (list-of (render-array-json-schema schema attribute))
     (t (render-type-json-schema schema attribute))))
 
 (defun render-object-json-schema (schema attribute)
@@ -29,7 +29,7 @@
               do
                  (json:as-object-member ((attribute-name attribute))
                    (render-json-schema (attribute-type attribute) attribute)))))
-    (json:encode-object-member "description" (object-documentation schema))))
+    (json:encode-object-member "description" (schema-documentation schema))))
 
 
 ;; JSON schema parsing
@@ -70,17 +70,17 @@ Example:
 
 (defun parse-json-schema-object (json-schema)
   (let ((required-props (access:access json-schema :required)))
-    `(:object ,(access:access json-schema "title")
-              ,(loop for prop in (alist (access:access json-schema "properties"))
-                     collect (parse-json-schema-object-property prop (member (car prop) required-props :test 'equalp)))
-              (:documentation ,(access:access json-schema :description)))))
+    (eval `(schema (object ,(access:access json-schema "title")
+                           ,(loop for prop in (alist (access:access json-schema "properties"))
+                                  collect (parse-json-schema-object-property prop (member (car prop) required-props :test 'equalp)))
+                           (:documentation ,(access:access json-schema :description)))))))
 
 (defun parse-json-schema-object-property (prop &optional (required-p t))
   `(,(intern (json:camel-case-to-lisp (car prop)))
     ,(schema-from-json-schema (cdr prop))
     :external-name ,(car prop)
     ,@(when (not required-p)
-        (list :optional t))
+        (list :required nil))
     ,@(let ((default (access:access (cdr prop) "default")))
         (when default
           (list :default default)))
@@ -108,24 +108,24 @@ Example:
 
 (defun parse-json-schema-boolean (json-schema)
   (declare (ignore json-schema))
-  :boolean)
+  'boolean)
 
 (defun parse-json-schema-integer (json-schema)
   (declare (ignore json-schema))
-  :integer)
+  'integer)
 
 (defun parse-json-schema-string (json-schema)
   (cond
     ((equalp (access:access json-schema "format")
              "date")
-     :date)
+     'local-time:date)
     ((equalp (access:access json-schema "format")
              "date-time")
-     :datetime)
-    (t :string)))
+     'local-time:timestamp)
+    (t 'string)))
 
 (defun parse-json-schema-number (json-schema)
   (alexandria:make-keyword (string-upcase (access:access json-schema :format))))
 
 (defun parse-json-schema-array (json-schema)
-  `(:list ,(schema-from-json-schema (access:accesses json-schema "items"))))
+  `(list-of ,(schema-from-json-schema (access:accesses json-schema "items"))))
