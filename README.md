@@ -8,38 +8,46 @@ This library is used by CL-REST-SERVER for API serialization and validation.
 
 ```lisp
 (schemata:define-schema customer
-    (:object "customer"
-             ((id :string :external-name "id" :accessor
+    (object "customer"
+             ((id string :external-name "id" :accessor
                   customer-id :documentation "customer id")
-              (number :string :external-name "number" :optional t
+              (number string :external-name "number" :required nil
                               :accessor customer-nr :documentation
                       "customer number")
-              (name :string :external-name "name" :accessor
+              (name string :external-name "name" :accessor
                     customer-name :documentation "customer name")
-              (address-1 :string :external-name "address1"
-                                 :optional t :documentation
+              (address-1 string :external-name "address1"
+                                 :required nil :documentation
                          "customer first address")
-              (address-2 :string :external-name "address2"
-                                 :optional t :documentation
+              (address-2 string :external-name "address2"
+                                 :required nil :documentation
                          "customer second address")
-              (postal-code :string :external-name "postalcode"
-                                   :optional t :documentation
+              (postal-code string :external-name "postalcode"
+                                   :required nil :documentation
                            "postal code")
-              (postal-area :string :external-name "postalarea"
-                                   :optional t :documentation
+              (postal-area string :external-name "postalarea"
+                                   :required nil :documentation
                            "postal area")
-              (country :string :external-name "country" :optional
-                       t :documentation "country code")
-              (phone :string :external-name "phone" :optional t
+              (country string :external-name "country" :required nil 
+                       :documentation "country code")
+              (phone string :external-name "phone" :required nil
                              :documentation "phone")
-              (fax :string :external-name "fax" :optional t
+              (fax string :external-name "fax" :required nil
                            :documentation "fax")
-              (email :string :external-name "email" :optional t
+              (email string :external-name "email" :required nil
                              :documentation "email"))
              (:documentation "customer data fetched")))
 ```
 
 Then you can validate data using that schema, and serialize/unserialize data too.
+
+## Schema types
+
+### Object schema
+
+### List schema
+
+### Schema references
 
 ## Functions
 
