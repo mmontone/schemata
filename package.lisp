@@ -40,4 +40,9 @@
            #:attribute-external-name
 
            #:serializable-class
-           #:serializable-class-schema))
+           #:serializable-class-schema
+
+           #:object-schema
+           #:type-schema
+           #:attribute
+           #:schema-reference-schema))
