@@ -85,6 +85,9 @@ serialized when optional. Useful for treatment of special values, like :null in 
                      :accessor attribute-required-message
                      :initform nil
                      :type (or string null))
+   (default :initarg :default
+            :accessor attribute-default
+            :initform nil)
    (accessor :initarg :accessor
              :initform nil
              :accessor attribute-accessor)
