@@ -29,8 +29,7 @@ DATA should be an association list."
                                      (validation-error "Attribute not found: ~a" (car data-attribute)))
         :do
            (schema-validate (attribute-type schema-attribute)
-                            (cdr data-attribute)
-                            schema-attribute)
+                            (cdr data-attribute))
            (let ((attribute-writer (attribute-writer schema-attribute)))
              (funcall attribute-writer
                       (cdr data-attribute)

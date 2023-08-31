@@ -1,5 +1,5 @@
 (asdf:defsystem #:schemata
-  :description "Schemas validation, serialization and parsing for Common Lisp"
+  :description "Schemas validation, serialization and parsing for Common Lisp."
   :author "Mariano Montone <marianomontone@gmail.com>"
   :license  "MIT"
   :version "0.0.1"
@@ -10,12 +10,14 @@
                :chronicity
                :net-telent-date
                :access
-               :generic-serializer)
+               :generic-serializer
+               :trivial-types)
   :components ((:file "package")
                (:file "schema")
                (:file "validation")
-               (:file "serialization")
-               (:file "parsing")
                (:file "serializable-class")
+               (:file "serialization")
+               (:file "unserialization")
+               (:file "parsing")
                (:file "schemata"))
   :in-order-to ((asdf:test-op (asdf:test-op :schemata-tests))))

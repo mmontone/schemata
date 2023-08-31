@@ -1,7 +1,7 @@
 ;;;; package.lisp
 
 (defpackage #:schemata
-  (:use #:cl #:generic-serializer)
+  (:use #:cl)
   (:export #:serialize-with-schema
            #:find-schema
            #:schema
@@ -14,6 +14,9 @@
            #:unserialize-with-schema
            #:populate-with-schema
            #:patch-with-schema
+           #:object
+           #:ref
+           #:list-of
            #:object-name
            #:object-attributes
            #:object-options

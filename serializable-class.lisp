@@ -206,33 +206,35 @@
           (or (and (serialization-name serializable-class)
                    (first (serialization-name serializable-class)))
               (class-name serializable-class))))
-    (list :object serialization-name
-          (loop for slot in (closer-mop:class-slots serializable-class)
-                when (and (typep slot 'serializable-effective-slot-definition)
-                          (serializable-slot-p slot))
-                  collect
-                  (let ((serialization-name (or (serialization-name slot)
-                                                (closer-mop:slot-definition-name slot)))
-                        (serialization-accessor (serialization-accessor slot))
-                        (toggle-option (toggle-option slot))
-                        (serialization-type (serialization-type slot))
-                        (serialization-optional (serialization-optional slot)))
-                    `(,serialization-name
-                      ,serialization-type
-                      ,@(when serialization-accessor
-                          (list :accessor serialization-accessor))
-                      ,@(when toggle-option
-                          (list :toggle toggle-option))
-                      ,@(when serialization-optional
-                          (list :optional t))))))))
+    (eval
+     (list 'schema
+           (list 'object serialization-name
+                 (loop for slot in (closer-mop:class-slots serializable-class)
+                       when (and (typep slot 'serializable-effective-slot-definition)
+                                 (serializable-slot-p slot))
+                         collect
+                         (let ((serialization-name (or (serialization-name slot)
+                                                       (closer-mop:slot-definition-name slot)))
+                               (serialization-accessor (serialization-accessor slot))
+                               (toggle-option (toggle-option slot))
+                               (serialization-type (serialization-type slot))
+                               (serialization-optional (serialization-optional slot)))
+                           `(,serialization-name
+                             ,serialization-type
+                             ,@(when serialization-accessor
+                                 (list :accessor serialization-accessor))
+                             ,@(when toggle-option
+                                 (list :toggle toggle-option))
+                             ,@(when serialization-optional
+                                 (list :required nil))))))))))
 
 (defmethod generic-serializer::serialize ((object serializable-object)
-                                    &optional
-                                      (serializer generic-serializer::*serializer*)
-                                      (stream generic-serializer::*serializer-output*)
-                                    &rest args)
+                                          &optional
+                                            (serializer generic-serializer::*serializer*)
+                                            (stream generic-serializer::*serializer-output*)
+                                          &rest args)
   (declare (ignore args))
-  (serialize-with-schema (serializable-class-schema (class-of object))
-                         object
-                         serializer
-                         stream))
+  (%serialize-with-schema (serializable-class-schema (class-of object))
+                          serializer
+                          object
+                          stream))

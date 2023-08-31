@@ -1,5 +1,6 @@
 (defpackage :schemata.tests
-  (:use :cl :schemata :stefil :generic-serializer)
+  (:use :cl :schemata :stefil)
+  (:local-nicknames (:gs :generic-serializer))
   (:export :run-tests))
 
 (in-package :schemata.tests)
@@ -11,44 +12,43 @@
 
 (defparameter *schema*
   (schema
-   (:object user
-            ((id :integer)
-             (realname :string)
-             (age :integer :optional t)
-             (sex (:option :male :female))
-             (best-friend (:object user
-                                   ((id :integer)
-                                    (realname :string))))
-             (groups (:list (:object group
-                                     ((id :integer)
-                                      (name :string))))
-                     :optional t)))))
+   (object user
+           ((id integer)
+            (realname string)
+            (age integer :required nil)
+            (sex (member :male :female))
+            (best-friend (object user
+                                 ((id integer)
+                                  (realname string))))
+            (groups (list-of (object group
+                                     ((id integer)
+                                      (name string))))
+                    :required nil)))))
 
 (define-schema user-schema
-    (:object user
-             ((id :integer :accessor id)
-              (realname :string)
-              (age :integer :optional t)
-              (best-friend user-schema
-                           :optional t)
-              (groups (:list group-schema)
-                      :optional t
-                      :switch :include-user-groups))
-             (:class user)))
+    (object user
+            ((id integer :accessor id)
+             (realname string)
+             (age integer :required nil)
+             (best-friend (schema user-schema)
+                          :required nil)
+             (groups (list-of (schema group-schema))
+                     :required nil))
+            (:class user)))
 
 (define-schema minimal-user-schema
-    (:object user
-             ((id :integer)
-              (realname :string))))
+    (object user
+            ((id integer)
+             (realname string))))
 
 (define-schema group-schema
-    (:object group
-             ((id :integer)
-              (name :string)
-              (users (:list user-schema)
-                     :optional t
-                     :switch :include-group-users))
-             (:class group)))
+    (object group
+            ((id integer)
+             (name string)
+             (users (list-of user-schema)
+                    :required nil
+                    ))
+            (:class group)))
 
 (defclass user ()
   ((id :initarg :id
@@ -96,67 +96,67 @@
                                              )))
 
 (deftest basic-json-schema-serialization-test ()
-    (let ((user (make-instance 'user
-                               :realname "Mariano"
-                               :id 2
-                               :age 30
-                               :groups (list (make-instance 'group
-                                                            :name "My group"
-                                                            :id 3))
-                               :best-friend (make-instance 'user
-                                                           :id 3
-                                                           :realname "Fernando"
-                                                           :age 31))))
-      (let ((json
-              (with-output-to-string (s)
-                (with-serializer-output s
-                  (with-serializer :json
-                    (serialize-with-schema
-                     *schema* user))))))
-        (finishes (json:decode-json-from-string json)))))
+  (let ((user (make-instance 'user
+                             :realname "Mariano"
+                             :id 2
+                             :age 30
+                             :groups (list (make-instance 'group
+                                                          :name "My group"
+                                                          :id 3))
+                             :best-friend (make-instance 'user
+                                                         :id 3
+                                                         :realname "Fernando"
+                                                         :age 31))))
+    (let ((json
+            (with-output-to-string (s)
+              (gs:with-serializer-output s
+                (gs:with-serializer :json
+                  (serialize-with-schema
+                   *schema* user))))))
+      (finishes (json:decode-json-from-string json)))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :json
+  (gs:with-serializer-output s
+    (gs:with-serializer :json
       (serialize-with-schema
        (find-schema 'user-schema) *user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :json
+  (gs:with-serializer-output s
+    (gs:with-serializer :json
       (serialize-with-schema
        (find-schema 'minimal-user-schema) *user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :xml
+  (gs:with-serializer-output s
+    (gs:with-serializer :xml
       (serialize-with-schema
        *schema* *user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :xml
+  (gs:with-serializer-output s
+    (gs:with-serializer :xml
       (serialize-with-schema
        (find-schema 'user-schema) *user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :xml
+  (gs:with-serializer-output s
+    (gs:with-serializer :xml
       (serialize-with-schema
        (find-schema 'minimal-user-schema) *user*))))
 
 #+fails(deftest parse-api-input-test ()
-           (let ((input-1 "{\"id\":2,\"realname\":\"Mariano\",\"age\":30,\"bestFriend\":{\"id\":3,\"realname\":\"Fernando\"},\"groups\":[{\"id\":3,\"name\":\"My group\"}]}")
-                 (input-2 "<user><id>2</id><realname>Mariano</realname><age>30</age><best-friend><user><id>3</id><realname>Fernando</realname></user></best-friend><groups><group><id>3</id><name>My group</name></group></groups></user>")
-                 (input-3 "(user ((id . 2) (realname . \"Mariano\") (age . 30) (best-friend . ((id . 3) (realname . \"Fernando\"))) (groups . ((group ((id . 3) (name . \"My group\")))))))"))
-             (let ((parsed-input-1 (rest-server::parse-api-input :json input-1))
-                   (parsed-input-2 (rest-server::parse-api-input :xml input-2))
-                   (parsed-input-3 (rest-server::parse-api-input :sexp input-3)))
-               (is (and
-                    (equalp (prin1-to-string parsed-input-1)
-                            (prin1-to-string parsed-input-2))
-                    (equalp (prin1-to-string parsed-input-2)
-                            (prin1-to-string parsed-input-3)))))))
+         (let ((input-1 "{\"id\":2,\"realname\":\"Mariano\",\"age\":30,\"bestFriend\":{\"id\":3,\"realname\":\"Fernando\"},\"groups\":[{\"id\":3,\"name\":\"My group\"}]}")
+               (input-2 "<user><id>2</id><realname>Mariano</realname><age>30</age><best-friend><user><id>3</id><realname>Fernando</realname></user></best-friend><groups><group><id>3</id><name>My group</name></group></groups></user>")
+               (input-3 "(user ((id . 2) (realname . \"Mariano\") (age . 30) (best-friend . ((id . 3) (realname . \"Fernando\"))) (groups . ((group ((id . 3) (name . \"My group\")))))))"))
+           (let ((parsed-input-1 (rest-server::parse-api-input :json input-1))
+                 (parsed-input-2 (rest-server::parse-api-input :xml input-2))
+                 (parsed-input-3 (rest-server::parse-api-input :sexp input-3)))
+             (is (and
+                  (equalp (prin1-to-string parsed-input-1)
+                          (prin1-to-string parsed-input-2))
+                  (equalp (prin1-to-string parsed-input-2)
+                          (prin1-to-string parsed-input-3)))))))
 
 ;; MOP
 
@@ -164,33 +164,33 @@
   ((id :initarg :id
        :accessor id
        :serialize t
-       :serialization-type :integer)
+       :serialization-type integer)
    (realname :initarg :realname
              :accessor realname
              :initform (error "Provide the realname")
-             :serialization-type :string)
+             :serialization-type string)
    (age :initarg :age
         :accessor age
         :initform (error "Provide the age")
-        :serialization-type :integer)
+        :serialization-type integer)
    (groups :initarg :groups
            :accessor groups
            :initform nil
-           :serialization-type (:list group-schema))
+           :serialization-type (list-of (schema group-schema)))
    (best-friend :initarg :best-friend
                 :accessor best-friend
                 :initform nil
-                :serialization-type user-schema
+                :serialization-type (schema user-schema)
                 :serialization-optional t)
    (another-friend :initarg :another-friend
                    :accessor another-friend
                    :initform nil
-                   :serialization-type serializable-user
+                   :serialization-type (schema serializable-user)
                    :serialization-optional t)
    (hobbies :initarg :hobbies
             :accessor hobbies
             :serialize t
-            :serialization-type (:list :string)
+            :serialization-type (list-of string)
             :initform nil
             :serialization-optional t))
   (:metaclass schemata:serializable-class)
@@ -220,51 +220,50 @@
                  :hobbies (list "reading" "swimming")))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :json
+  (gs:with-serializer-output s
+    (gs:with-serializer :json
       (serialize-with-schema
        (serializable-class-schema
         (find-class 'serializable-user))
        *serializable-user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :json
-      (serialize *serializable-user*))))
+  (gs:with-serializer-output s
+    (gs:with-serializer :json
+      (gs:serialize *serializable-user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :xml
+  (gs:with-serializer-output s
+    (gs:with-serializer :xml
       (serialize-with-schema
        (serializable-class-schema
         (find-class 'serializable-user))
        *serializable-user*))))
 
 (with-output-to-string (s)
-  (with-serializer-output s
-    (with-serializer :xml
-      (serialize *serializable-user*))))
-
-
+  (gs:with-serializer-output s
+    (gs:with-serializer :xml
+      (gs:serialize *serializable-user*))))
 
 ;; Unserialization
 
 (let ((data
         (with-output-to-string (s)
-          (with-serializer-output s
-            (with-serializer :json
+          (gs:with-serializer-output s
+            (gs:with-serializer :json
               (serialize-with-schema
                (find-schema 'user-schema) *user*))))))
   (unserialize-with-schema
    (find-schema 'user-schema)
-   (json:decode-json-from-string data)))
+   (json:decode-json-from-string data)
+   :json))
 
 ;; Parsing
 
 (let ((data
         (with-output-to-string (s)
-          (with-serializer-output s
-            (with-serializer :json
+          (gs:with-serializer-output s
+            (gs:with-serializer :json
               (serialize-with-schema
                (find-schema 'user-schema) *user*))))))
   (parse-with-schema
@@ -275,12 +274,12 @@
 
 (deftest schema-parsing-validation-test ()
 
-    ;; Fails
-    (signals validation-error
-      (let ((data '((id . 22))))
-        (parse-with-schema
-         (find-schema 'user-schema)
-         data)))
+  ;; Fails
+  (signals validation-error
+    (let ((data '((id . 22))))
+      (parse-with-schema
+       (find-schema 'user-schema)
+       data)))
 
   ;; Ok
   (finishes
@@ -329,33 +328,33 @@
 
 (deftest schema-unserialization-validation-test ()
 
-    ;; Fails
-    (signals validation-error
-      (let ((data '((id . 22))))
-        (unserialize-with-schema
-         (find-schema 'user-schema)
-         data)))
+  ;; Fails
+  (signals validation-error
+    (let ((data '((id . 22))))
+      (unserialize-with-schema
+       (find-schema 'user-schema)
+       data :json)))
 
   ;; Ok
   (finishes
     (let ((data '((id . 22) (realname . "asdf"))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data)))
+       data :json)))
 
   ;; Ok
   (finishes
     (let ((data '((id . 22) (realname . "asdf") (age . "23"))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data)))
+       data :json)))
 
   ;; Ok
   (finishes
     (let ((data '((id . 22) (realname . "asdf") (age . 454))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data)))
+       data :json)))
 
   ;; Fails
   #+fails(signals validation-error
@@ -363,7 +362,7 @@
                          (best-friend . 33))))
              (rest-server::unserialize-with-schema
               (find-schema 'user-schema)
-              data)))
+              data :json)))
 
   ;; Fails
   (signals validation-error
@@ -371,7 +370,7 @@
                   (best-friend . ((id . 34))))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data)))
+       data :json)))
 
   ;; Ok
   (finishes
@@ -379,7 +378,7 @@
                   (best-friend . ((id . 34) (realname . "dfdf"))))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data))))
+       data :json))))
 
 (deftest validate-with-schema-test ()
   (signals validation-error

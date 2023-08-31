@@ -12,16 +12,164 @@ serialized when optional. Useful for treatment of special values, like :null in 
   (member value *null-values*))
 
 (defun register-schema (name definition)
+  "Register schema under NAME."
   (setf (gethash name *schemas*)
         definition))
 
 (defmacro define-schema (name schema)
   "Define a schema"
-  `(register-schema ',name
-                    (schema ,schema)))
+  `(register-schema ',name (schema ,schema)))
 
 (defmacro schema (schema-def)
-  `(quote ,schema-def))
+  "Wrapper macro for schema definitions."
+  `(parse-schema ',schema-def))
+
+(defclass schema ()
+  ((documentation :initarg :documentation
+                  :accessor schema-documentation
+                  :initform nil)))
+
+(defclass schema-reference-schema (schema)
+  ((name :initarg :schema-name
+         :accessor schema-name
+         :type symbol)))
+
+(defun referenced-schema (schema)
+  (find-schema (schema-name schema)))
+
+(defclass type-schema (schema)
+  ((type :initarg :type
+         :accessor schema-type)))
+
+(defclass list-schema (schema)
+  ((elements-schema :initarg :elements-schema
+                    :accessor elements-schema
+                    :type (not null)
+                    :documentation "Schema of the elements of the list")))
+
+(defclass object-schema (schema)
+  ((name :initarg :name
+         :accessor object-name
+         :type (or string symbol))
+   (attributes :initarg :attributes
+               :accessor object-attributes
+               :type list
+               :initform nil)
+   (class :initarg :class
+          :accessor object-class
+          :initform nil)
+   (ignore-unknown-attributes
+    :initarg :ignore-unknown-attributes
+    :accessor ignore-unknown-attributes
+    :initform nil
+    :type boolean)
+   (serializer :initarg :serializer
+               :accessor object-serializer
+               :initform nil)
+   (unserializer :initarg :unserializer
+                 :accessor object-unserializer
+                 :initform nil)))
+
+(defclass attribute (schema)
+  ((name :initarg :name
+         :type symbol
+         :accessor attribute-name)
+   (type :initarg :type
+         :accessor attribute-type
+         :type schema)
+   (required :initarg :required
+             :accessor attribute-required-p
+             :initform t
+             :type boolean)
+   (required-message :initarg :required-message
+                     :accessor attribute-required-message
+                     :initform nil
+                     :type (or string null))
+   (accessor :initarg :accessor
+             :initform nil
+             :accessor attribute-accessor)
+   (writer :initarg :writer
+           :initform nil)
+   (reader :initarg :reader
+           :initform nil)
+   (validator :initarg :validator
+              :accessor attribute-validator
+              :initform nil)
+   (add-validator :initarg :add-validator
+                  :accessor attribute-add-validator
+                  :initform nil)
+   (parser :initarg :parser
+           :accessor attribute-parser
+           :initform nil)
+   (formatter :initarg :formatter
+              :accessor attribute-formatter
+              :initform nil)
+   (external-name :initarg :external-name
+                  :accessor attribute-external-name
+                  :type (or string null)
+                  :initform nil)
+   (serializer :initarg :serializer
+               :accessor attribute-serializer
+               :initform nil)
+   (unserializer :initarg :unserializer
+                 :accessor attribute-unserializer
+                 :initform nil)
+   (slot :initarg :slot
+         :accessor attribute-slot
+         :initform nil
+         :type (or null symbol))))
+
+(defun attribute-optional-p (attribute)
+  (not (attribute-required-p attribute)))
+
+(defun parse-schema (schema)
+  (cond
+    ((listp schema)
+     (parse-schema-type (car schema) schema))
+
+    ((find-schema schema nil)
+     (make-instance 'schema-reference-schema :schema-name schema))
+    ((trivial-types:type-specifier-p schema)
+     (make-instance 'type-schema :type schema))
+    (t (error "Cannot parse schema: ~S" schema))))
+
+(defgeneric parse-schema-type (schema-type schema))
+
+(defmethod parse-schema-type ((schema-type (eql 'object)) schema)
+  (destructuring-bind (name attributes &optional options)
+      (rest schema)
+    (apply #'make-instance 'object-schema
+           :name name
+           :attributes (mapcar #'parse-attribute attributes)
+           options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'list-of)) schema)
+  (destructuring-bind (elements-schema &rest args)
+      (rest schema)
+    (apply #'make-instance 'list-schema
+           :elements-schema (parse-schema elements-schema)
+           args)))
+
+(defmethod parse-schema-type ((schema-type (eql 'schema)) schema)
+  (make-instance 'schema-reference-schema :schema-name (cadr schema)))
+
+(defmethod parse-schema-type ((schema-type (eql 'ref)) schema)
+  (make-instance 'schema-reference-schema :schema-name (cadr schema)))
+
+(defmethod parse-schema-type ((schema-type t) schema)
+  "If the other cases fail, just create a TYPE-SCHEMA."
+  (assert (trivial-types:type-specifier-p schema)
+          nil
+          "Not a type specifier: ~s" schema)
+  (make-instance 'type-schema :type schema))
+
+(defun parse-attribute (attr)
+  (destructuring-bind (name type &rest options)
+      attr
+    (apply #'make-instance 'attribute
+           :name name
+           :type (parse-schema type)
+           options)))
 
 (defun find-schema (name &optional (errorp t))
   "Find a schema definition by name"
@@ -33,43 +181,10 @@ serialized when optional. Useful for treatment of special values, like :null in 
             nil)
         schema)))
 
-(defun object-name (object)
-  (second object))
-
-(defun object-attributes (object)
-  (third object))
-
-(defun object-options (object)
-  (cdddr object))
-
-(defun object-option (option object)
-  (cadr (find option (object-options object) :key 'car)))
-
 (defun find-object-attribute (object attribute-name &key (error-p t))
-  (loop for attribute in (object-attributes object)
-        when (equalp (string (attribute-name attribute))
-                     (string attribute-name))
-          do (return-from find-object-attribute attribute))
-  (when error-p
-    (error "Attribute ~A not found in ~A" attribute-name object)))
-
-(defun object-documentation (object)
-  (object-option :documentation object))
-
-(defun object-class (object)
-  "Returns the CLOS class associated with an object. May be null."
-  (object-option :class object))
-
-(defun schema-type (schema)
-  (if (listp schema)
-      (first schema)
-      schema))
-
-(defun attribute-name (attribute)
-  (first attribute))
-
-(defun attribute-type (attribute)
-  (second attribute))
+  (or (find attribute-name (object-attributes object) :key #'attribute-name)
+      (when error-p
+        (error "Attribute ~A not found in ~A" attribute-name object))))
 
 (defun attribute-type-name (attribute)
   (let ((attribute-type (attribute-type attribute)))
@@ -77,27 +192,9 @@ serialized when optional. Useful for treatment of special values, like :null in 
         (first attribute-type)
         attribute-type)))
 
-(defun attribute-options (attribute)
-  (cddr attribute))
-
-(defun attribute-option (option attribute)
-  (getf (attribute-options attribute) option))
-
-(defun attribute-optional-p (attribute)
-  (attribute-option :optional attribute))
-
-(defun attribute-accessor (attribute)
-  (attribute-option :accessor attribute))
-
-(defun attribute-validator (attribute)
-  (attribute-option :validator attribute))
-
-(defun attribute-add-validator (attribute)
-  (attribute-option :add-validator attribute))
-
 (defun attribute-writer (attribute)
-  (or (and (attribute-option :writer attribute)
-           (alexandria:ensure-function (attribute-option :writer attribute)))
+  (or (and (slot-value attribute 'writer)
+           (alexandria:ensure-function (slot-value attribute 'writer)))
       (and (attribute-accessor attribute)
            (alexandria:ensure-function
             `(setf
@@ -107,22 +204,9 @@ serialized when optional. Useful for treatment of special values, like :null in 
 
 (defun attribute-reader (attribute)
   (or
-   (and (attribute-option :reader attribute)
-        (alexandria:ensure-function (attribute-option :reader attribute)))
+   (and (slot-value attribute 'reader)
+        (alexandria:ensure-function (slot-value attribute 'reader)))
    (and (attribute-accessor attribute)
         (alexandria:ensure-function (attribute-accessor attribute)))
    (lambda (obj)
      (access:access obj (attribute-name attribute)))))
-
-(defun attribute-parser (attribute)
-  (attribute-option :parser attribute))
-
-(defun attribute-formatter (attribute)
-  (attribute-option :formatter attribute))
-
-(defun attribute-documentation (attribute)
-  (attribute-option :documentation attribute))
-
-(defun attribute-external-name (attribute)
-  "Name of the field that is shown in error messages (and in serialization?)"
-  (attribute-option :external-name attribute))

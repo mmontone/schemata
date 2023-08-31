@@ -1,169 +1,67 @@
 (in-package :schemata)
 
-(defgeneric parse-with-schema (schema string-or-data &optional format)
+;; (intern (string (attribute-name schema-attribute)) :keyword)
+
+(defgeneric parse-with-schema (schema string-or-data )
   (:documentation "Parses the string to an association list using the schema"))
 
-(defmethod parse-with-schema ((schema symbol) string-or-data &optional (format :json))
-  (parse-with-schema (find-schema schema) string-or-data format))
+(defmethod parse-with-schema ((schema object-schema) input )
+  "Parses an schema object
 
-(defmethod parse-with-schema (schema data &optional (format :json))
-  (%parse-with-schema (schema-type schema)
-                      schema
-                      data))
+Args: - object (list) : An schema object
+      - input (assoc-list) : An association list with values.
+                             Probably obtained from parse-api-input.
 
-(defmethod %parse-with-schema ((schema-type (eql :object))
-                               schema data)
-  (if (null data)
-      data
-      (loop
-        for schema-attribute in (object-attributes schema)
-        for data-attribute = (assoc (string (attribute-name schema-attribute))
-                                    data
-                                    :test #'equalp
-                                    :key #'string)
-        appending
-        (cond
-          ;; Don't do validation here, only parsing
-          #+nil((and (not data-attribute)
-                     (not (attribute-optional-p schema-attribute)))
-                (validation-error "Attribute ~a not found in ~a"
-                                  (attribute-name schema-attribute)
-                                  data))
-          ((not data-attribute)
-           ;; don't add the attribute to the data in this case
-           ;; idea to think of: we could use the attribute default value if specified, instead
-           nil)
-          ((or (equalp (attribute-type schema-attribute) :boolean)
-               (not (null (cdr data-attribute))))
-           (list (cons (intern (string (attribute-name schema-attribute)) :keyword)
-                       (parse-schema-attribute schema-attribute (cdr data-attribute)))))))))
+See: parse-api-input (function)"
 
-(defun parse-schema-attribute (schema-attribute value)
-  (let ((parsed-value (parse-schema-attribute-value (attribute-type schema-attribute) value)))
-    (if (attribute-parser schema-attribute)
-        (funcall (attribute-parser schema-attribute)
-                 parsed-value)
-        parsed-value)))
+  (loop for attribute in (object-attributes schema)
+        collect
+        (let* ((attribute-input (assoc (string (attribute-name attribute))
+                                      input
+                                      :test #'equalp
+                                      :key #'string))
+               (attribute-value (parse-schema-attribute attribute (cdr attribute-input))))
+          (cons (attribute-name attribute) attribute-value))))
 
-(defmethod %parse-with-schema ((schema-type (eql :list))
-                               schema data)
-  (let ((elem-schema (second schema)))
-    (flet ((parse-elem (elem)
-             (if (symbolp elem-schema)
-                 (parse-schema-attribute-value elem-schema elem)
-                 (parse-with-schema elem-schema elem))))
-      (loop for elem in data
-            collect (parse-elem elem)))))
+(defun parse-schema-attribute (attribute input )
+  (let ((parser (attribute-parser attribute)))
+    (if parser
+        (funcall parser)
+        (if (null input)
+            (when (not (attribute-optional-p attribute))
+              (validation-error
+               "Attribute ~A is not optional but value was not provided"
+               (attribute-name attribute)))
+                                        ;; else
+            (parse-with-schema (attribute-type attribute) input )))))
 
-(defmethod parse-schema-attribute-value ((type (eql :string)) data)
-  (string data))
+(defmethod parse-with-schema ((schema type-schema) data )
+  (parse-with-type (schema-type schema) data ))
 
-(defmethod parse-schema-attribute-value ((type (eql :boolean)) data)
-  (cond
-    ((or (eql data t)
-         (eql data nil))
-     data)
-    ((stringp data)
-     (cond
-       ((member data (list "true" "t" "yes" "on") :test #'equalp)
-        t)
-       ((member data (list "false" "f" "no" "off") :test #'equalp)
-        nil)
-       (t (validation-error "~A is not a boolean" data))))
-    (t (validation-error "~A is not a boolean" data))))
+(defmethod parse-with-schema ((schema schema-reference-schema) data )
+  (parse-with-schema (referenced-schema schema) data ))
 
-(defmethod parse-schema-attribute-value ((type (eql :integer)) data)
-  (cond
-    ((integerp data)
-     data)
-    ((stringp data)
-     (parse-integer data))
-    (t (validation-error "~A is not an integer" data))))
+(defmethod parse-with-schema ((schema list-schema) data )
+  (loop for elem in (the list data)
+        collect (parse-with-schema (elements-schema schema) elem )))
 
-(defmethod parse-schema-attribute-value ((type (eql :float)) data)
-  (cond
-    ((floatp data)
-     data)
-    ((stringp data)
-     (read-from-string data))
-    (t (validation-error "~A is not a float" data))))
-
-(defmethod parse-schema-attribute-value ((type (eql :timestamp)) data)
-  (or (ignore-errors (local-time:parse-timestring data :allow-missing-timezone-part t))
-      (chronicity:parse data)))
-
-(defmethod parse-schema-attribute-value ((type (eql :datetime)) data)
-  (or (ignore-errors (local-time:parse-timestring data :allow-missing-timezone-part t))
-      (chronicity:parse data)))
-
-(defmethod parse-schema-attribute-value ((type (eql :time)) data)
-  (or
-   (ignore-errors (local-time:parse-timestring
-                   data
-                   :allow-missing-date-part t
-                   :allow-missing-timezone-part t))
-   (chronicity:parse data)))
-
-(defmethod parse-schema-attribute-value ((type (eql :date)) data)
-  (or
-   (ignore-errors (local-time:parse-timestring
-                   data
-                   :allow-missing-time-part t
-                   :allow-missing-timezone-part t))
-   (chronicity:parse data)))
-
-(defmethod parse-schema-attribute-value ((type (eql :keyword)) data)
-  (intern (string-upcase data) :keyword))
-
-(defmethod parse-schema-attribute-value ((type symbol) data)
-  (let ((schema (find-schema type)))
-    (parse-with-schema schema data)))
-
-(defmethod parse-schema-attribute-value ((type cons) data)
-  (parse-with-schema type data))
-
-(defun parse-xml-with-schema (schema-or-name input)
-  (let ((schema (if (symbolp schema-or-name)
-                    (find-schema schema-or-name)
-                    schema-or-name)))
-
-    (ecase (schema-type schema)
-      (:list
-       (let ((items (third input)))
-         (loop for item in items
-               collect
-               (parse-xml-with-schema
-                (second schema) ;; the list type
-                item))))
-      (:object
-       (assert (equalp (alexandria:make-keyword (object-name schema))
-                       (alexandria:make-keyword (first input))) nil
-                       "~A is not a ~A" input (object-name schema))
-       (loop for attribute in (object-attributes schema)
-             appending (let ((input-attribute
-                               (find (symbol-name (attribute-name attribute))
-                                     (cddr input)
-                                     :key #'first
-                                     :test #'equalp)))
-                         (if input-attribute
-                             ;; The attrbute is present
-                             (list (cons (alexandria:make-keyword (first input-attribute))
-                                         (cond
-                                           ((listp (attribute-type attribute))
-                                            ;; It is a compound type (:list, :object, etc)
-                                            (parse-xml-with-schema
-                                             (second (attribute-type attribute)) ;; The compound object type
-                                             (third input-attribute) ;; The attribute value
-                                             ))
-                                           ((keywordp (attribute-type attribute))
-                                            ;; the attribute type is simple, parse the attribute value
-                                            (unserialize-schema-attribute-value
-                                             (attribute-type attribute)
-                                             (third input-attribute)))
-                                           ((symbolp (attribute-type attribute))
-                                            ;; assume a schema reference
-                                            (let ((attribute-schema (find-schema (attribute-type attribute))))
-                                              (parse-xml-with-schema
-                                               attribute-schema
-                                               (third input-attribute) ;; The attribute value
-                                               )))))))))))))
+(defgeneric parse-with-type (type input )
+  (:method (type input )
+    (assert (typep input type))
+    input)
+  (:method ((type (eql 'cl:integer)) input )
+    (if (integerp input)
+        input
+        (parse-integer input)))
+  (:method ((type (eql 'boolean)) input )
+    (if (stringp input)
+        (let ((true-strings (list "true" "t" "yes" "on"))
+              (false-strings (list "false" "f" "no" "off")))
+          (assert (member input (append true-strings false-strings) :test #'equalp)
+                  nil "Invalid boolean ~A" input)
+          (member input true-strings :test #'equalp))
+        (not (null input))))
+  (:method ((type (eql 'cl:keyword)) input )
+    (if (stringp input)
+        (intern (string-upcase input) :keyword)
+        (the keyword input))))
