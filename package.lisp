@@ -22,7 +22,7 @@
            #:object-options
            #:object-option
            #:find-object-attribute
-           #:object-documentation
+           #:schema-documentation
            #:object-class
            #:attribute-name
            #:attribute-type
