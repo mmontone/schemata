@@ -139,6 +139,9 @@ Args:
   (dolist (val data)
     (schema-validate (elements-schema schema) val)))
 
+(defmethod schema-validate ((schema schema-reference-schema) data)
+  (schema-validate (referenced-schema schema) data))
+
 (defmethod schema-type-validate ((schema-type (eql 'local-time:timestamp)) data)
   (unless
       (or (typep data 'local-time:timestamp)
