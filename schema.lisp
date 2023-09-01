@@ -34,6 +34,10 @@ serialized when optional. Useful for treatment of special values, like :null in 
          :accessor schema-name
          :type symbol)))
 
+(defmethod print-object ((object schema-reference-schema) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (princ (schema-name object) stream)))
+
 (defun referenced-schema (schema)
   (find-schema (schema-name schema)))
 
