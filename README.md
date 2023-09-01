@@ -117,6 +117,27 @@ SCHEMATA> (validate-with-schema *list-of-person* '((("names" . "Mariano")) (("na
 ; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "Attributes not part of schema: ~a" {1008CD3DD3}>.
 ```
 
+## SATISFIES-SCHEMA type
+
+Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA type.
+Schemas can be thought as types over data.
+Defined schemas can be checked using TYPEP and CHECK-TYPE with the type `(satisfies-schema schema-name)`.
+
+Example:
+
+```lisp
+SCHEMATA> (define-schema string-schema string)
+#<TYPE-SCHEMA STRING {10019DA8B3}>
+SCHEMATA> (typep "foo" '(satisfies-schema string-schema))
+T
+SCHEMATA> (typep 22 '(satisfies-schema string-schema))
+NIL
+SCHEMATA> (let ((x "foo"))
+            (check-type x (satisfies-schema string-schema))
+            x)
+"foo"
+```
+
 ## Functions
 
 ### attribute-external-name

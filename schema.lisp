@@ -16,13 +16,24 @@ serialized when optional. Useful for treatment of special values, like :null in 
   (setf (gethash name *schemas*)
         definition))
 
+(defun schema-validation-function (schema-name)
+  (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))
+
 (defmacro define-schema (name schema)
-  "Define a schema"
-  `(register-schema ',name (schema ,schema)))
+  "Register SCHEMA under NAME.
+The schema can then be accessed via FIND-SCHEMA."
+  `(progn
+     (defun ,(schema-validation-function name) (data)
+       (null (validate-with-schema (find-schema ',name) data :error-p nil)))
+     (register-schema ',name (schema ,schema))))
 
 (defmacro schema (schema-def)
   "Wrapper macro for schema definitions."
   `(parse-schema ',schema-def))
+
+(deftype satisfies-schema (schema-name)
+  "Common Lisp type for schemas."
+  `(satisfies ,(schema-validation-function schema-name)))
 
 (defclass schema ()
   ((documentation :initarg :documentation

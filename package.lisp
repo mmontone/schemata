@@ -45,4 +45,6 @@
            #:object-schema
            #:type-schema
            #:attribute
-           #:schema-reference-schema))
+           #:schema-reference-schema
+
+           #:satisfies-schema))
