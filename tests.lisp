@@ -290,7 +290,7 @@
        data)))
 
   ;; Fails
-  #+fails(signals validation-error
+  (signals validation-error
            (let ((data '((id . 22) (realname . "asdf") (age . "23")
                          (best-friend . 33))))
              (parse-with-schema
@@ -344,7 +344,7 @@
        data :json)))
 
   ;; Fails
-  #+fails(signals validation-error
+  (signals validation-error
            (let ((data '((id . 22) (realname . "asdf") (age . "23")
                          (best-friend . 33))))
              (unserialize-with-schema

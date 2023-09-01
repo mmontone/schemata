@@ -14,6 +14,9 @@ Args: - object (list) : An schema object
 
 See: parse-api-input (function)"
 
+  (unless (trivial-types:association-list-p input)
+    (validation-error "Not an object data: ~s" input))
+
   (loop for attribute in (object-attributes schema)
         collect
         (let* ((attribute-input (assoc (string (attribute-name attribute))

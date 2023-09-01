@@ -104,6 +104,9 @@ Args:
 (defmethod schema-validate ((schema object-schema) data)
   "Validate data using schema object. "
 
+  (unless (trivial-types:association-list-p data)
+    (validation-error "Not an object data: ~s" data))
+  
   ;; Check unknown attributes first
   (unless (or *ignore-unknown-object-attributes*
               (ignore-unknown-attributes schema))

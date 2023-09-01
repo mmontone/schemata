@@ -21,6 +21,8 @@ See: parse-api-input (function)"
       (t input))))
 
 (defun unserialize-schema-object-to-class (object input class format)
+  (unless (trivial-types:association-list-p input)
+    (validation-error "Not an object data: ~s" input))
   (let ((instance (allocate-instance (find-class class))))
     (loop for attribute in (object-attributes object)
           do (let ((attribute-input (assoc (string (attribute-name attribute))
