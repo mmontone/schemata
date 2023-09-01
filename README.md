@@ -48,8 +48,14 @@ Then you can validate data using that schema, and serialize/unserialize data too
 Schemas can be built from Common Lisp types:
 
 ```lisp
-SCHEMATA> (schema string)
-#<TYPE-SCHEMA STRING {10010ADF83}>
+SCHEMATA> (defparameter *s* (schema string))
+*S*
+SCHEMATA> *s*
+#<TYPE-SCHEMA STRING {1006FBBD13}>
+SCHEMATA> (validate-with-schema *s* "22")
+NIL
+SCHEMATA> (validate-with-schema *s* 22 :error-p nil)
+#<VALIDATION-ERROR "~s is not of type: ~a" {100152EB13}>
 ```
 
 ### Object schema
