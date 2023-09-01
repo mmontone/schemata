@@ -41,7 +41,8 @@
 
 (defun parse-json-schema-ref (ref)
   (let ((schema-name (car (last (split-sequence:split-sequence #\/ ref)))))
-    (intern (json::simplified-camel-case-to-lisp schema-name))))
+    (make-instance 'schema-reference-schema
+                   :schema-name (intern (json::simplified-camel-case-to-lisp schema-name)))))
 
 (defun schema-from-json-schema (json-schema)
   "Create a SCHEMA from JSON-SCHEMA.
