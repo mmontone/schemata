@@ -41,6 +41,10 @@ serialized when optional. Useful for treatment of special values, like :null in 
   ((type :initarg :type
          :accessor schema-type)))
 
+(defmethod print-object ((object type-schema) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (princ (schema-type object) stream)))
+
 (defclass list-schema (schema)
   ((elements-schema :initarg :elements-schema
                     :accessor elements-schema
