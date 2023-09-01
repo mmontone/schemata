@@ -8,6 +8,12 @@
 (define-condition validation-error (simple-error)
   ())
 
+(defmethod print-object ((validation-error validation-error) stream)
+  (print-unreadable-object (validation-error stream :type t :identity t)
+    (apply #'format stream
+            (simple-condition-format-control validation-error)
+            (simple-condition-format-arguments validation-error))))
+
 (define-condition validation-error-collection (validation-error)
   ((validation-errors :initarg :validation-errors
                       :initform (error "Provide the validation errors")
