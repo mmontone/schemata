@@ -94,23 +94,30 @@ serialized when optional. Useful for treatment of special values, like :null in 
             :initform nil)
    (accessor :initarg :accessor
              :initform nil
-             :accessor attribute-accessor)
+             :accessor attribute-accessor
+             :type (or null symbol))
    (writer :initarg :writer
-           :initform nil)
+           :initform nil
+           :type (or null trivial-types:function-designator))
    (reader :initarg :reader
-           :initform nil)
+           :initform nil
+           :type (or null trivial-types:function-designator))
    (validator :initarg :validator
               :accessor attribute-validator
-              :initform nil)
+              :initform nil
+              :type (or null trivial-types:function-designator))
    (add-validator :initarg :add-validator
                   :accessor attribute-add-validator
-                  :initform nil)
+                  :initform nil
+                  :type (or null trivial-types:function-designator))
    (parser :initarg :parser
            :accessor attribute-parser
-           :initform nil)
+           :initform nil
+           :type (or null trivial-types:function-designator))
    (formatter :initarg :formatter
               :accessor attribute-formatter
-              :initform nil)
+              :initform nil
+              :type (or null trivial-types:function-designator))
    (external-name :initarg :external-name
                   :accessor attribute-external-name
                   :type (or string null)
@@ -120,7 +127,8 @@ serialized when optional. Useful for treatment of special values, like :null in 
                :initform nil)
    (unserializer :initarg :unserializer
                  :accessor attribute-unserializer
-                 :initform nil)
+                 :initform nil
+                 :type (or null trivial-types:function-designator))
    (slot :initarg :slot
          :accessor attribute-slot
          :initform nil
