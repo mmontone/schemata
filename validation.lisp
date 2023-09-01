@@ -136,9 +136,8 @@ Args:
   (when (not (listp data))
     (validation-error "~A is not a list"
                       data))
-  (every (lambda (val)
-           (schema-validate (elements-schema schema) val))
-         data))
+  (dolist (val data)
+    (schema-validate (elements-schema schema) val)))
 
 (defmethod schema-type-validate ((schema-type (eql 'local-time:timestamp)) data)
   (unless
