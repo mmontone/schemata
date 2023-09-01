@@ -61,8 +61,7 @@ See: parse-api-input (function)"
 
 (defgeneric unserialize-with-type (type input format)
   (:method (type input format)
-    (assert (typep input type))
-    input)
+    (coerce input type))
   (:method ((type (eql 'cl:integer)) input format)
     (if (integerp input)
         input
