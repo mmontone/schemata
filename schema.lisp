@@ -76,6 +76,7 @@ The schema can then be accessed via FIND-SCHEMA."
                :initform nil)
    (class :initarg :class
           :accessor object-class
+          :type (or null symbol)
           :initform nil)
    (ignore-unknown-attributes
     :initarg :ignore-unknown-attributes
@@ -84,19 +85,15 @@ The schema can then be accessed via FIND-SCHEMA."
     :type boolean)
    (serializer :initarg :serializer
                :accessor object-serializer
+               :type (or null trivial-types:function-designator)
                :initform nil)
    (unserializer :initarg :unserializer
                  :accessor object-unserializer
+                 :type (or null trivial-types:function-designator)
                  :initform nil)))
 
-(defclass attribute (schema)
-  ((name :initarg :name
-         :type symbol
-         :accessor attribute-name)
-   (type :initarg :type
-         :accessor attribute-type
-         :type schema)
-   (required :initarg :required
+(defclass attribute-properties ()
+  ((required :initarg :required
              :accessor attribute-required-p
              :initform t
              :type boolean)
@@ -143,7 +140,15 @@ The schema can then be accessed via FIND-SCHEMA."
    (unserializer :initarg :unserializer
                  :accessor attribute-unserializer
                  :initform nil
-                 :type (or null trivial-types:function-designator))
+                 :type (or null trivial-types:function-designator))))
+
+(defclass attribute (schema attribute-properties)
+  ((name :initarg :name
+         :type symbol
+         :accessor attribute-name)
+   (type :initarg :type
+         :accessor attribute-type
+         :type schema)
    (slot :initarg :slot
          :accessor attribute-slot
          :initform nil
@@ -240,3 +245,37 @@ The schema can then be accessed via FIND-SCHEMA."
         (alexandria:ensure-function (attribute-accessor attribute)))
    (lambda (obj)
      (access:access obj (attribute-name attribute)))))
+
+(defun attribute-spec (attribute)
+  (list (attribute-name attribute)
+        (schema-spec (attribute-type attribute))
+        :required (attribute-required-p attribute)
+        :required-message (attribute-required-message attribute)
+        :default (attribute-default attribute)
+        :accessor (slot-value attribute 'accessor)
+        :writer (slot-value attribute 'writer)
+        :reader (slot-value attribute 'reader)
+        :validator (slot-value attribute 'validator)
+        :add-validator (slot-value attribute 'add-validator)
+        :parser (slot-value attribute 'parser)
+        :formatter (slot-value attribute 'formatter)
+        :external-name (slot-value attribute 'external-name)
+        :serializer (slot-value attribute 'serializer)
+        :unserializer (slot-value attribute 'unserializer)
+        :slot (attribute-slot attribute)))
+
+(defun schema-spec (schema)
+  (typecase schema
+    (type-schema
+     (schema-type schema))
+    (schema-reference-schema
+     (list 'ref (schema-name schema)))
+    (object-schema
+     (list 'object (object-name schema)
+           (mapcar #'attribute-spec (object-attributes schema))
+           (list :class (object-class schema)
+                 :serializer (object-serializer schema)
+                 :unserializer (object-unserializer schema)
+                 :ignore-unknown-attributes (ignore-unknown-attributes schema))))
+    (list-schema
+     (list 'list-of (schema-spec (elements-schema schema))))))

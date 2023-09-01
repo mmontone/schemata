@@ -46,5 +46,5 @@
            #:type-schema
            #:attribute
            #:schema-reference-schema
-
+           #:schema-spec
            #:satisfies-schema))
