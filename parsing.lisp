@@ -47,8 +47,7 @@ See: parse-api-input (function)"
 
 (defgeneric parse-with-type (type input )
   (:method (type input )
-    (assert (typep input type))
-    input)
+    (coerce input type))
   (:method ((type (eql 'cl:integer)) input )
     (if (integerp input)
         input
