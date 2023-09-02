@@ -11,20 +11,22 @@ serialized when optional. Useful for treatment of special values, like :null in 
 (defun null-value (value)
   (member value *null-values*))
 
+(defun schema-validation-function (schema-name)
+  "The name of the function used by SATISFIES-SCHEMA type."
+  (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))
+
 (defun register-schema (name schema)
   "Register SCHEMA under NAME."
-  (setf (gethash name *schemas*) schema))
-
-(defun schema-validation-function (schema-name)
-  (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))
+  (setf (gethash name *schemas*) schema)
+  ;; Create the function for SATISFIES-SCHEMA type.
+  (setf (symbol-function (schema-validation-function name))
+        (lambda (data)
+          (null (validate-with-schema (find-schema name) data :error-p nil)))))
 
 (defmacro define-schema (name schema)
   "Register SCHEMA under NAME.
 The schema can then be accessed via FIND-SCHEMA."
-  `(progn
-     (defun ,(schema-validation-function name) (data)
-       (null (validate-with-schema (find-schema ',name) data :error-p nil)))
-     (register-schema ',name (schema ,schema))))
+  `(register-schema ',name (schema ,schema)))
 
 (defmacro schema (schema-def)
   "Wrapper macro for schema definitions."
