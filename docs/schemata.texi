@@ -74,6 +74,8 @@ With Quicklisp:
 @chapter Usage
 @anchor{usage}
 
+@section Schema definition
+
 Use @clref{SCHEMATA, DEFINE-SCHEMA, macro}for defining schemas.
 
 Schema example:
@@ -110,6 +112,46 @@ Schema example:
                              :documentation "email"))
              (:documentation "customer data fetched")))
 @end lisp
+
+@section Validation using schemas
+
+Use @clref{SCHEMATA, VALIDATE-WITH-SCHEMA, function}.
+
+@section Serialization using schemas
+
+Via @emph{generic-serializer} library.
+
+Use @clref{SCHEMATA, SERIALIZE-WITH-SCHEMA, function}.
+
+@lisp
+(with-output-to-string (s)
+    (gs:with-serializer-output s
+        (gs:with-serializer :json
+           (serialize-with-schema *schema* user))))
+@end lisp
+
+@lisp
+(with-output-to-string (s)
+  (gs:with-serializer-output s
+    (gs:with-serializer :json
+      (serialize-with-schema
+       (find-schema 'user-schema) *user*))))
+@end lisp
+
+@section Unserialization using schemas
+
+Use @clref{SCHEMATA, UNSERIALIZE-WITH-SCHEMA, function}.
+
+@lisp
+(unserialize-with-schema
+   (find-schema 'user-schema)
+   (json:decode-json-from-string data)
+   :json)
+@end lisp
+
+@section Patch and updates
+
+See @clref{SCHEMATA, PATCH-WITH-SCHEMA, function}and @clref{SCHEMATA, POPULATE-WITH-SCHEMA, function}.
 
 @node Schema types
 @chapter Schema types

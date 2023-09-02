@@ -73,7 +73,14 @@ ul.no-bullet {list-style: none}
 <ul class="no-bullet">
   <li><a id="toc-Introduction" href="#Intro">1 Introduction</a></li>
   <li><a id="toc-Installation-1" href="#Installation">2 Installation</a></li>
-  <li><a id="toc-Usage-1" href="#Usage">3 Usage</a></li>
+  <li><a id="toc-Usage-1" href="#Usage">3 Usage</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Schema-definition" href="#Schema-definition">3.1 Schema definition</a></li>
+    <li><a id="toc-Validation-using-schemas" href="#Validation-using-schemas">3.2 Validation using schemas</a></li>
+    <li><a id="toc-Serialization-using-schemas" href="#Serialization-using-schemas">3.3 Serialization using schemas</a></li>
+    <li><a id="toc-Unserialization-using-schemas" href="#Unserialization-using-schemas">3.4 Unserialization using schemas</a></li>
+    <li><a id="toc-Patch-and-updates" href="#Patch-and-updates">3.5 Patch and updates</a></li>
+  </ul></li>
   <li><a id="toc-Schema-types-1" href="#Schema-types">4 Schema types</a>
   <ul class="no-bullet">
     <li><a id="toc-Type-schemas" href="#Type-schemas">4.1 Type schemas</a></li>
@@ -155,6 +162,8 @@ Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previou
 </div>
 <span id="Usage-1"></span><h2 class="chapter">3 Usage</h2>
 <span id="usage"></span>
+<span id="Schema-definition"></span><h3 class="section">3.1 Schema definition</h3>
+
 <p>Use <a href="#SCHEMATA_003aDEFINE_002dSCHEMA-macro">DEFINE-SCHEMA</a>for defining schemas.
 </p>
 <p>Schema example:
@@ -192,6 +201,46 @@ Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previou
                <span class="paren3">(<span class="lisp-bg"><span class="keyword">:documentation</span> <span class="string">&quot;customer data fetched&quot;</span></span>)</span></span>)</span></span>)</span>
 </pre></div>
 
+<span id="Validation-using-schemas"></span><h3 class="section">3.2 Validation using schemas</h3>
+
+<p>Use <a href="#SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-function">VALIDATE-WITH-SCHEMA</a>.
+</p>
+<span id="Serialization-using-schemas"></span><h3 class="section">3.3 Serialization using schemas</h3>
+
+<p>Via <em>generic-serializer</em> library.
+</p>
+<p>Use <a href="#SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-function">SERIALIZE-WITH-SCHEMA</a>.
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">with-output-to-string</span></i> <span class="paren2">(<span class="lisp-bg">s</span>)</span>
+      <span class="paren2">(<span class="lisp-bg"><i><span class="symbol">gs:with-serializer-output</span></i> s
+          <span class="paren3">(<span class="lisp-bg"><i><span class="symbol">gs:with-serializer</span></i> <span class="keyword">:json</span>
+             <span class="paren4">(<span class="lisp-bg">serialize-with-schema <span class="special">*schema*</span> user</span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">with-output-to-string</span></i> <span class="paren2">(<span class="lisp-bg">s</span>)</span>
+    <span class="paren2">(<span class="lisp-bg"><i><span class="symbol">gs:with-serializer-output</span></i> s
+      <span class="paren3">(<span class="lisp-bg"><i><span class="symbol">gs:with-serializer</span></i> <span class="keyword">:json</span>
+        <span class="paren4">(<span class="lisp-bg">serialize-with-schema
+         <span class="paren5">(<span class="lisp-bg">find-schema 'user-schema</span>)</span> <span class="special">*user*</span></span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="Unserialization-using-schemas"></span><h3 class="section">3.4 Unserialization using schemas</h3>
+
+<p>Use <a href="#SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-function">UNSERIALIZE-WITH-SCHEMA</a>.
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">unserialize-with-schema
+     <span class="paren2">(<span class="lisp-bg">find-schema 'user-schema</span>)</span>
+     <span class="paren2">(<span class="lisp-bg">json:decode-json-from-string data</span>)</span>
+     <span class="keyword">:json</span></span>)</span>
+</pre></div>
+
+<span id="Patch-and-updates"></span><h3 class="section">3.5 Patch and updates</h3>
+
+<p>See <a href="#SCHEMATA_003aPATCH_002dWITH_002dSCHEMA-function">PATCH-WITH-SCHEMA</a>and <a href="#SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-function">POPULATE-WITH-SCHEMA</a>.
+</p>
 <hr>
 <span id="Schema-types"></span><div class="header">
 <p>
