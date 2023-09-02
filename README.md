@@ -138,6 +138,29 @@ SCHEMATA> (let ((x "foo"))
 "foo"
 ```
 
+## SCHEMA-CLASS metaclass
+
+SCHEMA-CLASS classes get an schema attached.
+
+Example:
+
+```lisp
+SCHEMATA> (define-schema-class person ()
+            ((name :type string :initarg :name)
+             (age :type integer :required nil :initarg :age)))
+#<SCHEMA-CLASS SCHEMATA::PERSON>
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 22)))
+NIL
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 'asdf)) :error-p nil)
+#<VALIDATION-ERROR 'ASDF is not of type: INTEGER {100109F833}>
+
+SCHEMATA> (generic-serializer:with-serializer :json
+            (generic-serializer:serialize (make-instance 'person :name "Mariano" :age 44)))
+{"name":"Mariano","age":44}
+```
+
 ## Functions
 
 ### attribute-external-name
