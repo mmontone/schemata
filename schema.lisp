@@ -11,7 +11,7 @@ serialized when optional. Useful for treatment of special values, like :null in 
 (defun null-value (value)
   (member value *null-values*))
 
-(defun schema-validation-function (schema-name)
+(defun schema-validation-function-name (schema-name)
   "The name of the function used by SATISFIES-SCHEMA type."
   (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))
 
@@ -19,7 +19,7 @@ serialized when optional. Useful for treatment of special values, like :null in 
   "Register SCHEMA under NAME."
   (setf (gethash name *schemas*) schema)
   ;; Create the function for SATISFIES-SCHEMA type.
-  (setf (symbol-function (schema-validation-function name))
+  (setf (symbol-function (schema-validation-function-name name))
         (lambda (data)
           (null (validate-with-schema (find-schema name) data :error-p nil)))))
 
@@ -34,7 +34,7 @@ The schema can then be accessed via FIND-SCHEMA."
 
 (deftype satisfies-schema (schema-name)
   "Common Lisp type for schemas."
-  `(satisfies ,(schema-validation-function schema-name)))
+  `(satisfies ,(schema-validation-function-name schema-name)))
 
 (defclass schema ()
   ((documentation :initarg :documentation
