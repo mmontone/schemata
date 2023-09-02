@@ -70,7 +70,8 @@ The schema can then be accessed via FIND-SCHEMA."
 (defclass object-schema (schema)
   ((name :initarg :name
          :accessor object-name
-         :type (or string symbol))
+         :type (or string symbol)
+         :documentation "The name of the object.")
    (attributes :initarg :attributes
                :accessor object-attributes
                :type list

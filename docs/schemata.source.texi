@@ -37,7 +37,8 @@ Copyright @copyright{} 2021 Mariano Montone
 * Intro::
 * Installation::
 * Usage::
-* API::
+* Schema types::
+* Reference::
 * Index::
 @end menu
 
@@ -45,22 +46,17 @@ Copyright @copyright{} 2021 Mariano Montone
 @chapter Introduction
 @anchor{introduction}
 
-SCHEMATA is a web forms handling library for Common Lisp.
+Generic purpose schema library for serialization and validation of data.
 
-Although it is potentially framework agnostic, it runs on top of Hunchentoot at the moment.
+This library is used by CL-REST-SERVER for API serialization and validation.
 
 It features:
 
 @itemize @bullet
-@item
-Several form field types: String, boolean, integer, email, password fields. And more.
-@item Custom fields. SCHEMATA is extensible and it is possible to define new field types.
-@item Server and client side validation
-@item Rendering backends. Forms can be rendered via CL-WHO, or Djula, or something else; the backend is pluggable. The default renderer is CL-WHO.
-@item Themes (like Bootstrap)
-@item Control on rendering and layout.
-@item Handling of form errors.
-@item CSRF protection
+@item Validation using schemas.
+@item Serialization and unserialization using schemas.
+@item Integration with Common Lisp type system.
+@item A schema class metaclass.
 @end itemize
 
 @node Installation
@@ -74,17 +70,171 @@ With Quicklisp:
 (ql:quickload "schemata")
 @end lisp
 
-When you want to use a form renderer such as @code{:who} or @code{:djula}, quickload the associated package: @code{schemata.who}, @code{schemata.who.bootstrap}, @code{schemata.djula}.
-
 @node Usage
 @chapter Usage
 @anchor{usage}
 
-@section Basics
+Use (@clref schemata:define-schema macro) for defining schemas.
 
-@node API
-@chapter API
-@anchor{api}
+Schema example:
+
+@lisp
+(schemata:define-schema customer
+    (object "customer"
+             ((id string :external-name "id" :accessor
+                  customer-id :documentation "customer id")
+              (number string :external-name "number" :required nil
+                              :accessor customer-nr :documentation
+                      "customer number")
+              (name string :external-name "name" :accessor
+                    customer-name :documentation "customer name")
+              (address-1 string :external-name "address1"
+                                 :required nil :documentation
+                         "customer first address")
+              (address-2 string :external-name "address2"
+                                 :required nil :documentation
+                         "customer second address")
+              (postal-code string :external-name "postalcode"
+                                   :required nil :documentation
+                           "postal code")
+              (postal-area string :external-name "postalarea"
+                                   :required nil :documentation
+                           "postal area")
+              (country string :external-name "country" :required nil 
+                       :documentation "country code")
+              (phone string :external-name "phone" :required nil
+                             :documentation "phone")
+              (fax string :external-name "fax" :required nil
+                           :documentation "fax")
+              (email string :external-name "email" :required nil
+                             :documentation "email"))
+             (:documentation "customer data fetched")))
+@end lisp
+
+@node Schema types
+@chapter Schema types
+@section Type schemas
+
+Schemas can be built from Common Lisp types:
+
+@verbatim
+SCHEMATA> (defparameter *s* (schema string))
+*S*
+SCHEMATA> *s*
+#<TYPE-SCHEMA STRING {1006FBBD13}>
+SCHEMATA> (validate-with-schema *s* "22")
+NIL
+SCHEMATA> (validate-with-schema *s* 22 :error-p nil)
+#<VALIDATION-ERROR "~s is not of type: ~a" {100152EB13}>
+@end verbatim
+
+@section Object schema
+
+Object schemas are built using the syntax: @code{(object name attributes options)}.
+Attributes are specified as: @code{(attribute-name attribute-type &rest options)}.
+
+The @code{attribute-type} is parsed as a schema.
+
+Possible attribute options are: `required`, `required-message`, `default`, `accessor`, `writer`, `reader`, `parser`, `validator`, `add-validator`, `formatter`, `external-name`, `serializer`, `unserializer`, `slot`.
+
+Example:
+
+@verbatim
+SCHEMATA> (schema (object person
+                          ((name string)
+                           (age integer :required nil))))
+#<OBJECT-SCHEMA {1001843543}>
+@end verbatim
+
+@section List schema
+
+Homogeneous list of schemas are specified via @code{list-of}.
+
+Example:
+
+@verbatim
+SCHEMATA> (defparameter *s* (schema (list-of integer)))
+*S*
+SCHEMATA> (validate-with-schema *s* '(1 2 "foo"))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "~s is not of type: ~a" {1006ECA323}>.
+SCHEMATA> (validate-with-schema *s* '(1 2 3))
+NIL
+@end verbatim
+
+@section Schema references
+
+Defined schemas can be referenced via either `(schema schema-name)` or `(ref schema-name)` (they are identical).
+
+Example:
+
+@verbatim
+SCHEMATA> (define-schema person
+            (object person
+                    ((name string))))
+#<OBJECT-SCHEMA {1006F8A813}>
+SCHEMATA> (defparameter *list-of-person* (schema (list-of (ref person))))
+*LIST-OF-PERSON*
+SCHEMATA> *list-of-person*
+#<LIST-SCHEMA {1006F8C2A3}>
+SCHEMATA> (parse-with-schema *list-of-person* '((("name" . "Mariano")) (("name" . "Peter"))))
+(((NAME . "Mariano")) ((NAME . "Peter")))
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . 22)) (("name" . "Peter"))))
+; processing (DEFMETHOD SCHEMA-VALIDATE ...); Evaluation aborted on #<SB-PCL::NO-APPLICABLE-METHOD-ERROR {1008018513}>.
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . 22)) (("name" . "Peter"))))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "~s is not of type: ~a" {10082EB883}>.
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . "Mariano")) (("name" . "Peter"))))
+NIL
+SCHEMATA> (validate-with-schema *list-of-person* '((("names" . "Mariano")) (("name" . "Peter"))))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "Attributes not part of schema: ~a" {1008CD3DD3}>.
+@end verbatim
+
+@section SATISFIES-SCHEMA type
+
+Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA type.
+Schemas can be thought as types over data.
+Defined schemas can be checked using TYPEP and CHECK-TYPE with the type `(satisfies-schema schema-name)`.
+
+Example:
+
+@verbatim
+SCHEMATA> (define-schema string-schema string)
+#<TYPE-SCHEMA STRING {10019DA8B3}>
+SCHEMATA> (typep "foo" '(satisfies-schema string-schema))
+T
+SCHEMATA> (typep 22 '(satisfies-schema string-schema))
+NIL
+SCHEMATA> (let ((x "foo"))
+            (check-type x (satisfies-schema string-schema))
+            x)
+"foo"
+@end verbatim
+
+@section SCHEMA-CLASS metaclass
+
+SCHEMA-CLASS classes get an schema attached.
+
+Example:
+
+@verbatim
+SCHEMATA> (define-schema-class person ()
+            ((name :type string :initarg :name)
+             (age :type integer :required nil :initarg :age)))
+#<SCHEMA-CLASS SCHEMATA::PERSON>
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 22)))
+NIL
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 'asdf)) :error-p nil)
+#<VALIDATION-ERROR 'ASDF is not of type: INTEGER {100109F833}>
+
+SCHEMATA> (generic-serializer:with-serializer :json
+            (generic-serializer:serialize (make-instance 'person :name "Mariano" :age 44)))
+{"name":"Mariano","age":44}
+@end verbatim
+
+@node Reference
+@chapter Reference
+@anchor{reference}
 
 @menu
 * SCHEMATA package::

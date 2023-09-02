@@ -73,15 +73,21 @@ ul.no-bullet {list-style: none}
 <ul class="no-bullet">
   <li><a id="toc-Introduction" href="#Intro">1 Introduction</a></li>
   <li><a id="toc-Installation-1" href="#Installation">2 Installation</a></li>
-  <li><a id="toc-Usage-1" href="#Usage">3 Usage</a>
+  <li><a id="toc-Usage-1" href="#Usage">3 Usage</a></li>
+  <li><a id="toc-Schema-types-1" href="#Schema-types">4 Schema types</a>
   <ul class="no-bullet">
-    <li><a id="toc-Basics" href="#Basics">3.1 Basics</a></li>
+    <li><a id="toc-Type-schemas" href="#Type-schemas">4.1 Type schemas</a></li>
+    <li><a id="toc-Object-schema" href="#Object-schema">4.2 Object schema</a></li>
+    <li><a id="toc-List-schema" href="#List-schema">4.3 List schema</a></li>
+    <li><a id="toc-Schema-references" href="#Schema-references">4.4 Schema references</a></li>
+    <li><a id="toc-SATISFIES_002dSCHEMA-type" href="#SATISFIES_002dSCHEMA-type">4.5 SATISFIES-SCHEMA type</a></li>
+    <li><a id="toc-SCHEMA_002dCLASS-metaclass" href="#SCHEMA_002dCLASS-metaclass">4.6 SCHEMA-CLASS metaclass</a></li>
   </ul></li>
-  <li><a id="toc-API-1" href="#API">4 API</a>
+  <li><a id="toc-Reference-1" href="#Reference">5 Reference</a>
   <ul class="no-bullet">
-    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">4.1 SCHEMATA package</a></li>
+    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">5.1 SCHEMATA package</a></li>
   </ul></li>
-  <li><a id="toc-Index-1" href="#Index" rel="index">5 Index</a></li>
+  <li><a id="toc-Index-1" href="#Index" rel="index">6 Index</a></li>
 </ul>
 </div>
 
@@ -100,9 +106,11 @@ Next: <a href="#Intro" accesskey="n" rel="next">Intro</a> &nbsp; [<a href="#SEC_
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Usage" accesskey="3">Usage</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#API" accesskey="4">API</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+<tr><td align="left" valign="top">&bull; <a href="#Schema-types" accesskey="4">Schema types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Index" rel="index" accesskey="5">Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+<tr><td align="left" valign="top">&bull; <a href="#Reference" accesskey="5">Reference</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Index" rel="index" accesskey="6">Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
 </table>
 
@@ -113,21 +121,17 @@ Next: <a href="#Installation" accesskey="n" rel="next">Installation</a>, Previou
 </div>
 <span id="Introduction"></span><h2 class="chapter">1 Introduction</h2>
 <span id="introduction"></span>
-<p>SCHEMATA is a web forms handling library for Common Lisp.
+<p>Generic purpose schema library for serialization and validation of data.
 </p>
-<p>Although it is potentially framework agnostic, it runs on top of Hunchentoot at the moment.
+<p>This library is used by CL-REST-SERVER for API serialization and validation.
 </p>
 <p>It features:
 </p>
 <ul>
-<li> Several form field types: String, boolean, integer, email, password fields. And more.
-</li><li> Custom fields. SCHEMATA is extensible and it is possible to define new field types.
-</li><li> Server and client side validation
-</li><li> Rendering backends. Forms can be rendered via CL-WHO, or Djula, or something else; the backend is pluggable. The default renderer is CL-WHO.
-</li><li> Themes (like Bootstrap)
-</li><li> Control on rendering and layout.
-</li><li> Handling of form errors.
-</li><li> CSRF protection
+<li> Validation using schemas.
+</li><li> Serialization and unserialization using schemas.
+</li><li> Integration with Common Lisp type system.
+</li><li> A schema class metaclass.
 </li></ul>
 
 <hr>
@@ -144,24 +148,170 @@ Next: <a href="#Usage" accesskey="n" rel="next">Usage</a>, Previous: <a href="#I
 <pre class="lisp">  <span class="paren1">(<span class="lisp-bg">ql:quickload <span class="string">&quot;schemata&quot;</span></span>)</span>
 </pre></div>
 
-<p>When you want to use a form renderer such as <code>:who</code> or <code>:djula</code>, quickload the associated package: <code>schemata.who</code>, <code>schemata.who.bootstrap</code>, <code>schemata.djula</code>.
-</p>
 <hr>
 <span id="Usage"></span><div class="header">
 <p>
-Next: <a href="#API" accesskey="n" rel="next">API</a>, Previous: <a href="#Installation" accesskey="p" rel="prev">Installation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previous: <a href="#Installation" accesskey="p" rel="prev">Installation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <span id="Usage-1"></span><h2 class="chapter">3 Usage</h2>
 <span id="usage"></span>
-<span id="Basics"></span><h3 class="section">3.1 Basics</h3>
+<p>Use <a href="#SCHEMATA_003aDEFINE_002dSCHEMA-macro">DEFINE-SCHEMA</a>for defining schemas.
+</p>
+<p>Schema example:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">schemata:define-schema</span></i> customer
+      <span class="paren2">(<span class="lisp-bg">object <span class="string">&quot;customer&quot;</span>
+               <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg">id string <span class="keyword">:external-name</span> <span class="string">&quot;id&quot;</span> <span class="keyword">:accessor</span>
+                    customer-id <span class="keyword">:documentation</span> <span class="string">&quot;customer id&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">number string <span class="keyword">:external-name</span> <span class="string">&quot;number&quot;</span> <span class="keyword">:required</span> nil
+                                <span class="keyword">:accessor</span> customer-nr <span class="keyword">:documentation</span>
+                        <span class="string">&quot;customer number&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">name string <span class="keyword">:external-name</span> <span class="string">&quot;name&quot;</span> <span class="keyword">:accessor</span>
+                      customer-name <span class="keyword">:documentation</span> <span class="string">&quot;customer name&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">address-1 string <span class="keyword">:external-name</span> <span class="string">&quot;address1&quot;</span>
+                                   <span class="keyword">:required</span> nil <span class="keyword">:documentation</span>
+                           <span class="string">&quot;customer first address&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">address-2 string <span class="keyword">:external-name</span> <span class="string">&quot;address2&quot;</span>
+                                   <span class="keyword">:required</span> nil <span class="keyword">:documentation</span>
+                           <span class="string">&quot;customer second address&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">postal-code string <span class="keyword">:external-name</span> <span class="string">&quot;postalcode&quot;</span>
+                                     <span class="keyword">:required</span> nil <span class="keyword">:documentation</span>
+                             <span class="string">&quot;postal code&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">postal-area string <span class="keyword">:external-name</span> <span class="string">&quot;postalarea&quot;</span>
+                                     <span class="keyword">:required</span> nil <span class="keyword">:documentation</span>
+                             <span class="string">&quot;postal area&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">country string <span class="keyword">:external-name</span> <span class="string">&quot;country&quot;</span> <span class="keyword">:required</span> nil 
+                         <span class="keyword">:documentation</span> <span class="string">&quot;country code&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">phone string <span class="keyword">:external-name</span> <span class="string">&quot;phone&quot;</span> <span class="keyword">:required</span> nil
+                               <span class="keyword">:documentation</span> <span class="string">&quot;phone&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">fax string <span class="keyword">:external-name</span> <span class="string">&quot;fax&quot;</span> <span class="keyword">:required</span> nil
+                             <span class="keyword">:documentation</span> <span class="string">&quot;fax&quot;</span></span>)</span>
+                <span class="paren4">(<span class="lisp-bg">email string <span class="keyword">:external-name</span> <span class="string">&quot;email&quot;</span> <span class="keyword">:required</span> nil
+                               <span class="keyword">:documentation</span> <span class="string">&quot;email&quot;</span></span>)</span></span>)</span>
+               <span class="paren3">(<span class="lisp-bg"><span class="keyword">:documentation</span> <span class="string">&quot;customer data fetched&quot;</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
 
 <hr>
-<span id="API"></span><div class="header">
+<span id="Schema-types"></span><div class="header">
 <p>
-Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Reference" accesskey="n" rel="next">Reference</a>, Previous: <a href="#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="API-1"></span><h2 class="chapter">4 API</h2>
-<span id="api"></span>
+<span id="Schema-types-1"></span><h2 class="chapter">4 Schema types</h2>
+<span id="Type-schemas"></span><h3 class="section">4.1 Type schemas</h3>
+
+<p>Schemas can be built from Common Lisp types:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (defparameter *s* (schema string))
+*S*
+SCHEMATA&gt; *s*
+#&lt;TYPE-SCHEMA STRING {1006FBBD13}&gt;
+SCHEMATA&gt; (validate-with-schema *s* &quot;22&quot;)
+NIL
+SCHEMATA&gt; (validate-with-schema *s* 22 :error-p nil)
+#&lt;VALIDATION-ERROR &quot;~s is not of type: ~a&quot; {100152EB13}&gt;
+</pre>
+<span id="Object-schema"></span><h3 class="section">4.2 Object schema</h3>
+
+<p>Object schemas are built using the syntax: <code>(object name attributes options)</code>.
+Attributes are specified as: <code>(attribute-name attribute-type &amp;rest options)</code>.
+</p>
+<p>The <code>attribute-type</code> is parsed as a schema.
+</p>
+<p>Possible attribute options are: &lsquo;required&lsquo;, &lsquo;required-message&lsquo;, &lsquo;default&lsquo;, &lsquo;accessor&lsquo;, &lsquo;writer&lsquo;, &lsquo;reader&lsquo;, &lsquo;parser&lsquo;, &lsquo;validator&lsquo;, &lsquo;add-validator&lsquo;, &lsquo;formatter&lsquo;, &lsquo;external-name&lsquo;, &lsquo;serializer&lsquo;, &lsquo;unserializer&lsquo;, &lsquo;slot&lsquo;.
+</p>
+<p>Example:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (schema (object person
+                          ((name string)
+                           (age integer :required nil))))
+#&lt;OBJECT-SCHEMA {1001843543}&gt;
+</pre>
+<span id="List-schema"></span><h3 class="section">4.3 List schema</h3>
+
+<p>Homogeneous list of schemas are specified via <code>list-of</code>.
+</p>
+<p>Example:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (defparameter *s* (schema (list-of integer)))
+*S*
+SCHEMATA&gt; (validate-with-schema *s* '(1 2 &quot;foo&quot;))
+; Evaluation aborted on #&lt;SCHEMATA:VALIDATION-ERROR &quot;~s is not of type: ~a&quot; {1006ECA323}&gt;.
+SCHEMATA&gt; (validate-with-schema *s* '(1 2 3))
+NIL
+</pre>
+<span id="Schema-references"></span><h3 class="section">4.4 Schema references</h3>
+
+<p>Defined schemas can be referenced via either &lsquo;(schema schema-name)&lsquo; or &lsquo;(ref schema-name)&lsquo; (they are identical).
+</p>
+<p>Example:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (define-schema person
+            (object person
+                    ((name string))))
+#&lt;OBJECT-SCHEMA {1006F8A813}&gt;
+SCHEMATA&gt; (defparameter *list-of-person* (schema (list-of (ref person))))
+*LIST-OF-PERSON*
+SCHEMATA&gt; *list-of-person*
+#&lt;LIST-SCHEMA {1006F8C2A3}&gt;
+SCHEMATA&gt; (parse-with-schema *list-of-person* '(((&quot;name&quot; . &quot;Mariano&quot;)) ((&quot;name&quot; . &quot;Peter&quot;))))
+(((NAME . &quot;Mariano&quot;)) ((NAME . &quot;Peter&quot;)))
+SCHEMATA&gt; (validate-with-schema *list-of-person* '(((&quot;name&quot; . 22)) ((&quot;name&quot; . &quot;Peter&quot;))))
+; processing (DEFMETHOD SCHEMA-VALIDATE ...); Evaluation aborted on #&lt;SB-PCL::NO-APPLICABLE-METHOD-ERROR {1008018513}&gt;.
+SCHEMATA&gt; (validate-with-schema *list-of-person* '(((&quot;name&quot; . 22)) ((&quot;name&quot; . &quot;Peter&quot;))))
+; Evaluation aborted on #&lt;SCHEMATA:VALIDATION-ERROR &quot;~s is not of type: ~a&quot; {10082EB883}&gt;.
+SCHEMATA&gt; (validate-with-schema *list-of-person* '(((&quot;name&quot; . &quot;Mariano&quot;)) ((&quot;name&quot; . &quot;Peter&quot;))))
+NIL
+SCHEMATA&gt; (validate-with-schema *list-of-person* '(((&quot;names&quot; . &quot;Mariano&quot;)) ((&quot;name&quot; . &quot;Peter&quot;))))
+; Evaluation aborted on #&lt;SCHEMATA:VALIDATION-ERROR &quot;Attributes not part of schema: ~a&quot; {1008CD3DD3}&gt;.
+</pre>
+<span id="SATISFIES_002dSCHEMA-type"></span><h3 class="section">4.5 SATISFIES-SCHEMA type</h3>
+
+<p>Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA type.
+Schemas can be thought as types over data.
+Defined schemas can be checked using TYPEP and CHECK-TYPE with the type &lsquo;(satisfies-schema schema-name)&lsquo;.
+</p>
+<p>Example:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (define-schema string-schema string)
+#&lt;TYPE-SCHEMA STRING {10019DA8B3}&gt;
+SCHEMATA&gt; (typep &quot;foo&quot; '(satisfies-schema string-schema))
+T
+SCHEMATA&gt; (typep 22 '(satisfies-schema string-schema))
+NIL
+SCHEMATA&gt; (let ((x &quot;foo&quot;))
+            (check-type x (satisfies-schema string-schema))
+            x)
+&quot;foo&quot;
+</pre>
+<span id="SCHEMA_002dCLASS-metaclass"></span><h3 class="section">4.6 SCHEMA-CLASS metaclass</h3>
+
+<p>SCHEMA-CLASS classes get an schema attached.
+</p>
+<p>Example:
+</p>
+<pre class="verbatim">SCHEMATA&gt; (define-schema-class person ()
+            ((name :type string :initarg :name)
+             (age :type integer :required nil :initarg :age)))
+#&lt;SCHEMA-CLASS SCHEMATA::PERSON&gt;
+
+SCHEMATA&gt; (validate-with-schema (find-class 'person) '((&quot;name&quot; . &quot;Mariano&quot;) (&quot;age&quot; . 22)))
+NIL
+
+SCHEMATA&gt; (validate-with-schema (find-class 'person) '((&quot;name&quot; . &quot;Mariano&quot;) (&quot;age&quot; . 'asdf)) :error-p nil)
+#&lt;VALIDATION-ERROR 'ASDF is not of type: INTEGER {100109F833}&gt;
+
+SCHEMATA&gt; (generic-serializer:with-serializer :json
+            (generic-serializer:serialize (make-instance 'person :name &quot;Mariano&quot; :age 44)))
+{&quot;name&quot;:&quot;Mariano&quot;,&quot;age&quot;:44}
+</pre>
+<hr>
+<span id="Reference"></span><div class="header">
+<p>
+Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Schema-types" accesskey="p" rel="prev">Schema types</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Reference-1"></span><h2 class="chapter">5 Reference</h2>
+<span id="reference"></span>
 <table class="menu" border="0" cellspacing="0">
 <tr><td align="left" valign="top">&bull; <a href="#SCHEMATA-package" accesskey="1">SCHEMATA package</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
@@ -170,9 +320,9 @@ Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#U
 <hr>
 <span id="SCHEMATA-package"></span><div class="header">
 <p>
-Up: <a href="#API" accesskey="u" rel="up">API</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="SCHEMATA-package-1"></span><h3 class="section">4.1 SCHEMATA package</h3>
+<span id="SCHEMATA-package-1"></span><h3 class="section">5.1 SCHEMATA package</h3>
 <dl>
 <dt id="index-SCHEMATA">PACKAGE: <strong>SCHEMATA</strong></dt>
 </dl>
@@ -504,9 +654,9 @@ DATA should be an association list.
 <hr>
 <span id="Index"></span><div class="header">
 <p>
-Previous: <a href="#API" accesskey="p" rel="prev">API</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Previous: <a href="#Reference" accesskey="p" rel="prev">Reference</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Index-1"></span><h2 class="chapter">5 Index</h2>
+<span id="Index-1"></span><h2 class="chapter">6 Index</h2>
 
 <table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_cp_letter-S"><b>S</b></a>
  &nbsp; 

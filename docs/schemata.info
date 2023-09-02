@@ -19,7 +19,8 @@ Top
 * Intro::
 * Installation::
 * Usage::
-* API::
+* Schema types::
+* Reference::
 * Index::
 
 
@@ -28,25 +29,17 @@ File: schemata.info,  Node: Intro,  Next: Installation,  Prev: Top,  Up: Top
 1 Introduction
 **************
 
-SCHEMATA is a web forms handling library for Common Lisp.
+Generic purpose schema library for serialization and validation of data.
 
-   Although it is potentially framework agnostic, it runs on top of
-Hunchentoot at the moment.
+   This library is used by CL-REST-SERVER for API serialization and
+validation.
 
    It features:
 
-   * Several form field types: String, boolean, integer, email, password
-     fields.  And more.
-   * Custom fields.  SCHEMATA is extensible and it is possible to define
-     new field types.
-   * Server and client side validation
-   * Rendering backends.  Forms can be rendered via CL-WHO, or Djula, or
-     something else; the backend is pluggable.  The default renderer is
-     CL-WHO.
-   * Themes (like Bootstrap)
-   * Control on rendering and layout.
-   * Handling of form errors.
-   * CSRF protection
+   * Validation using schemas.
+   * Serialization and unserialization using schemas.
+   * Integration with Common Lisp type system.
+   * A schema class metaclass.
 
 
 File: schemata.info,  Node: Installation,  Next: Usage,  Prev: Intro,  Up: Top
@@ -58,33 +51,187 @@ With Quicklisp:
 
      (ql:quickload "schemata")
 
-   When you want to use a form renderer such as ':who' or ':djula',
-quickload the associated package: 'schemata.who',
-'schemata.who.bootstrap', 'schemata.djula'.
-
 
-File: schemata.info,  Node: Usage,  Next: API,  Prev: Installation,  Up: Top
+File: schemata.info,  Node: Usage,  Next: Schema types,  Prev: Installation,  Up: Top
 
 3 Usage
 *******
 
-3.1 Basics
-==========
+Use *note DEFINE-SCHEMA: SCHEMATA:DEFINE-SCHEMA macro.for defining
+schemas.
+
+   Schema example:
+
+     (schemata:define-schema customer
+         (object "customer"
+                  ((id string :external-name "id" :accessor
+                       customer-id :documentation "customer id")
+                   (number string :external-name "number" :required nil
+                                   :accessor customer-nr :documentation
+                           "customer number")
+                   (name string :external-name "name" :accessor
+                         customer-name :documentation "customer name")
+                   (address-1 string :external-name "address1"
+                                      :required nil :documentation
+                              "customer first address")
+                   (address-2 string :external-name "address2"
+                                      :required nil :documentation
+                              "customer second address")
+                   (postal-code string :external-name "postalcode"
+                                        :required nil :documentation
+                                "postal code")
+                   (postal-area string :external-name "postalarea"
+                                        :required nil :documentation
+                                "postal area")
+                   (country string :external-name "country" :required nil
+                            :documentation "country code")
+                   (phone string :external-name "phone" :required nil
+                                  :documentation "phone")
+                   (fax string :external-name "fax" :required nil
+                                :documentation "fax")
+                   (email string :external-name "email" :required nil
+                                  :documentation "email"))
+                  (:documentation "customer data fetched")))
 
 
-File: schemata.info,  Node: API,  Next: Index,  Prev: Usage,  Up: Top
+File: schemata.info,  Node: Schema types,  Next: Reference,  Prev: Usage,  Up: Top
 
-4 API
-*****
+4 Schema types
+**************
+
+4.1 Type schemas
+================
+
+Schemas can be built from Common Lisp types:
+
+SCHEMATA> (defparameter *s* (schema string))
+*S*
+SCHEMATA> *s*
+#<TYPE-SCHEMA STRING {1006FBBD13}>
+SCHEMATA> (validate-with-schema *s* "22")
+NIL
+SCHEMATA> (validate-with-schema *s* 22 :error-p nil)
+#<VALIDATION-ERROR "~s is not of type: ~a" {100152EB13}>
+
+4.2 Object schema
+=================
+
+Object schemas are built using the syntax: '(object name attributes
+options)'.  Attributes are specified as: '(attribute-name attribute-type
+&rest options)'.
+
+   The 'attribute-type' is parsed as a schema.
+
+   Possible attribute options are: 'required', 'required-message',
+'default', 'accessor', 'writer', 'reader', 'parser', 'validator',
+'add-validator', 'formatter', 'external-name', 'serializer',
+'unserializer', 'slot'.
+
+   Example:
+
+SCHEMATA> (schema (object person
+                          ((name string)
+                           (age integer :required nil))))
+#<OBJECT-SCHEMA {1001843543}>
+
+4.3 List schema
+===============
+
+Homogeneous list of schemas are specified via 'list-of'.
+
+   Example:
+
+SCHEMATA> (defparameter *s* (schema (list-of integer)))
+*S*
+SCHEMATA> (validate-with-schema *s* '(1 2 "foo"))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "~s is not of type: ~a" {1006ECA323}>.
+SCHEMATA> (validate-with-schema *s* '(1 2 3))
+NIL
+
+4.4 Schema references
+=====================
+
+Defined schemas can be referenced via either '(schema schema-name)' or
+'(ref schema-name)' (they are identical).
+
+   Example:
+
+SCHEMATA> (define-schema person
+            (object person
+                    ((name string))))
+#<OBJECT-SCHEMA {1006F8A813}>
+SCHEMATA> (defparameter *list-of-person* (schema (list-of (ref person))))
+*LIST-OF-PERSON*
+SCHEMATA> *list-of-person*
+#<LIST-SCHEMA {1006F8C2A3}>
+SCHEMATA> (parse-with-schema *list-of-person* '((("name" . "Mariano")) (("name" . "Peter"))))
+(((NAME . "Mariano")) ((NAME . "Peter")))
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . 22)) (("name" . "Peter"))))
+; processing (DEFMETHOD SCHEMA-VALIDATE ...); Evaluation aborted on #<SB-PCL::NO-APPLICABLE-METHOD-ERROR {1008018513}>.
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . 22)) (("name" . "Peter"))))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "~s is not of type: ~a" {10082EB883}>.
+SCHEMATA> (validate-with-schema *list-of-person* '((("name" . "Mariano")) (("name" . "Peter"))))
+NIL
+SCHEMATA> (validate-with-schema *list-of-person* '((("names" . "Mariano")) (("name" . "Peter"))))
+; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "Attributes not part of schema: ~a" {1008CD3DD3}>.
+
+4.5 SATISFIES-SCHEMA type
+=========================
+
+Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA
+type.  Schemas can be thought as types over data.  Defined schemas can
+be checked using TYPEP and CHECK-TYPE with the type '(satisfies-schema
+schema-name)'.
+
+   Example:
+
+SCHEMATA> (define-schema string-schema string)
+#<TYPE-SCHEMA STRING {10019DA8B3}>
+SCHEMATA> (typep "foo" '(satisfies-schema string-schema))
+T
+SCHEMATA> (typep 22 '(satisfies-schema string-schema))
+NIL
+SCHEMATA> (let ((x "foo"))
+            (check-type x (satisfies-schema string-schema))
+            x)
+"foo"
+
+4.6 SCHEMA-CLASS metaclass
+==========================
+
+SCHEMA-CLASS classes get an schema attached.
+
+   Example:
+
+SCHEMATA> (define-schema-class person ()
+            ((name :type string :initarg :name)
+             (age :type integer :required nil :initarg :age)))
+#<SCHEMA-CLASS SCHEMATA::PERSON>
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 22)))
+NIL
+
+SCHEMATA> (validate-with-schema (find-class 'person) '(("name" . "Mariano") ("age" . 'asdf)) :error-p nil)
+#<VALIDATION-ERROR 'ASDF is not of type: INTEGER {100109F833}>
+
+SCHEMATA> (generic-serializer:with-serializer :json
+            (generic-serializer:serialize (make-instance 'person :name "Mariano" :age 44)))
+{"name":"Mariano","age":44}
+
+
+File: schemata.info,  Node: Reference,  Next: Index,  Prev: Schema types,  Up: Top
+
+5 Reference
+***********
 
 * Menu:
 
 * SCHEMATA package::
 
 
-File: schemata.info,  Node: SCHEMATA package,  Up: API
+File: schemata.info,  Node: SCHEMATA package,  Up: Reference
 
-4.1 SCHEMATA package
+5.1 SCHEMATA package
 ====================
 
  -- PACKAGE: SCHEMATA
@@ -316,9 +463,9 @@ Classes
           '(setf schemata::schema-name)'
 
 
-File: schemata.info,  Node: Index,  Prev: API,  Up: Top
+File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
 
-5 Index
+6 Index
 *******
 
  [index ]
@@ -394,53 +541,54 @@ File: schemata.info,  Node: Index,  Prev: API,  Up: Top
 
 Tag Table:
 Node: Top246
-Node: Intro381
-Ref: introduction492
-Node: Installation1172
-Ref: installation1285
-Node: Usage1497
-Ref: usage1594
-Node: API1617
-Ref: api1703
-Node: SCHEMATA package1734
-Ref: SCHEMATA:SCHEMA macro1916
-Ref: SCHEMATA:DEFINE-SCHEMA macro2001
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function2175
-Ref: SCHEMATA:ATTRIBUTE-NAME function2313
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function2377
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function2464
-Ref: SCHEMATA:OBJECT-CLASS function2534
-Ref: SCHEMATA:ATTRIBUTE-PARSER function2596
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function2662
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function2731
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function2804
-Ref: SCHEMATA:SCHEMA-TYPE function2877
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function2938
-Ref: SCHEMATA:OBJECT-NAME function3007
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function3068
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function3135
-Ref: SCHEMATA:ATTRIBUTE-TYPE function3203
-Ref: SCHEMATA:ATTRIBUTE-READER function3288
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function3341
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function3543
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function3659
-Ref: SCHEMATA:SCHEMA-SPEC function3845
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function3890
-Ref: SCHEMATA:VALIDATION-ERROR function3946
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function4008
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function4849
-Ref: SCHEMATA:ATTRIBUTE-WRITER function4906
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function4959
-Ref: SCHEMATA:FIND-SCHEMA function5056
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function5159
-Ref: SCHEMATA:OBJECT-SCHEMA class5457
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class6872
-Ref: SCHEMATA:SCHEMA class7171
-Ref: SCHEMATA:VALIDATION-ERROR class7445
-Ref: SCHEMATA:ATTRIBUTE class7576
-Ref: SCHEMATA:TYPE-SCHEMA class8682
-Ref: SCHEMATA:SCHEMA-OBJECT class8928
-Ref: SCHEMATA:SCHEMA-CLASS class9028
-Node: Index9404
+Node: Intro404
+Ref: introduction515
+Node: Installation851
+Ref: installation964
+Node: Usage1013
+Ref: usage1119
+Node: Schema types3043
+Node: Reference7111
+Ref: reference7222
+Node: SCHEMATA package7253
+Ref: SCHEMATA:SCHEMA macro7441
+Ref: SCHEMATA:DEFINE-SCHEMA macro7526
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function7700
+Ref: SCHEMATA:ATTRIBUTE-NAME function7838
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function7902
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function7989
+Ref: SCHEMATA:OBJECT-CLASS function8059
+Ref: SCHEMATA:ATTRIBUTE-PARSER function8121
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function8187
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function8256
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function8329
+Ref: SCHEMATA:SCHEMA-TYPE function8402
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function8463
+Ref: SCHEMATA:OBJECT-NAME function8532
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function8593
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function8660
+Ref: SCHEMATA:ATTRIBUTE-TYPE function8728
+Ref: SCHEMATA:ATTRIBUTE-READER function8813
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function8866
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function9068
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function9184
+Ref: SCHEMATA:SCHEMA-SPEC function9370
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function9415
+Ref: SCHEMATA:VALIDATION-ERROR function9471
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function9533
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function10374
+Ref: SCHEMATA:ATTRIBUTE-WRITER function10431
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function10484
+Ref: SCHEMATA:FIND-SCHEMA function10581
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function10684
+Ref: SCHEMATA:OBJECT-SCHEMA class10982
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class12397
+Ref: SCHEMATA:SCHEMA class12696
+Ref: SCHEMATA:VALIDATION-ERROR class12970
+Ref: SCHEMATA:ATTRIBUTE class13101
+Ref: SCHEMATA:TYPE-SCHEMA class14207
+Ref: SCHEMATA:SCHEMA-OBJECT class14453
+Ref: SCHEMATA:SCHEMA-CLASS class14553
+Node: Index14929
 
 End Tag Table
