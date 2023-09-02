@@ -4,90 +4,75 @@
   ())
 
 (defclass schema-class (standard-class)
-  ((serialization-name :initarg :serialization-name
-                       :accessor serialization-name
-                                        ;:type (or string symbol)
-                       :initform nil))
-  (:documentation "Metaclass for serializable objects"))
+  ((schema-name :initarg :schema-name
+                :accessor schema-name
+                :type (or null string symbol)
+                :initform nil))
+  (:documentation "Metaclass for schema objects"))
 
-(defclass serializable-slot-definition (closer-mop:standard-slot-definition)
-  ((serializable
+(defclass schema-slot-definition (closer-mop:standard-slot-definition attribute-properties)
+  ((schema
+    :initform nil
+    :accessor slot-schema
+    :type (or null schema)
+    :initarg :schema)
+   (schema-slot-p
     :initform t
     :type boolean
-    :accessor serializable-slot-p
-    :initarg :serialize)
-   (serialization-type
+    :initarg :schema-slot-p
+    :accessor schema-slot-p)
+   (schema-name
     :initform nil
-    :accessor serialization-type
-    :initarg :serialization-type)
-   (serialization-accessor
-    :initform nil
-    :type (or function null)
-    :accessor serialization-accessor
-    :initarg :serialize-accessor)
-   (serialization-name
-    :initform nil
-    :type (or string symbol)
-    :accessor serialization-name
-    :initarg :serialization-name)
-   (serialization-optional
-    :initform nil
-    :type boolean
-    :accessor serialization-optional
-    :initarg :serialization-optional)
-   (toggle-option
-    :initform nil
-    :type symbol
-    :accessor toggle-option
-    :initarg toggle-option)))
-
+    :type (or null string symbol)
+    :accessor schema-name
+    :initarg :schema-name)))
 
 ;; Slots
 
-(defclass serializable-direct-slot-definition (serializable-slot-definition closer-mop:standard-direct-slot-definition)
+(defclass schema-direct-slot-definition (schema-slot-definition closer-mop:standard-direct-slot-definition)
   ())
 
-(defclass serializable-effective-slot-definition (serializable-slot-definition closer-mop:standard-effective-slot-definition)
+(defclass schema-effective-slot-definition (schema-slot-definition closer-mop:standard-effective-slot-definition)
   ())
 
 (defmethod closer-mop:direct-slot-definition-class ((class schema-class) &rest initargs)
   (declare (ignore initargs))
-  (find-class 'serializable-direct-slot-definition))
+  (find-class 'schema-direct-slot-definition))
 
 (defmethod closer-mop:effective-slot-definition-class ((class schema-class) &rest initargs)
   (declare (ignore initargs))
-  (find-class 'serializable-effective-slot-definition))
+  (find-class 'schema-effective-slot-definition))
 
-(defmethod initialize-instance :after ((serializable-slot serializable-direct-slot-definition) &rest initargs)
+(defmethod initialize-instance :after ((schema-slot schema-direct-slot-definition) &rest initargs)
   (declare (ignore initargs))
-  (assert (or (not (serializable-slot-p serializable-slot))
-              (serialization-type serializable-slot))
+  (assert (or (not (schema-slot-p schema-slot))
+              (c2mop:slot-definition-type schema-slot)
+              (slot-schema schema-slot))
           nil
-          "Provide the serialization type for slot ~A" serializable-slot))
+          "Provide the type or schema for slot ~A" schema-slot))
 
 (defmethod closer-mop:compute-effective-slot-definition ((class schema-class)
                                                          slot-name direct-slots)
   (declare (ignore slot-name))
   (let ((effective-slot (call-next-method))
         (direct-slots (remove-if-not (lambda (slot)
-                                       (typep slot 'serializable-direct-slot-definition))
+                                       (typep slot 'schema-direct-slot-definition))
                                      direct-slots)))
     (unless (null (cdr direct-slots))
-      (error "More than one :serialize specifier"))
-    (let ((direct-slot (car direct-slots)))
-      (setf (serializable-slot-p effective-slot)
-            (serializable-slot-p direct-slot)
-            (serialization-name effective-slot)
-            (serialization-name direct-slot)
-            (serialization-type effective-slot)
-            (serialization-type direct-slot)
-            (serialization-accessor effective-slot)
-            (serialization-accessor direct-slot)
-            (serialization-optional effective-slot)
-            (serialization-optional direct-slot)
-            (toggle-option effective-slot)
-            (toggle-option direct-slot)))
-    effective-slot))
+      (error "More than one :schema specifier"))
+    (macrolet ((set-effective-slot (&rest accessors)
+                 `(setf ,@(loop for accessor in accessors
+                                collect `(,accessor effective-slot)
+                                collect `(,accessor direct-slot)))))
+      (let ((direct-slot (car direct-slots)))
+        (set-effective-slot schema-slot-p schema-name
+                            slot-schema attribute-required-p
+                            attribute-required-message attribute-default
+                            attribute-validator attribute-add-validator
+                            attribute-parser attribute-formatter
+                            attribute-external-name
+                            attribute-serializer attribute-unserializer)
+        effective-slot))))
 
 ;; Inheritance
 
@@ -113,8 +98,8 @@
   ;; to be able to call closer-mop:class-slots needed for the schema definition
   (closer-mop:finalize-inheritance class)
 
-  (let ((schema-name #+nil(intern (format nil "~A-SCHEMA" (class-name class)))
-                     (class-name class)))
+  (let ((schema-name (or (schema-name class)
+                         (class-name class))))
     (register-schema
      schema-name
      (schema-class-schema class))))
@@ -139,8 +124,7 @@
         ;; to be able to call closer-mop:class-slots needed for the schema definition
         (closer-mop:finalize-inheritance class)
 
-        (let ((schema-name #+nil(intern (format nil "~A-SCHEMA" (class-name class)))
-                           (class-name class)))
+        (let ((schema-name (or (schema-name class) (class-name class))))
           (register-schema
            schema-name
            (schema-class-schema class))))
@@ -169,24 +153,24 @@
           (append direct-superclasses from-classes))
         direct-superclasses)))
 
-(defgeneric serializable-slots (object)
+(defgeneric schema-slots (object)
   (declare (optimize speed))
   (:documentation
-   "Return a list of slot-definitions to serialize. The default
-    is to call serializable-slots-using-class with the object
+   "Return a list of slot-definitions part of the schema. The default
+    is to call schema-slots-using-class with the object
     and the objects class")
   (:method ((object standard-object))
-    (serializable-slots-using-class object (class-of object)))
+    (schema-slots-using-class object (class-of object)))
   #+(or sbcl cmu openmcl allegro)
   (:method ((object structure-object))
-    (serializable-slots-using-class object (class-of object)))
+    (schema-slots-using-class object (class-of object)))
   (:method ((object condition))
-    (serializable-slots-using-class object (class-of object))))
+    (schema-slots-using-class object (class-of object))))
 
-                                        ; unfortunately the metaclass of conditions in sbcl and cmu
-                                        ; are not standard-class
+;; unfortunately the metaclass of conditions in sbcl and cmu
+;; are not standard-class
 
-(defgeneric serializable-slots-using-class (object class)
+(defgeneric schema-slots-using-class (object class)
   (declare (optimize speed))
   (:documentation "Return a list of slot-definitions to serialize.
    The default calls compute slots with class")
@@ -194,39 +178,42 @@
     (closer-mop:class-slots class)))
 
 (defmacro define-schema-class (name direct-superclasses direct-slots &rest options)
-  "Helper macro to define serializable classes"
+  "Helper macro to define schema classes"
   `(defclass ,name ,direct-superclasses
      ,direct-slots
      (:metaclass schema-class)
      ,@options))
 
 (defun schema-class-schema (schema-class)
-  "Generate a schema using the serializable class meta info"
-  (let ((serialization-name
-          (or (and (serialization-name schema-class)
-                   (first (serialization-name schema-class)))
+  "Generate a schema using the schema class meta info"
+  (let ((schema-name
+          (or (schema-name schema-class)
               (class-name schema-class))))
     (eval
      (list 'schema
-           (list 'object serialization-name
+           (list 'object schema-name
                  (loop for slot in (closer-mop:class-slots schema-class)
-                       when (and (typep slot 'serializable-effective-slot-definition)
-                                 (serializable-slot-p slot))
+                       when (and (typep slot 'schema-effective-slot-definition)
+                                 (schema-slot-p slot))
                          collect
-                         (let ((serialization-name (or (serialization-name slot)
-                                                       (closer-mop:slot-definition-name slot)))
-                               (serialization-accessor (serialization-accessor slot))
-                               (toggle-option (toggle-option slot))
-                               (serialization-type (serialization-type slot))
-                               (serialization-optional (serialization-optional slot)))
-                           `(,serialization-name
-                             ,serialization-type
-                             ,@(when serialization-accessor
-                                 (list :accessor serialization-accessor))
-                             ,@(when toggle-option
-                                 (list :toggle toggle-option))
-                             ,@(when serialization-optional
-                                 (list :required nil))))))))))
+                         (let ((slot-schema-name (or (schema-name slot)
+                                                     (closer-mop:slot-definition-name slot))))
+                               
+                           (list slot-schema-name
+                                 (or (slot-schema slot)
+                                     (c2mop:slot-definition-type slot))
+                                 :slot (c2mop:slot-definition-name slot)
+                                 :required (attribute-required-p slot)
+                                 :required-message (attribute-required-message slot)
+                                 :default (or (attribute-default slot)
+                                              (c2mop:slot-definition-initform slot))
+                                 :validator (attribute-validator slot)
+                                 :add-validator (attribute-add-validator slot)
+                                 :parser (attribute-parser slot)
+                                 :formatter (attribute-formatter slot)
+                                 :external-name (attribute-external-name slot)
+                                 :serializer (attribute-serializer slot)
+                                 :unserializer (attribute-unserializer slot)))))))))
 
 (defmethod generic-serializer::serialize ((object schema-object)
                                           &optional

@@ -48,8 +48,8 @@
 (defmethod %serialize-with-schema ((schema type-schema) serializer input stream)
   (let ((class (find-class (schema-type schema) nil)))
     (cond
-      ((and class (typep class 'serializable-class))
-       (%serialize-with-schema (serializable-class-schema class)
+      ((and class (typep class 'schema-class))
+       (%serialize-with-schema (schema-class-schema class)
                                serializer input stream))
       (t
        ;; else, serialize the attribute value

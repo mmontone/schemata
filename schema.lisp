@@ -104,16 +104,6 @@ The schema can then be accessed via FIND-SCHEMA."
    (default :initarg :default
             :accessor attribute-default
             :initform nil)
-   (accessor :initarg :accessor
-             :initform nil
-             :accessor attribute-accessor
-             :type (or null symbol))
-   (writer :initarg :writer
-           :initform nil
-           :type (or null trivial-types:function-designator))
-   (reader :initarg :reader
-           :initform nil
-           :type (or null trivial-types:function-designator))
    (validator :initarg :validator
               :accessor attribute-validator
               :initform nil
@@ -149,6 +139,16 @@ The schema can then be accessed via FIND-SCHEMA."
    (type :initarg :type
          :accessor attribute-type
          :type schema)
+   (accessor :initarg :accessor
+             :initform nil
+             :accessor attribute-accessor
+             :type (or null symbol))
+   (writer :initarg :writer
+           :initform nil
+           :type (or null trivial-types:function-designator))
+   (reader :initarg :reader
+           :initform nil
+           :type (or null trivial-types:function-designator))
    (slot :initarg :slot
          :accessor attribute-slot
          :initform nil

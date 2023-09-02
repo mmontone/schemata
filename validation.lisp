@@ -151,6 +151,9 @@ Args:
 (defmethod schema-validate ((schema schema-reference-schema) data)
   (schema-validate (referenced-schema schema) data))
 
+(defmethod schema-validate ((schema schema-class) data)
+  (schema-validate (schema-class-schema schema) data))
+
 (defmethod schema-type-validate ((schema-type (eql 'local-time:timestamp)) data)
   (unless
       (or (typep data 'local-time:timestamp)
