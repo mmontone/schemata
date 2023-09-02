@@ -1,0 +1,104 @@
+\input texinfo   @c -*-texinfo-*-
+@comment $Id@w{$}
+@comment %**start of header
+@settitle SCHEMATA
+@syncodeindex pg cp
+@setfilename schemata.info
+@include common-lisp.texi
+
+@copying
+
+Copyright @copyright{} 2021 Mariano Montone
+
+@end copying
+
+
+@dircategory Common Lisp
+@direntry
+* schemata: (schemata) Common Lisp web forms handling library.
+@end direntry
+
+@titlepage
+@title SCHEMATA
+
+@author Mariano Montone ( @email{marianomontone@@gmail.com} )
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@node Top
+@top Top
+@cindex schemata
+
+@menu
+* Intro::
+* Installation::
+* Usage::
+* API::
+* Index::
+@end menu
+
+@node Intro
+@chapter Introduction
+@anchor{introduction}
+
+SCHEMATA is a web forms handling library for Common Lisp.
+
+Although it is potentially framework agnostic, it runs on top of Hunchentoot at the moment.
+
+It features:
+
+@itemize @bullet
+@item
+Several form field types: String, boolean, integer, email, password fields. And more.
+@item Custom fields. SCHEMATA is extensible and it is possible to define new field types.
+@item Server and client side validation
+@item Rendering backends. Forms can be rendered via CL-WHO, or Djula, or something else; the backend is pluggable. The default renderer is CL-WHO.
+@item Themes (like Bootstrap)
+@item Control on rendering and layout.
+@item Handling of form errors.
+@item CSRF protection
+@end itemize
+
+@node Installation
+@chapter Installation
+@anchor{installation}
+
+
+With Quicklisp:
+
+@lisp
+(ql:quickload "schemata")
+@end lisp
+
+When you want to use a form renderer such as @code{:who} or @code{:djula}, quickload the associated package: @code{schemata.who}, @code{schemata.who.bootstrap}, @code{schemata.djula}.
+
+@node Usage
+@chapter Usage
+@anchor{usage}
+
+@section Basics
+
+@node API
+@chapter API
+@anchor{api}
+
+@menu
+* SCHEMATA package::
+@end menu
+
+@node SCHEMATA package
+@section SCHEMATA package
+(@clpackage :schemata)
+
+@node Index
+@chapter Index
+
+@printindex cp
+@printindex vr
+@printindex fn
+
+@bye

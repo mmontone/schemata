@@ -1,2 +1,12 @@
 *~
 *.fasl
+/docs/schemata.aux
+/docs/schemata.cp
+/docs/schemata.fn
+/docs/schemata.fns
+/docs/schemata.log
+/docs/schemata.toc
+/docs/schemata.tp
+/docs/schemata.tps
+/docs/schemata.vr
+/docs/schemata.vrs

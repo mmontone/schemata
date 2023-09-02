@@ -1,0 +1,398 @@
+\input texinfo   @c -*-texinfo-*-
+@comment $Id@w{$}
+@comment %**start of header
+@settitle SCHEMATA
+@syncodeindex pg cp
+@setfilename schemata.info
+@include common-lisp.texi
+
+@copying
+
+Copyright @copyright{} 2021 Mariano Montone
+
+@end copying
+
+
+@dircategory Common Lisp
+@direntry
+* schemata: (schemata) Common Lisp web forms handling library.
+@end direntry
+
+@titlepage
+@title SCHEMATA
+
+@author Mariano Montone ( @email{marianomontone@@gmail.com} )
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+@end titlepage
+
+@contents
+
+@node Top
+@top Top
+@cindex schemata
+
+@menu
+* Intro::
+* Installation::
+* Usage::
+* API::
+* Index::
+@end menu
+
+@node Intro
+@chapter Introduction
+@anchor{introduction}
+
+SCHEMATA is a web forms handling library for Common Lisp.
+
+Although it is potentially framework agnostic, it runs on top of Hunchentoot at the moment.
+
+It features:
+
+@itemize @bullet
+@item
+Several form field types: String, boolean, integer, email, password fields. And more.
+@item Custom fields. SCHEMATA is extensible and it is possible to define new field types.
+@item Server and client side validation
+@item Rendering backends. Forms can be rendered via CL-WHO, or Djula, or something else; the backend is pluggable. The default renderer is CL-WHO.
+@item Themes (like Bootstrap)
+@item Control on rendering and layout.
+@item Handling of form errors.
+@item CSRF protection
+@end itemize
+
+@node Installation
+@chapter Installation
+@anchor{installation}
+
+
+With Quicklisp:
+
+@lisp
+(ql:quickload "schemata")
+@end lisp
+
+When you want to use a form renderer such as @code{:who} or @code{:djula}, quickload the associated package: @code{schemata.who}, @code{schemata.who.bootstrap}, @code{schemata.djula}.
+
+@node Usage
+@chapter Usage
+@anchor{usage}
+
+@section Basics
+
+@node API
+@chapter API
+@anchor{api}
+
+@menu
+* SCHEMATA package::
+@end menu
+
+@node SCHEMATA package
+@section SCHEMATA package
+@deftp PACKAGE SCHEMATA
+
+@end deftp
+
+@heading External definitions
+
+@subheading Macros
+@cldefmacro {SCHEMATA, SCHEMA, (schema-def)}
+
+Wrapper macro for schema definitions.
+@endcldefmacro
+
+@cldefmacro {SCHEMATA, DEFINE-SCHEMA, (name schema)}
+
+Register SCHEMA under NAME.
+The schema can then be accessed via FIND-SCHEMA.
+@endcldefmacro
+
+@subheading Generic functions
+@cldefgeneric {SCHEMATA, PARSE-WITH-SCHEMA, (schema string-or-data)}
+
+Parses the string to an association list using the schema
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-NAME, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, UNSERIALIZE-WITH-SCHEMA, (schema data format)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, SCHEMA-DOCUMENTATION, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, OBJECT-CLASS, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-PARSER, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-VALIDATOR, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-ADD-VALIDATOR, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-EXTERNAL-NAME, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, SCHEMA-TYPE, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-FORMATTER, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, OBJECT-NAME, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, OBJECT-ATTRIBUTES, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-ACCESSOR, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-TYPE, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@subheading Functions
+@cldefun {SCHEMATA, ATTRIBUTE-READER, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, POPULATE-WITH-SCHEMA, (schema object data &key exclude)}
+
+Populate CLOS objects from data + schema.
+Attributes members of EXCLUDE parameter are not populated.
+@endcldefun
+
+@cldefun {SCHEMATA, SCHEMA-CLASS-SCHEMA, (schema-class)}
+
+Generate a schema using the schema class meta info
+@endcldefun
+
+@cldefun {SCHEMATA, SERIALIZE-WITH-SCHEMA, (schema input &optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, SCHEMA-SPEC, (schema)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, ATTRIBUTE-TYPE-NAME, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, VALIDATION-ERROR, (message &rest args)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, VALIDATE-WITH-SCHEMA, (schema data &key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))}
+
+Validate input using schema.
+Useful for validating resource operations posted content (for :post and :put methods).
+Input can be a string or an association list.
+
+Args:
+  - schema (symbol or schema): The schema
+  - data (alist): The data to validate.
+  - format (keyword): The data format.
+  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
+  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
+@endcldefun
+
+@cldefun {SCHEMATA, ATTRIBUTE-OPTIONAL-P, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, ATTRIBUTE-WRITER, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, FIND-OBJECT-ATTRIBUTE, (object attribute-name &key (error-p t))}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, FIND-SCHEMA, (name &optional (errorp t))}
+
+Find a schema definition by name
+@endcldefun
+
+@cldefun {SCHEMATA, PATCH-WITH-SCHEMA, (schema object data)}
+
+Populate CLOS objects from data + schema.
+Only populates attributes available in DATA, validating them.
+Useful for PATCH rest api operations implementations.
+DATA should be an association list.
+@endcldefun
+
+@subheading Classes
+@cldefclass {SCHEMATA, OBJECT-SCHEMA}
+
+
+
+Class precedence list: @code{object-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{name} --- initarg: @code{@w{:name}}; reader: @code{@w{schemata:object-name}}; writer: @code{@w{(setf schemata:object-name)}}
+
+The name of the object.@item @code{attributes} --- initarg: @code{@w{:attributes}}; reader: @code{@w{schemata:object-attributes}}; writer: @code{@w{(setf schemata:object-attributes)}}
+
+@item @code{class} --- initarg: @code{@w{:class}}; reader: @code{@w{schemata:object-class}}; writer: @code{@w{(setf schemata:object-class)}}
+
+@item @code{ignore-unknown-attributes} --- initarg: @code{@w{:ignore-unknown-attributes}}; reader: @code{@w{schemata::ignore-unknown-attributes}}; writer: @code{@w{(setf schemata::ignore-unknown-attributes)}}
+
+@item @code{serializer} --- initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::object-serializer}}; writer: @code{@w{(setf schemata::object-serializer)}}
+
+@item @code{unserializer} --- initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::object-unserializer}}; writer: @code{@w{(setf schemata::object-unserializer)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-REFERENCE-SCHEMA}
+
+
+
+Class precedence list: @code{schema-reference-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{name} --- initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA}
+
+
+
+Class precedence list: @code{schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{documentation} --- initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, VALIDATION-ERROR}
+
+
+
+Class precedence list: @code{validation-error, error, serious-condition, condition, t}
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, ATTRIBUTE}
+
+
+
+Class precedence list: @code{attribute, schema, attribute-properties, standard-object, t}
+
+Slots:
+@itemize
+@item @code{name} --- initarg: @code{@w{:name}}; reader: @code{@w{schemata:attribute-name}}; writer: @code{@w{(setf schemata:attribute-name)}}
+
+@item @code{type} --- initarg: @code{@w{:type}}; reader: @code{@w{schemata:attribute-type}}; writer: @code{@w{(setf schemata:attribute-type)}}
+
+@item @code{accessor} --- initarg: @code{@w{:accessor}}; reader: @code{@w{schemata:attribute-accessor}}; writer: @code{@w{(setf schemata:attribute-accessor)}}
+
+@item @code{writer} --- initarg: @code{@w{:writer}}
+
+@item @code{reader} --- initarg: @code{@w{:reader}}
+
+@item @code{slot} --- initarg: @code{@w{:slot}}; reader: @code{@w{schemata::attribute-slot}}; writer: @code{@w{(setf schemata::attribute-slot)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, TYPE-SCHEMA}
+
+
+
+Class precedence list: @code{type-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{type} --- initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-OBJECT}
+
+
+
+Class precedence list: @code{schema-object, standard-object, t}
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-CLASS}
+
+Metaclass for schema objects
+
+Class precedence list: @code{schema-class, standard-class, class, specializer, metaobject, standard-object, t}
+
+Slots:
+@itemize
+@item @code{schema-name} --- initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+
+@end itemize
+
+@endcldefclass
+
+
+
+@node Index
+@chapter Index
+
+@printindex cp
+@printindex vr
+@printindex fn
+
+@bye

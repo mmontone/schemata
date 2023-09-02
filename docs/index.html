@@ -1,0 +1,602 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<!-- 
+Copyright (C) 2021 Mariano Montone
+ -->
+<!-- Created by GNU Texinfo 6.7, http://www.gnu.org/software/texinfo/ -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>SCHEMATA</title>
+
+<meta name="description" content="SCHEMATA">
+<meta name="keywords" content="SCHEMATA">
+<meta name="resource-type" content="document">
+<meta name="distribution" content="global">
+<meta name="Generator" content="texi2any">
+<link href="#Top" rel="start" title="Top">
+<link href="#Index" rel="index" title="Index">
+<link href="#SEC_Contents" rel="contents" title="Table of Contents">
+<style type="text/css">
+<!--
+a.summary-letter {text-decoration: none}
+blockquote.indentedblock {margin-right: 0em}
+div.display {margin-left: 3.2em}
+div.example {margin-left: 3.2em}
+div.lisp {margin-left: 3.2em}
+kbd {font-style: oblique}
+pre.display {font-family: inherit}
+pre.format {font-family: inherit}
+pre.menu-comment {font-family: serif}
+pre.menu-preformatted {font-family: serif}
+span.nolinebreak {white-space: nowrap}
+span.roman {font-family: initial; font-weight: normal}
+span.sansserif {font-family: sans-serif; font-weight: normal}
+ul.no-bullet {list-style: none}
+-->
+</style>
+<link rel="stylesheet" type="text/css" href="texinfo-klare.css">
+<link rel="stylesheet" type="text/css" href="lisp-coloring.css">
+
+
+</head>
+
+<body lang="en">
+<h1 class="settitle" align="center">SCHEMATA</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<span id="SEC_Contents"></span>
+<h2 class="contents-heading">Table of Contents</h2>
+
+<div class="contents">
+
+<ul class="no-bullet">
+  <li><a id="toc-Introduction" href="#Intro">1 Introduction</a></li>
+  <li><a id="toc-Installation-1" href="#Installation">2 Installation</a></li>
+  <li><a id="toc-Usage-1" href="#Usage">3 Usage</a>
+  <ul class="no-bullet">
+    <li><a id="toc-Basics" href="#Basics">3.1 Basics</a></li>
+  </ul></li>
+  <li><a id="toc-API-1" href="#API">4 API</a>
+  <ul class="no-bullet">
+    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">4.1 SCHEMATA package</a></li>
+  </ul></li>
+  <li><a id="toc-Index-1" href="#Index" rel="index">5 Index</a></li>
+</ul>
+</div>
+
+
+<span id="Top"></span><div class="header">
+<p>
+Next: <a href="#Intro" accesskey="n" rel="next">Intro</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Top-1"></span><h1 class="top">Top</h1>
+<span id="index-schemata"></span>
+
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#Intro" accesskey="1">Intro</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Installation" accesskey="2">Installation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Usage" accesskey="3">Usage</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#API" accesskey="4">API</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Index" rel="index" accesskey="5">Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="Intro"></span><div class="header">
+<p>
+Next: <a href="#Installation" accesskey="n" rel="next">Installation</a>, Previous: <a href="#Top" accesskey="p" rel="prev">Top</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Introduction"></span><h2 class="chapter">1 Introduction</h2>
+<span id="introduction"></span>
+<p>SCHEMATA is a web forms handling library for Common Lisp.
+</p>
+<p>Although it is potentially framework agnostic, it runs on top of Hunchentoot at the moment.
+</p>
+<p>It features:
+</p>
+<ul>
+<li> Several form field types: String, boolean, integer, email, password fields. And more.
+</li><li> Custom fields. SCHEMATA is extensible and it is possible to define new field types.
+</li><li> Server and client side validation
+</li><li> Rendering backends. Forms can be rendered via CL-WHO, or Djula, or something else; the backend is pluggable. The default renderer is CL-WHO.
+</li><li> Themes (like Bootstrap)
+</li><li> Control on rendering and layout.
+</li><li> Handling of form errors.
+</li><li> CSRF protection
+</li></ul>
+
+<hr>
+<span id="Installation"></span><div class="header">
+<p>
+Next: <a href="#Usage" accesskey="n" rel="next">Usage</a>, Previous: <a href="#Intro" accesskey="p" rel="prev">Intro</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Installation-1"></span><h2 class="chapter">2 Installation</h2>
+<span id="installation"></span>
+
+<p>With Quicklisp:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">ql:quickload <span class="string">&quot;schemata&quot;</span></span>)</span>
+</pre></div>
+
+<p>When you want to use a form renderer such as <code>:who</code> or <code>:djula</code>, quickload the associated package: <code>schemata.who</code>, <code>schemata.who.bootstrap</code>, <code>schemata.djula</code>.
+</p>
+<hr>
+<span id="Usage"></span><div class="header">
+<p>
+Next: <a href="#API" accesskey="n" rel="next">API</a>, Previous: <a href="#Installation" accesskey="p" rel="prev">Installation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Usage-1"></span><h2 class="chapter">3 Usage</h2>
+<span id="usage"></span>
+<span id="Basics"></span><h3 class="section">3.1 Basics</h3>
+
+<hr>
+<span id="API"></span><div class="header">
+<p>
+Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="API-1"></span><h2 class="chapter">4 API</h2>
+<span id="api"></span>
+<table class="menu" border="0" cellspacing="0">
+<tr><td align="left" valign="top">&bull; <a href="#SCHEMATA-package" accesskey="1">SCHEMATA package</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+</table>
+
+<hr>
+<span id="SCHEMATA-package"></span><div class="header">
+<p>
+Up: <a href="#API" accesskey="u" rel="up">API</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="SCHEMATA-package-1"></span><h3 class="section">4.1 SCHEMATA package</h3>
+<dl>
+<dt id="index-SCHEMATA">PACKAGE: <strong>SCHEMATA</strong></dt>
+</dl>
+
+<span id="External-definitions"></span><h3 class="heading">External definitions</h3>
+
+<span id="Macros"></span><h4 class="subheading">Macros</h4>
+<span id="index-SCHEMATA_003aSCHEMA"></span>
+<span id="SCHEMATA_003aSCHEMA-macro"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA-1">Macro: <strong>SCHEMATA:SCHEMA</strong> <em>(schema-def)</em></dt>
+<dd>
+<p>Wrapper macro for schema definitions.
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aDEFINE_002dSCHEMA"></span>
+<span id="SCHEMATA_003aDEFINE_002dSCHEMA-macro"></span><dl>
+<dt id="index-SCHEMATA_003aDEFINE_002dSCHEMA-1">Macro: <strong>SCHEMATA:DEFINE-SCHEMA</strong> <em>(name schema)</em></dt>
+<dd>
+<p>Register SCHEMA under NAME.
+The schema can then be accessed via FIND-SCHEMA.
+</p></dd></dl>
+
+<span id="Generic-functions"></span><h4 class="subheading">Generic functions</h4>
+<span id="index-SCHEMATA_003aPARSE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPARSE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aPARSE_002dWITH_002dSCHEMA-1">Generic-Function: <strong>SCHEMATA:PARSE-WITH-SCHEMA</strong> <em>(schema string-or-data)</em></dt>
+<dd>
+<p>Parses the string to an association list using the schema
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-NAME</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-1">Generic-Function: <strong>SCHEMATA:UNSERIALIZE-WITH-SCHEMA</strong> <em>(schema data format)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION"></span>
+<span id="SCHEMATA_003aSCHEMA_002dDOCUMENTATION-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION-1">Generic-Function: <strong>SCHEMATA:SCHEMA-DOCUMENTATION</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aOBJECT_002dCLASS"></span>
+<span id="SCHEMATA_003aOBJECT_002dCLASS-function"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dCLASS-1">Generic-Function: <strong>SCHEMATA:OBJECT-CLASS</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dPARSER"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dPARSER-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dPARSER-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-PARSER</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dVALIDATOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ADD-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-EXTERNAL-NAME</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dTYPE"></span>
+<span id="SCHEMATA_003aSCHEMA_002dTYPE-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dTYPE-1">Generic-Function: <strong>SCHEMATA:SCHEMA-TYPE</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dFORMATTER-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-FORMATTER</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aOBJECT_002dNAME"></span>
+<span id="SCHEMATA_003aOBJECT_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dNAME-1">Generic-Function: <strong>SCHEMATA:OBJECT-NAME</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES"></span>
+<span id="SCHEMATA_003aOBJECT_002dATTRIBUTES-function"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES-1">Generic-Function: <strong>SCHEMATA:OBJECT-ATTRIBUTES</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dACCESSOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ACCESSOR</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dTYPE-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-TYPE</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="Functions"></span><h4 class="subheading">Functions</h4>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dREADER"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dREADER-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dREADER-1">Function: <strong>SCHEMATA:ATTRIBUTE-READER</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:POPULATE-WITH-SCHEMA</strong> <em>(schema object data &amp;key exclude)</em></dt>
+<dd>
+<p>Populate CLOS objects from data + schema.
+Attributes members of EXCLUDE parameter are not populated.
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-1">Function: <strong>SCHEMATA:SCHEMA-CLASS-SCHEMA</strong> <em>(schema-class)</em></dt>
+<dd>
+<p>Generate a schema using the schema class meta info
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:SERIALIZE-WITH-SCHEMA</strong> <em>(schema input &amp;optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dSPEC"></span>
+<span id="SCHEMATA_003aSCHEMA_002dSPEC-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dSPEC-1">Function: <strong>SCHEMATA:SCHEMA-SPEC</strong> <em>(schema)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-1">Function: <strong>SCHEMATA:ATTRIBUTE-TYPE-NAME</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aVALIDATION_002dERROR"></span>
+<span id="SCHEMATA_003aVALIDATION_002dERROR-function"></span><dl>
+<dt id="index-SCHEMATA_003aVALIDATION_002dERROR-1">Function: <strong>SCHEMATA:VALIDATION-ERROR</strong> <em>(message &amp;rest args)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:VALIDATE-WITH-SCHEMA</strong> <em>(schema data &amp;key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))</em></dt>
+<dd>
+<p>Validate input using schema.
+Useful for validating resource operations posted content (for :post and :put methods).
+Input can be a string or an association list.
+</p>
+<p>Args:
+  - schema (symbol or schema): The schema
+  - data (alist): The data to validate.
+  - format (keyword): The data format.
+  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
+  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-1">Function: <strong>SCHEMATA:ATTRIBUTE-OPTIONAL-P</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dWRITER"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dWRITER-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dWRITER-1">Function: <strong>SCHEMATA:ATTRIBUTE-WRITER</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"></span>
+<span id="SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-function"></span><dl>
+<dt id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1">Function: <strong>SCHEMATA:FIND-OBJECT-ATTRIBUTE</strong> <em>(object attribute-name &amp;key (error-p t))</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aFIND_002dSCHEMA"></span>
+<span id="SCHEMATA_003aFIND_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aFIND_002dSCHEMA-1">Function: <strong>SCHEMATA:FIND-SCHEMA</strong> <em>(name &amp;optional (errorp t))</em></dt>
+<dd>
+<p>Find a schema definition by name
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aPATCH_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPATCH_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aPATCH_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:PATCH-WITH-SCHEMA</strong> <em>(schema object data)</em></dt>
+<dd>
+<p>Populate CLOS objects from data + schema.
+Only populates attributes available in DATA, validating them.
+Useful for PATCH rest api operations implementations.
+DATA should be an association list.
+</p></dd></dl>
+
+<span id="Classes"></span><h4 class="subheading">Classes</h4>
+<span id="index-SCHEMATA_003aOBJECT_002dSCHEMA"></span>
+<span id="SCHEMATA_003aOBJECT_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dSCHEMA-1">Class: <strong>SCHEMATA:OBJECT-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>object-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>name</code> &mdash; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-name)</span><!-- /@w --></code>
+
+<p>The name of the object.</p></li><li> <code>attributes</code> &mdash; initarg: <code>:attributes<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-attributes)</span><!-- /@w --></code>
+
+</li><li> <code>class</code> &mdash; initarg: <code>:class<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-class</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-class)</span><!-- /@w --></code>
+
+</li><li> <code>ignore-unknown-attributes</code> &mdash; initarg: <code><span class="nolinebreak">:ignore-unknown-attributes</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::ignore-unknown-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::ignore-unknown-attributes)</span><!-- /@w --></code>
+
+</li><li> <code>serializer</code> &mdash; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-serializer)</span><!-- /@w --></code>
+
+</li><li> <code>unserializer</code> &mdash; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-unserializer)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-1">Class: <strong>SCHEMATA:SCHEMA-REFERENCE-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema-reference-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>name</code> &mdash; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA-2"></span>
+<span id="SCHEMATA_003aSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA-3">Class: <strong>SCHEMATA:SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>documentation</code> &mdash; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aVALIDATION_002dERROR-2"></span>
+<span id="SCHEMATA_003aVALIDATION_002dERROR-class"></span><dl>
+<dt id="index-SCHEMATA_003aVALIDATION_002dERROR-3">Class: <strong>SCHEMATA:VALIDATION-ERROR</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>validation-error, error, serious-condition, condition, t</code>
+</p>
+</dd></dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE"></span>
+<span id="SCHEMATA_003aATTRIBUTE-class"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE-1">Class: <strong>SCHEMATA:ATTRIBUTE</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>attribute, schema, attribute-properties, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>name</code> &mdash; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-name)</span><!-- /@w --></code>
+
+</li><li> <code>type</code> &mdash; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-type)</span><!-- /@w --></code>
+
+</li><li> <code>accessor</code> &mdash; initarg: <code>:accessor<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-accessor</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-accessor)</span><!-- /@w --></code>
+
+</li><li> <code>writer</code> &mdash; initarg: <code>:writer<!-- /@w --></code>
+
+</li><li> <code>reader</code> &mdash; initarg: <code>:reader<!-- /@w --></code>
+
+</li><li> <code>slot</code> &mdash; initarg: <code>:slot<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-slot</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-slot)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aTYPE_002dSCHEMA"></span>
+<span id="SCHEMATA_003aTYPE_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aTYPE_002dSCHEMA-1">Class: <strong>SCHEMATA:TYPE-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>type-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>type</code> &mdash; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dOBJECT"></span>
+<span id="SCHEMATA_003aSCHEMA_002dOBJECT-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dOBJECT-1">Class: <strong>SCHEMATA:SCHEMA-OBJECT</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema-object, standard-object, t</code>
+</p>
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dCLASS"></span>
+<span id="SCHEMATA_003aSCHEMA_002dCLASS-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS-1">Class: <strong>SCHEMATA:SCHEMA-CLASS</strong></dt>
+<dd>
+<p>Metaclass for schema objects
+</p>
+<p>Class precedence list: <code>schema-class, standard-class, class, specializer, metaobject, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>schema-name</code> &mdash; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+
+
+<hr>
+<span id="Index"></span><div class="header">
+<p>
+Previous: <a href="#API" accesskey="p" rel="prev">API</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Index-1"></span><h2 class="chapter">5 Index</h2>
+
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_cp_letter-S"><b>S</b></a>
+ &nbsp; 
+</td></tr></table>
+<table class="index-cp" border="0">
+<tr><td></td><th align="left">Index Entry</th><td>&nbsp;</td><th align="left"> Section</th></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th id="Index_cp_letter-S">S</th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-schemata">schemata</a>:</td><td>&nbsp;</td><td valign="top"><a href="#Top">Top</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_cp_letter-S"><b>S</b></a>
+ &nbsp; 
+</td></tr></table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_fn_letter-S"><b>S</b></a>
+ &nbsp; 
+</td></tr></table>
+<table class="index-fn" border="0">
+<tr><td></td><th align="left">Index Entry</th><td>&nbsp;</td><th align="left"> Section</th></tr>
+<tr><td colspan="4"> <hr></td></tr>
+<tr><th id="Index_fn_letter-S">S</th><td></td><td></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dACCESSOR"><code>SCHEMATA:ATTRIBUTE-ACCESSOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dACCESSOR-1"><code>SCHEMATA:ATTRIBUTE-ACCESSOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR"><code>SCHEMATA:ATTRIBUTE-ADD-VALIDATOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-1"><code>SCHEMATA:ATTRIBUTE-ADD-VALIDATOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME"><code>SCHEMATA:ATTRIBUTE-EXTERNAL-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-1"><code>SCHEMATA:ATTRIBUTE-EXTERNAL-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dFORMATTER"><code>SCHEMATA:ATTRIBUTE-FORMATTER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dFORMATTER-1"><code>SCHEMATA:ATTRIBUTE-FORMATTER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dNAME"><code>SCHEMATA:ATTRIBUTE-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dNAME-1"><code>SCHEMATA:ATTRIBUTE-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP"><code>SCHEMATA:ATTRIBUTE-OPTIONAL-P</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-1"><code>SCHEMATA:ATTRIBUTE-OPTIONAL-P</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dPARSER"><code>SCHEMATA:ATTRIBUTE-PARSER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dPARSER-1"><code>SCHEMATA:ATTRIBUTE-PARSER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREADER"><code>SCHEMATA:ATTRIBUTE-READER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREADER-1"><code>SCHEMATA:ATTRIBUTE-READER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE"><code>SCHEMATA:ATTRIBUTE-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE-1"><code>SCHEMATA:ATTRIBUTE-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME"><code>SCHEMATA:ATTRIBUTE-TYPE-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-1"><code>SCHEMATA:ATTRIBUTE-TYPE-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR"><code>SCHEMATA:ATTRIBUTE-VALIDATOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR-1"><code>SCHEMATA:ATTRIBUTE-VALIDATOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dWRITER"><code>SCHEMATA:ATTRIBUTE-WRITER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dWRITER-1"><code>SCHEMATA:ATTRIBUTE-WRITER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFINE_002dSCHEMA"><code>SCHEMATA:DEFINE-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFINE_002dSCHEMA-1"><code>SCHEMATA:DEFINE-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"><code>SCHEMATA:FIND-OBJECT-ATTRIBUTE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1"><code>SCHEMATA:FIND-OBJECT-ATTRIBUTE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dSCHEMA"><code>SCHEMATA:FIND-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dSCHEMA-1"><code>SCHEMATA:FIND-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dATTRIBUTES"><code>SCHEMATA:OBJECT-ATTRIBUTES</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dATTRIBUTES-1"><code>SCHEMATA:OBJECT-ATTRIBUTES</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dCLASS"><code>SCHEMATA:OBJECT-CLASS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dCLASS-1"><code>SCHEMATA:OBJECT-CLASS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dNAME"><code>SCHEMATA:OBJECT-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aOBJECT_002dNAME-1"><code>SCHEMATA:OBJECT-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPARSE_002dWITH_002dSCHEMA"><code>SCHEMATA:PARSE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPARSE_002dWITH_002dSCHEMA-1"><code>SCHEMATA:PARSE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPATCH_002dWITH_002dSCHEMA"><code>SCHEMATA:PATCH-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPATCH_002dWITH_002dSCHEMA-1"><code>SCHEMATA:PATCH-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA"><code>SCHEMATA:POPULATE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-1"><code>SCHEMATA:POPULATE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA"><code>SCHEMATA:SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA-1"><code>SCHEMATA:SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA"><code>SCHEMATA:SCHEMA-CLASS-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-1"><code>SCHEMATA:SCHEMA-CLASS-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION"><code>SCHEMATA:SCHEMA-DOCUMENTATION</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION-1"><code>SCHEMATA:SCHEMA-DOCUMENTATION</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dSPEC"><code>SCHEMATA:SCHEMA-SPEC</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dSPEC-1"><code>SCHEMATA:SCHEMA-SPEC</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dTYPE"><code>SCHEMATA:SCHEMA-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSCHEMA_002dTYPE-1"><code>SCHEMATA:SCHEMA-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA"><code>SCHEMATA:SERIALIZE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-1"><code>SCHEMATA:SERIALIZE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA"><code>SCHEMATA:UNSERIALIZE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-1"><code>SCHEMATA:UNSERIALIZE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA"><code>SCHEMATA:VALIDATE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-1"><code>SCHEMATA:VALIDATE-WITH-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aVALIDATION_002dERROR"><code>SCHEMATA:VALIDATION-ERROR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aVALIDATION_002dERROR-1"><code>SCHEMATA:VALIDATION-ERROR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td colspan="4"> <hr></td></tr>
+</table>
+<table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_fn_letter-S"><b>S</b></a>
+ &nbsp; 
+</td></tr></table>
+
+<hr>
+
+
+
+</body>
+</html>
