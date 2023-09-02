@@ -373,17 +373,17 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>name</code> &mdash; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-name)</span><!-- /@w --></code>
+<li> <code>name</code> &mdash; type: <code>(or&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-name)</span><!-- /@w --></code>
 
-<p>The name of the object.</p></li><li> <code>attributes</code> &mdash; initarg: <code>:attributes<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-attributes)</span><!-- /@w --></code>
+<p>The name of the object.</p></li><li> <code>attributes</code> &mdash; type: <code>list<!-- /@w --></code>; initarg: <code>:attributes<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-attributes)</span><!-- /@w --></code>
 
-</li><li> <code>class</code> &mdash; initarg: <code>:class<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-class</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-class)</span><!-- /@w --></code>
+</li><li> <code>class</code> &mdash; type: <code>(or&nbsp;null&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:class<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-class</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-class)</span><!-- /@w --></code>
 
-</li><li> <code>ignore-unknown-attributes</code> &mdash; initarg: <code><span class="nolinebreak">:ignore-unknown-attributes</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::ignore-unknown-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::ignore-unknown-attributes)</span><!-- /@w --></code>
+</li><li> <code>ignore-unknown-attributes</code> &mdash; type: <code>boolean<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:ignore-unknown-attributes</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::ignore-unknown-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::ignore-unknown-attributes)</span><!-- /@w --></code>
 
-</li><li> <code>serializer</code> &mdash; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-serializer)</span><!-- /@w --></code>
+</li><li> <code>serializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-serializer)</span><!-- /@w --></code>
 
-</li><li> <code>unserializer</code> &mdash; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-unserializer)</span><!-- /@w --></code>
+</li><li> <code>unserializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-unserializer)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -399,7 +399,7 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>name</code> &mdash; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+<li> <code>name</code> &mdash; type: <code>symbol<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -415,7 +415,7 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>documentation</code> &mdash; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
+<li> <code>documentation</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -441,17 +441,17 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>name</code> &mdash; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-name)</span><!-- /@w --></code>
+<li> <code>name</code> &mdash; type: <code>symbol<!-- /@w --></code>; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-name)</span><!-- /@w --></code>
 
-</li><li> <code>type</code> &mdash; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-type)</span><!-- /@w --></code>
+</li><li> <code>type</code> &mdash; type: <code>schemata:schema<!-- /@w --></code>; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-type)</span><!-- /@w --></code>
 
-</li><li> <code>accessor</code> &mdash; initarg: <code>:accessor<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-accessor</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-accessor)</span><!-- /@w --></code>
+</li><li> <code>accessor</code> &mdash; type: <code>(or&nbsp;null&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:accessor<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-accessor</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-accessor)</span><!-- /@w --></code>
 
-</li><li> <code>writer</code> &mdash; initarg: <code>:writer<!-- /@w --></code>
+</li><li> <code>writer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:writer<!-- /@w --></code>
 
-</li><li> <code>reader</code> &mdash; initarg: <code>:reader<!-- /@w --></code>
+</li><li> <code>reader</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:reader<!-- /@w --></code>
 
-</li><li> <code>slot</code> &mdash; initarg: <code>:slot<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-slot</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-slot)</span><!-- /@w --></code>
+</li><li> <code>slot</code> &mdash; type: <code>(or&nbsp;null&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:slot<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-slot</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-slot)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -467,7 +467,7 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>type</code> &mdash; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
+<li> <code>type</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -493,7 +493,7 @@ DATA should be an association list.
 </p>
 <p>Slots:
 </p><ul>
-<li> <code>schema-name</code> &mdash; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+<li> <code>schema-name</code> &mdash; type: <code>(or&nbsp;null&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
 
 </li></ul>
 

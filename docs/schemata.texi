@@ -274,17 +274,19 @@ Class precedence list: @code{object-schema, schema, standard-object, t}
 
 Slots:
 @itemize
-@item @code{name} --- initarg: @code{@w{:name}}; reader: @code{@w{schemata:object-name}}; writer: @code{@w{(setf schemata:object-name)}}
+@item @code{name} --- type: @code{@w{(or string symbol)}}; initarg: @code{@w{:name}}; reader: @code{@w{schemata:object-name}}; writer: @code{@w{(setf schemata:object-name)}}
 
-The name of the object.@item @code{attributes} --- initarg: @code{@w{:attributes}}; reader: @code{@w{schemata:object-attributes}}; writer: @code{@w{(setf schemata:object-attributes)}}
+The name of the object.@item @code{attributes} --- type: @code{@w{list}}; initarg: @code{@w{:attributes}}; reader: @code{@w{schemata:object-attributes}}; writer: @code{@w{(setf schemata:object-attributes)}}
 
-@item @code{class} --- initarg: @code{@w{:class}}; reader: @code{@w{schemata:object-class}}; writer: @code{@w{(setf schemata:object-class)}}
+@item @code{class} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:class}}; reader: @code{@w{schemata:object-class}}; writer: @code{@w{(setf schemata:object-class)}}
 
-@item @code{ignore-unknown-attributes} --- initarg: @code{@w{:ignore-unknown-attributes}}; reader: @code{@w{schemata::ignore-unknown-attributes}}; writer: @code{@w{(setf schemata::ignore-unknown-attributes)}}
+@item @code{ignore-unknown-attributes} --- type: @code{@w{boolean}}; initarg: @code{@w{:ignore-unknown-attributes}}; reader: @code{@w{schemata::ignore-unknown-attributes}}; writer: @code{@w{(setf schemata::ignore-unknown-attributes)}}
 
-@item @code{serializer} --- initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::object-serializer}}; writer: @code{@w{(setf schemata::object-serializer)}}
+@item @code{serializer} --- type: @code{@w{(or null
+                                               trivial-types:function-designator)}}; initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::object-serializer}}; writer: @code{@w{(setf schemata::object-serializer)}}
 
-@item @code{unserializer} --- initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::object-unserializer}}; writer: @code{@w{(setf schemata::object-unserializer)}}
+@item @code{unserializer} --- type: @code{@w{(or null
+                                                 trivial-types:function-designator)}}; initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::object-unserializer}}; writer: @code{@w{(setf schemata::object-unserializer)}}
 
 @end itemize
 
@@ -298,7 +300,7 @@ Class precedence list: @code{schema-reference-schema, schema, standard-object, t
 
 Slots:
 @itemize
-@item @code{name} --- initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+@item @code{name} --- type: @code{@w{symbol}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
 
 @end itemize
 
@@ -312,7 +314,7 @@ Class precedence list: @code{schema, standard-object, t}
 
 Slots:
 @itemize
-@item @code{documentation} --- initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
+@item @code{documentation} --- type: @code{@w{t}}; initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
 
 @end itemize
 
@@ -334,17 +336,19 @@ Class precedence list: @code{attribute, schema, attribute-properties, standard-o
 
 Slots:
 @itemize
-@item @code{name} --- initarg: @code{@w{:name}}; reader: @code{@w{schemata:attribute-name}}; writer: @code{@w{(setf schemata:attribute-name)}}
+@item @code{name} --- type: @code{@w{symbol}}; initarg: @code{@w{:name}}; reader: @code{@w{schemata:attribute-name}}; writer: @code{@w{(setf schemata:attribute-name)}}
 
-@item @code{type} --- initarg: @code{@w{:type}}; reader: @code{@w{schemata:attribute-type}}; writer: @code{@w{(setf schemata:attribute-type)}}
+@item @code{type} --- type: @code{@w{schemata:schema}}; initarg: @code{@w{:type}}; reader: @code{@w{schemata:attribute-type}}; writer: @code{@w{(setf schemata:attribute-type)}}
 
-@item @code{accessor} --- initarg: @code{@w{:accessor}}; reader: @code{@w{schemata:attribute-accessor}}; writer: @code{@w{(setf schemata:attribute-accessor)}}
+@item @code{accessor} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:accessor}}; reader: @code{@w{schemata:attribute-accessor}}; writer: @code{@w{(setf schemata:attribute-accessor)}}
 
-@item @code{writer} --- initarg: @code{@w{:writer}}
+@item @code{writer} --- type: @code{@w{(or null
+                                           trivial-types:function-designator)}}; initarg: @code{@w{:writer}}
 
-@item @code{reader} --- initarg: @code{@w{:reader}}
+@item @code{reader} --- type: @code{@w{(or null
+                                           trivial-types:function-designator)}}; initarg: @code{@w{:reader}}
 
-@item @code{slot} --- initarg: @code{@w{:slot}}; reader: @code{@w{schemata::attribute-slot}}; writer: @code{@w{(setf schemata::attribute-slot)}}
+@item @code{slot} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:slot}}; reader: @code{@w{schemata::attribute-slot}}; writer: @code{@w{(setf schemata::attribute-slot)}}
 
 @end itemize
 
@@ -358,7 +362,7 @@ Class precedence list: @code{type-schema, schema, standard-object, t}
 
 Slots:
 @itemize
-@item @code{type} --- initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
+@item @code{type} --- type: @code{@w{t}}; initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
 
 @end itemize
 
@@ -380,7 +384,7 @@ Class precedence list: @code{schema-class, standard-class, class, specializer, m
 
 Slots:
 @itemize
-@item @code{schema-name} --- initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+@item @code{schema-name} --- type: @code{@w{(or null string symbol)}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
 
 @end itemize
 

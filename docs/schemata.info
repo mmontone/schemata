@@ -208,27 +208,32 @@ Classes
      Class precedence list: 'object-schema, schema, standard-object, t'
 
      Slots:
-        * 'name' -- initarg: ':name'; reader: 'schemata:object-name';
-          writer: '(setf schemata:object-name)'
+        * 'name' -- type: '(or string symbol)'; initarg: ':name';
+          reader: 'schemata:object-name'; writer:
+          '(setf schemata:object-name)'
 
           The name of the object.
-        * 'attributes' -- initarg: ':attributes'; reader:
+        * 'attributes' -- type: 'list'; initarg: ':attributes'; reader:
           'schemata:object-attributes'; writer:
           '(setf schemata:object-attributes)'
 
-        * 'class' -- initarg: ':class'; reader: 'schemata:object-class';
-          writer: '(setf schemata:object-class)'
+        * 'class' -- type: '(or null symbol)'; initarg: ':class';
+          reader: 'schemata:object-class'; writer:
+          '(setf schemata:object-class)'
 
-        * 'ignore-unknown-attributes' -- initarg:
+        * 'ignore-unknown-attributes' -- type: 'boolean'; initarg:
           ':ignore-unknown-attributes'; reader:
           'schemata::ignore-unknown-attributes'; writer:
           '(setf schemata::ignore-unknown-attributes)'
 
-        * 'serializer' -- initarg: ':serializer'; reader:
-          'schemata::object-serializer'; writer:
-          '(setf schemata::object-serializer)'
+        * 'serializer' -- type:
+          '(or null                                                trivial-types:function-designator)';
+          initarg: ':serializer'; reader: 'schemata::object-serializer';
+          writer: '(setf schemata::object-serializer)'
 
-        * 'unserializer' -- initarg: ':unserializer'; reader:
+        * 'unserializer' -- type:
+          '(or null                                                  trivial-types:function-designator)';
+          initarg: ':unserializer'; reader:
           'schemata::object-unserializer'; writer:
           '(setf schemata::object-unserializer)'
 
@@ -238,7 +243,7 @@ Classes
      standard-object, t'
 
      Slots:
-        * 'name' -- initarg: ':schema-name'; reader:
+        * 'name' -- type: 'symbol'; initarg: ':schema-name'; reader:
           'schemata::schema-name'; writer:
           '(setf schemata::schema-name)'
 
@@ -247,8 +252,8 @@ Classes
      Class precedence list: 'schema, standard-object, t'
 
      Slots:
-        * 'documentation' -- initarg: ':documentation'; reader:
-          'schemata:schema-documentation'; writer:
+        * 'documentation' -- type: 't'; initarg: ':documentation';
+          reader: 'schemata:schema-documentation'; writer:
           '(setf schemata:schema-documentation)'
 
  -- Class: SCHEMATA:VALIDATION-ERROR
@@ -262,21 +267,27 @@ Classes
      standard-object, t'
 
      Slots:
-        * 'name' -- initarg: ':name'; reader: 'schemata:attribute-name';
-          writer: '(setf schemata:attribute-name)'
+        * 'name' -- type: 'symbol'; initarg: ':name'; reader:
+          'schemata:attribute-name'; writer:
+          '(setf schemata:attribute-name)'
 
-        * 'type' -- initarg: ':type'; reader: 'schemata:attribute-type';
-          writer: '(setf schemata:attribute-type)'
+        * 'type' -- type: 'schemata:schema'; initarg: ':type'; reader:
+          'schemata:attribute-type'; writer:
+          '(setf schemata:attribute-type)'
 
-        * 'accessor' -- initarg: ':accessor'; reader:
-          'schemata:attribute-accessor'; writer:
+        * 'accessor' -- type: '(or null symbol)'; initarg: ':accessor';
+          reader: 'schemata:attribute-accessor'; writer:
           '(setf schemata:attribute-accessor)'
 
-        * 'writer' -- initarg: ':writer'
+        * 'writer' -- type:
+          '(or null                                            trivial-types:function-designator)';
+          initarg: ':writer'
 
-        * 'reader' -- initarg: ':reader'
+        * 'reader' -- type:
+          '(or null                                            trivial-types:function-designator)';
+          initarg: ':reader'
 
-        * 'slot' -- initarg: ':slot'; reader:
+        * 'slot' -- type: '(or null symbol)'; initarg: ':slot'; reader:
           'schemata::attribute-slot'; writer:
           '(setf schemata::attribute-slot)'
 
@@ -285,8 +296,8 @@ Classes
      Class precedence list: 'type-schema, schema, standard-object, t'
 
      Slots:
-        * 'type' -- initarg: ':type'; reader: 'schemata:schema-type';
-          writer: '(setf schemata:schema-type)'
+        * 'type' -- type: 't'; initarg: ':type'; reader:
+          'schemata:schema-type'; writer: '(setf schemata:schema-type)'
 
  -- Class: SCHEMATA:SCHEMA-OBJECT
 
@@ -300,8 +311,8 @@ Classes
      specializer, metaobject, standard-object, t'
 
      Slots:
-        * 'schema-name' -- initarg: ':schema-name'; reader:
-          'schemata::schema-name'; writer:
+        * 'schema-name' -- type: '(or null string symbol)'; initarg:
+          ':schema-name'; reader: 'schemata::schema-name'; writer:
           '(setf schemata::schema-name)'
 
 
@@ -423,13 +434,13 @@ Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function4959
 Ref: SCHEMATA:FIND-SCHEMA function5056
 Ref: SCHEMATA:PATCH-WITH-SCHEMA function5159
 Ref: SCHEMATA:OBJECT-SCHEMA class5457
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class6535
-Ref: SCHEMATA:SCHEMA class6818
-Ref: SCHEMATA:VALIDATION-ERROR class7081
-Ref: SCHEMATA:ATTRIBUTE class7212
-Ref: SCHEMATA:TYPE-SCHEMA class7973
-Ref: SCHEMATA:SCHEMA-OBJECT class8208
-Ref: SCHEMATA:SCHEMA-CLASS class8308
-Node: Index8651
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class6872
+Ref: SCHEMATA:SCHEMA class7171
+Ref: SCHEMATA:VALIDATION-ERROR class7445
+Ref: SCHEMATA:ATTRIBUTE class7576
+Ref: SCHEMATA:TYPE-SCHEMA class8682
+Ref: SCHEMATA:SCHEMA-OBJECT class8928
+Ref: SCHEMATA:SCHEMA-CLASS class9028
+Node: Index9404
 
 End Tag Table
