@@ -11,10 +11,9 @@ serialized when optional. Useful for treatment of special values, like :null in 
 (defun null-value (value)
   (member value *null-values*))
 
-(defun register-schema (name definition)
-  "Register schema under NAME."
-  (setf (gethash name *schemas*)
-        definition))
+(defun register-schema (name schema)
+  "Register SCHEMA under NAME."
+  (setf (gethash name *schemas*) schema))
 
 (defun schema-validation-function (schema-name)
   (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))

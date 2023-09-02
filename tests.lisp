@@ -147,60 +147,57 @@
 
 ;; MOP
 
-(defclass serializable-user ()
+(defclass schema-user ()
   ((id :initarg :id
        :accessor id
-       :serialize t
-       :serialization-type integer)
+       :type integer)
    (realname :initarg :realname
              :accessor realname
              :initform (error "Provide the realname")
-             :serialization-type string)
+             :type string)
    (age :initarg :age
         :accessor age
         :initform (error "Provide the age")
-        :serialization-type integer)
+        :type integer)
    (groups :initarg :groups
            :accessor groups
            :initform nil
-           :serialization-type (list-of (schema group-schema)))
+           :schema (list-of (ref group-schema)))
    (best-friend :initarg :best-friend
                 :accessor best-friend
                 :initform nil
-                :serialization-type (schema user-schema)
-                :serialization-optional t)
+                :schema (ref user-schema)
+                :required nil)
    (another-friend :initarg :another-friend
                    :accessor another-friend
                    :initform nil
-                   :serialization-type (schema serializable-user)
-                   :serialization-optional t)
+                   :schema (ref schema-user)
+                   :required nil)
    (hobbies :initarg :hobbies
             :accessor hobbies
-            :serialize t
-            :serialization-type (list-of string)
+            :schema (list-of string)
             :initform nil
-            :serialization-optional t))
-  (:metaclass schemata:serializable-class)
-  (:serialization-name user))
+            :required nil))
+  (:metaclass schemata:schema-class))
 
-(closer-mop:finalize-inheritance (find-class 'serializable-user))
+(closer-mop:finalize-inheritance (find-class 'schema-user))
 
-(serializable-class-schema (find-class 'serializable-user))
-(find-schema 'serializable-user)
+(schema-class-schema (find-class 'schema-user))
+(find-schema 'schema-user)
 
-(defparameter *serializable-user*
-  (make-instance 'serializable-user
+(defparameter *schema-user*
+  (make-instance 'schema-user
                  :realname "Mariano"
                  :id 2
                  :age 30
                  :groups (list (make-instance 'group
                                               :name "My group"
                                               :id 3))
-                 :best-friend (make-instance 'serializable-user
+                 :best-friend (make-instance 'schema-user
                                              :id 3
                                              :realname "Fernando"
                                              :age 31)
-                 :another-friend (make-instance 'serializable-user
+                 :another-friend (make-instance 'schema-user
                                                 :id 3
                                                 :realname "Julio"
                                                 :age 31)
@@ -210,27 +207,27 @@
   (gs:with-serializer-output s
     (gs:with-serializer :json
       (serialize-with-schema
-       (serializable-class-schema
-        (find-class 'serializable-user))
-       *serializable-user*))))
+       (schema-class-schema
+        (find-class 'schema-user))
+       *schema-user*))))
 
 (with-output-to-string (s)
   (gs:with-serializer-output s
     (gs:with-serializer :json
-      (gs:serialize *serializable-user*))))
+      (gs:serialize *schema-user*))))
 
 (with-output-to-string (s)
   (gs:with-serializer-output s
     (gs:with-serializer :xml
       (serialize-with-schema
-       (serializable-class-schema
-        (find-class 'serializable-user))
-       *serializable-user*))))
+       (schema-class-schema
+        (find-class 'schema-user))
+       *schema-user*))))
 
 (with-output-to-string (s)
   (gs:with-serializer-output s
     (gs:with-serializer :xml
-      (gs:serialize *serializable-user*))))
+      (gs:serialize *schema-user*))))
 
 ;; Unserialization
 

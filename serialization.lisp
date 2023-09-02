@@ -25,6 +25,8 @@
 
 (defun serialize-schema-attribute (attribute serializer input stream)
   (let* ((reader (or (attribute-reader attribute)
+                     (and (attribute-slot attribute)
+                          (lambda (obj) (slot-value obj (attribute-slot attribute))))
                      (symbol-function (attribute-name attribute))))
          (attribute-value (funcall reader input)))
     (when (and
