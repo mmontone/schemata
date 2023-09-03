@@ -26,7 +26,9 @@ serialized when optional. Useful for treatment of special values, like :null in 
 (defmacro define-schema (name schema)
   "Register SCHEMA under NAME.
 The schema can then be accessed via FIND-SCHEMA."
-  `(register-schema ',name (schema ,schema)))
+  `(let ((schema (schema ,schema)))
+     (register-schema ',name schema)
+     schema))
 
 (defmacro schema (schema-def)
   "Wrapper macro for schema definitions."
@@ -39,7 +41,11 @@ The schema can then be accessed via FIND-SCHEMA."
 (defclass schema ()
   ((documentation :initarg :documentation
                   :accessor schema-documentation
-                  :initform nil)))
+                  :type (or null string)
+                  :initform nil)
+   (generator :initarg :generator
+              :accessor schema-generator
+              :initform nil)))
 
 (defclass schema-reference-schema (schema)
   ((name :initarg :schema-name
