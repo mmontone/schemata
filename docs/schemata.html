@@ -169,7 +169,7 @@ Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previou
 <p>Schema example:
 </p>
 <div class="lisp">
-<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">schemata:define-schema</span></i> customer
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">schemata:defschema</span></i> customer
       <span class="paren2">(<span class="lisp-bg">object <span class="string">&quot;customer&quot;</span>
                <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg">id string <span class="keyword">:external-name</span> <span class="string">&quot;id&quot;</span> <span class="keyword">:accessor</span>
                     customer-id <span class="keyword">:documentation</span> <span class="string">&quot;customer id&quot;</span></span>)</span>
@@ -295,7 +295,7 @@ NIL
 </p>
 <p>Example:
 </p>
-<pre class="verbatim">SCHEMATA&gt; (define-schema person
+<pre class="verbatim">SCHEMATA&gt; (defschema person
             (object person
                     ((name string))))
 #&lt;OBJECT-SCHEMA {1006F8A813}&gt;
@@ -322,7 +322,7 @@ Defined schemas can be checked using TYPEP and CHECK-TYPE with the type &lsquo;(
 </p>
 <p>Example:
 </p>
-<pre class="verbatim">SCHEMATA&gt; (define-schema string-schema string)
+<pre class="verbatim">SCHEMATA&gt; (defschema string-schema string)
 #&lt;TYPE-SCHEMA STRING {10019DA8B3}&gt;
 SCHEMATA&gt; (typep &quot;foo&quot; '(satisfies-schema string-schema))
 T
@@ -339,7 +339,7 @@ SCHEMATA&gt; (let ((x &quot;foo&quot;))
 </p>
 <p>Example:
 </p>
-<pre class="verbatim">SCHEMATA&gt; (define-schema-class person ()
+<pre class="verbatim">SCHEMATA&gt; (defschema-class person ()
             ((name :type string :initarg :name)
              (age :type integer :required nil :initarg :age)))
 #&lt;SCHEMA-CLASS SCHEMATA::PERSON&gt;

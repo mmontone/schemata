@@ -23,7 +23,7 @@ serialized when optional. Useful for treatment of special values, like :null in 
         (lambda (data)
           (null (validate-with-schema (find-schema name) data :error-p nil)))))
 
-(defmacro define-schema (name schema)
+(defmacro defschema (name schema)
   "Register SCHEMA under NAME.
 The schema can then be accessed via FIND-SCHEMA."
   `(let ((schema (schema ,schema)))

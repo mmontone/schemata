@@ -5,7 +5,7 @@
   (:export #:serialize-with-schema
            #:find-schema
            #:schema
-           #:define-schema
+           #:defschema
            #:schema-type
            #:validation
            #:validation-error

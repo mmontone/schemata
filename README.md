@@ -7,7 +7,7 @@ This library is used by CL-REST-SERVER for API serialization and validation.
 ## Example
 
 ```lisp
-(schemata:define-schema customer
+(schemata:defschema customer
     (object "customer"
              ((id string :external-name "id" :accessor
                   customer-id :documentation "customer id")
@@ -99,7 +99,7 @@ Defined schemas can be referenced via either `(schema schema-name)` or `(ref sch
 Example:
 
 ```lisp
-SCHEMATA> (define-schema person
+SCHEMATA> (defschema person
             (object person
                     ((name string))))
 #<OBJECT-SCHEMA {1006F8A813}>
@@ -128,7 +128,7 @@ Defined schemas can be checked using TYPEP and CHECK-TYPE with the type `(satisf
 Example:
 
 ```lisp
-SCHEMATA> (define-schema string-schema string)
+SCHEMATA> (defschema string-schema string)
 #<TYPE-SCHEMA STRING {10019DA8B3}>
 SCHEMATA> (typep "foo" '(satisfies-schema string-schema))
 T
@@ -147,7 +147,7 @@ SCHEMA-CLASS classes get an schema attached.
 Example:
 
 ```lisp
-SCHEMATA> (define-schema-class person ()
+SCHEMATA> (defschema-class person ()
             ((name :type string :initarg :name)
              (age :type integer :required nil :initarg :age)))
 #<SCHEMA-CLASS SCHEMATA::PERSON>

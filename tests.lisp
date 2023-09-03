@@ -25,7 +25,7 @@
                                       (name string))))
                     :required nil)))))
 
-(define-schema user-schema
+(defschema user-schema
     (object user
             ((id integer :accessor id)
              (realname string)
@@ -36,12 +36,12 @@
                      :required nil))
             (:class user)))
 
-(define-schema minimal-user-schema
+(defschema minimal-user-schema
     (object user
             ((id integer)
              (realname string))))
 
-(define-schema group-schema
+(defschema group-schema
     (object group
             ((id integer)
              (name string)

@@ -169,7 +169,7 @@
   (:method ((object t) (class schema-class))
     (closer-mop:class-slots class)))
 
-(defmacro define-schema-class (name direct-superclasses direct-slots &rest options)
+(defmacro defschema-class (name direct-superclasses direct-slots &rest options)
   "Helper macro to define schema classes"
   `(defclass ,name ,direct-superclasses
      ,direct-slots
