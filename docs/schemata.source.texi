@@ -15,7 +15,7 @@ Copyright @copyright{} 2021 Mariano Montone
 
 @dircategory Common Lisp
 @direntry
-* schemata: (schemata) Common Lisp web forms handling library.
+* schemata: (schemata) Schema validation and serialization library for Common Lisp.
 @end direntry
 
 @titlepage
