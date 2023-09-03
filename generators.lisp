@@ -3,6 +3,28 @@
 
 (in-package :schemata-generators)
 
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (def-genex-macro maybe (form)
+    `(or nil ,form))
+
+  ;; Doesn't work because it caches the call func
+  ;; (def-generator func (func)
+  ;;   (generator (funcall func)))
+
+  (defclass func (check-it::custom-generator)
+    ((check-it::bias :initform 1.0
+                     :accessor check-it::bias
+                     :allocation :class)
+     (func :initarg :func)))
+  (setf (get 'func 'check-it::genex-type) 'generator)
+  (setf (get 'func 'check-it::generator-form)
+        `(lambda ,'(func) (make-instance ','func ,@'(:func func))))
+
+  (defmethod generate ((generator func))
+    (let ((func (slot-value generator 'func)))
+      (funcall func)))
+  )
+
 ;; check-it patch
 ;; Allow functions as generators
 (defmethod check-it::generate ((generator function))
@@ -27,9 +49,9 @@
   (let ((assoc-generator
           (lambda ()
             (cons (attribute-name attribute)
-                  (generate (generator-for-schema (attribute-type attribute)))))))
+                  (generate (attribute-type attribute))))))
     (if (attribute-required-p attribute)
-        assoc-generator
+        (generator assoc-generator)
         (generator
          (chain ((gen assoc-generator))
                 (generator (maybe gen)))))))
