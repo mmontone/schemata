@@ -76,7 +76,7 @@ With Quicklisp:
 
 @section Schema definition
 
-Use @clref{SCHEMATA, DEFINE-SCHEMA, macro}for defining schemas.
+Use @clref{SCHEMATA, DEFSCHEMA, macro}for defining schemas.
 
 Schema example:
 
@@ -258,7 +258,7 @@ SCHEMA-CLASS classes get an schema attached.
 Example:
 
 @verbatim
-SCHEMATA> (defschema-class person ()
+SCHEMATA> (def-schema-class person ()
             ((name :type string :initarg :name)
              (age :type integer :required nil :initarg :age)))
 #<SCHEMA-CLASS SCHEMATA::PERSON>
@@ -291,15 +291,20 @@ SCHEMATA> (generic-serializer:with-serializer :json
 @heading External definitions
 
 @subheading Macros
-@cldefmacro {SCHEMATA, SCHEMA, (schema-def)}
-
-Wrapper macro for schema definitions.
-@endcldefmacro
-
-@cldefmacro {SCHEMATA, DEFINE-SCHEMA, (name schema)}
+@cldefmacro {SCHEMATA, DEFSCHEMA, (name schema)}
 
 Register SCHEMA under NAME.
 The schema can then be accessed via FIND-SCHEMA.
+@endcldefmacro
+
+@cldefmacro {SCHEMATA, DEF-SCHEMA-CLASS, (name direct-superclasses direct-slots &rest options)}
+
+Helper macro to define schema classes
+@endcldefmacro
+
+@cldefmacro {SCHEMATA, SCHEMA, (schema-def)}
+
+Wrapper macro for schema definitions.
 @endcldefmacro
 
 @subheading Generic functions
@@ -378,8 +383,18 @@ Parses the string to an association list using the schema
 
 @endcldefgeneric
 
+@cldefgeneric {SCHEMATA, ATTRIBUTE-REQUIRED-P, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
 @subheading Functions
 @cldefun {SCHEMATA, ATTRIBUTE-READER, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, FIND-OBJECT-ATTRIBUTE, (object attribute-name &key (error-p t))}
 
 
 @endcldefun
@@ -439,11 +454,6 @@ Args:
 
 @endcldefun
 
-@cldefun {SCHEMATA, FIND-OBJECT-ATTRIBUTE, (object attribute-name &key (error-p t))}
-
-
-@endcldefun
-
 @cldefun {SCHEMATA, FIND-SCHEMA, (name &optional (errorp t))}
 
 Find a schema definition by name
@@ -498,20 +508,6 @@ Slots:
 
 @endcldefclass
 
-@cldefclass {SCHEMATA, SCHEMA}
-
-
-
-Class precedence list: @code{schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{documentation} --- type: @code{@w{t}}; initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
-
-@end itemize
-
-@endcldefclass
-
 @cldefclass {SCHEMATA, VALIDATION-ERROR}
 
 
@@ -555,6 +551,22 @@ Class precedence list: @code{type-schema, schema, standard-object, t}
 Slots:
 @itemize
 @item @code{type} --- type: @code{@w{t}}; initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA}
+
+
+
+Class precedence list: @code{schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{documentation} --- type: @code{@w{(or null string)}}; initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
+
+@item @code{generator} --- type: @code{@w{t}}; initarg: @code{@w{:generator}}; reader: @code{@w{schemata::schema-generator}}; writer: @code{@w{(setf schemata::schema-generator)}}
 
 @end itemize
 

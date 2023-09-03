@@ -164,7 +164,7 @@ Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previou
 <span id="usage"></span>
 <span id="Schema-definition"></span><h3 class="section">3.1 Schema definition</h3>
 
-<p>Use <a href="#SCHEMATA_003aDEFINE_002dSCHEMA-macro">DEFINE-SCHEMA</a>for defining schemas.
+<p>Use <a href="#SCHEMATA_003aDEFSCHEMA-macro">DEFSCHEMA</a>for defining schemas.
 </p>
 <p>Schema example:
 </p>
@@ -339,7 +339,7 @@ SCHEMATA&gt; (let ((x &quot;foo&quot;))
 </p>
 <p>Example:
 </p>
-<pre class="verbatim">SCHEMATA&gt; (defschema-class person ()
+<pre class="verbatim">SCHEMATA&gt; (def-schema-class person ()
             ((name :type string :initarg :name)
              (age :type integer :required nil :initarg :age)))
 #&lt;SCHEMA-CLASS SCHEMATA::PERSON&gt;
@@ -379,19 +379,26 @@ Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#
 <span id="External-definitions"></span><h3 class="heading">External definitions</h3>
 
 <span id="Macros"></span><h4 class="subheading">Macros</h4>
+<span id="index-SCHEMATA_003aDEFSCHEMA"></span>
+<span id="SCHEMATA_003aDEFSCHEMA-macro"></span><dl>
+<dt id="index-SCHEMATA_003aDEFSCHEMA-1">Macro: <strong>SCHEMATA:DEFSCHEMA</strong> <em>(name schema)</em></dt>
+<dd>
+<p>Register SCHEMA under NAME.
+The schema can then be accessed via FIND-SCHEMA.
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS"></span>
+<span id="SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-macro"></span><dl>
+<dt id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-1">Macro: <strong>SCHEMATA:DEF-SCHEMA-CLASS</strong> <em>(name direct-superclasses direct-slots &amp;rest options)</em></dt>
+<dd>
+<p>Helper macro to define schema classes
+</p></dd></dl>
+
 <span id="index-SCHEMATA_003aSCHEMA"></span>
 <span id="SCHEMATA_003aSCHEMA-macro"></span><dl>
 <dt id="index-SCHEMATA_003aSCHEMA-1">Macro: <strong>SCHEMATA:SCHEMA</strong> <em>(schema-def)</em></dt>
 <dd>
 <p>Wrapper macro for schema definitions.
-</p></dd></dl>
-
-<span id="index-SCHEMATA_003aDEFINE_002dSCHEMA"></span>
-<span id="SCHEMATA_003aDEFINE_002dSCHEMA-macro"></span><dl>
-<dt id="index-SCHEMATA_003aDEFINE_002dSCHEMA-1">Macro: <strong>SCHEMATA:DEFINE-SCHEMA</strong> <em>(name schema)</em></dt>
-<dd>
-<p>Register SCHEMA under NAME.
-The schema can then be accessed via FIND-SCHEMA.
 </p></dd></dl>
 
 <span id="Generic-functions"></span><h4 class="subheading">Generic functions</h4>
@@ -472,10 +479,20 @@ The schema can then be accessed via FIND-SCHEMA.
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-TYPE</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
+<span id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-REQUIRED-P</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
 <span id="Functions"></span><h4 class="subheading">Functions</h4>
 <span id="index-SCHEMATA_003aATTRIBUTE_002dREADER"></span>
 <span id="SCHEMATA_003aATTRIBUTE_002dREADER-function"></span><dl>
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dREADER-1">Function: <strong>SCHEMATA:ATTRIBUTE-READER</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"></span>
+<span id="SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-function"></span><dl>
+<dt id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1">Function: <strong>SCHEMATA:FIND-OBJECT-ATTRIBUTE</strong> <em>(object attribute-name &amp;key (error-p t))</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA"></span>
@@ -539,11 +556,6 @@ Input can be a string or an association list.
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dWRITER-1">Function: <strong>SCHEMATA:ATTRIBUTE-WRITER</strong> <em>(attribute)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"></span>
-<span id="SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-function"></span><dl>
-<dt id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1">Function: <strong>SCHEMATA:FIND-OBJECT-ATTRIBUTE</strong> <em>(object attribute-name &amp;key (error-p t))</em></dt>
-</dl>
-
 <span id="index-SCHEMATA_003aFIND_002dSCHEMA"></span>
 <span id="SCHEMATA_003aFIND_002dSCHEMA-function"></span><dl>
 <dt id="index-SCHEMATA_003aFIND_002dSCHEMA-1">Function: <strong>SCHEMATA:FIND-SCHEMA</strong> <em>(name &amp;optional (errorp t))</em></dt>
@@ -604,22 +616,6 @@ DATA should be an association list.
 
 </dd></dl>
 
-<span id="index-SCHEMATA_003aSCHEMA-2"></span>
-<span id="SCHEMATA_003aSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA-3">Class: <strong>SCHEMATA:SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>documentation</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
 <span id="index-SCHEMATA_003aVALIDATION_002dERROR-2"></span>
 <span id="SCHEMATA_003aVALIDATION_002dERROR-class"></span><dl>
 <dt id="index-SCHEMATA_003aVALIDATION_002dERROR-3">Class: <strong>SCHEMATA:VALIDATION-ERROR</strong></dt>
@@ -667,6 +663,24 @@ DATA should be an association list.
 <p>Slots:
 </p><ul>
 <li> <code>type</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA-2"></span>
+<span id="SCHEMATA_003aSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA-3">Class: <strong>SCHEMATA:SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>documentation</code> &mdash; type: <code>(or&nbsp;null&nbsp;string)<!-- /@w --></code>; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
+
+</li><li> <code>generator</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:generator<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-generator</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-generator)</span><!-- /@w --></code>
 
 </li></ul>
 
@@ -743,6 +757,8 @@ Previous: <a href="#Reference" accesskey="p" rel="prev">Reference</a>, Up: <a hr
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dPARSER-1"><code>SCHEMATA:ATTRIBUTE-PARSER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREADER"><code>SCHEMATA:ATTRIBUTE-READER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREADER-1"><code>SCHEMATA:ATTRIBUTE-READER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP"><code>SCHEMATA:ATTRIBUTE-REQUIRED-P</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-1"><code>SCHEMATA:ATTRIBUTE-REQUIRED-P</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE"><code>SCHEMATA:ATTRIBUTE-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE-1"><code>SCHEMATA:ATTRIBUTE-TYPE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME"><code>SCHEMATA:ATTRIBUTE-TYPE-NAME</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
@@ -751,8 +767,10 @@ Previous: <a href="#Reference" accesskey="p" rel="prev">Reference</a>, Up: <a hr
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR-1"><code>SCHEMATA:ATTRIBUTE-VALIDATOR</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dWRITER"><code>SCHEMATA:ATTRIBUTE-WRITER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aATTRIBUTE_002dWRITER-1"><code>SCHEMATA:ATTRIBUTE-WRITER</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFINE_002dSCHEMA"><code>SCHEMATA:DEFINE-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
-<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFINE_002dSCHEMA-1"><code>SCHEMATA:DEFINE-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS"><code>SCHEMATA:DEF-SCHEMA-CLASS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-1"><code>SCHEMATA:DEF-SCHEMA-CLASS</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFSCHEMA"><code>SCHEMATA:DEFSCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
+<tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aDEFSCHEMA-1"><code>SCHEMATA:DEFSCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"><code>SCHEMATA:FIND-OBJECT-ATTRIBUTE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1"><code>SCHEMATA:FIND-OBJECT-ATTRIBUTE</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>
 <tr><td></td><td valign="top"><a href="#index-SCHEMATA_003aFIND_002dSCHEMA"><code>SCHEMATA:FIND-SCHEMA</code></a>:</td><td>&nbsp;</td><td valign="top"><a href="#SCHEMATA-package">SCHEMATA package</a></td></tr>

@@ -51,5 +51,6 @@
            #:satisfies-schema
 
            #:schema-object
+           #:def-schema-class
            #:schema-class
            #:schema-class-schema))

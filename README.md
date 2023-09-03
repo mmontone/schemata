@@ -147,7 +147,7 @@ SCHEMA-CLASS classes get an schema attached.
 Example:
 
 ```lisp
-SCHEMATA> (defschema-class person ()
+SCHEMATA> (def-schema-class person ()
             ((name :type string :initarg :name)
              (age :type integer :required nil :initarg :age)))
 #<SCHEMA-CLASS SCHEMATA::PERSON>
