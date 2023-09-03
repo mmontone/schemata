@@ -3,34 +3,29 @@
 
 (in-package :schemata-generators)
 
-(def-genex-macro maybe (form)
-  `(or nil ,form))
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (def-genex-macro maybe (form)
+    `(or nil ,form))
 
-(generate (generator (list (maybe (integer)))))
+  ;; Doesn't work because it caches the call func
+  ;; (def-generator func (func)
+  ;;   (generator (funcall func)))
 
-;; Doesn't work because it caches the call func
-;; (def-generator func (func)
-;;   (generator (funcall func)))
+  (defclass func (check-it::custom-generator)
+    ((check-it::bias :initform 1.0
+                     :accessor check-it::bias
+                     :allocation :class)
+     (func :initarg :func)))
+  (setf (get 'func 'check-it::genex-type) 'generator)
+  (setf (get 'func 'check-it::generator-form)
+        `(lambda ,'(func) (make-instance ','func ,@'(:func func))))
 
-(DEFCLASS FUNC (CHECK-IT::CUSTOM-GENERATOR)
-            ((CHECK-IT::BIAS :INITFORM 1.0 :ACCESSOR CHECK-IT::BIAS :ALLOCATION
-                             :CLASS)
-             (FUNC :INITARG :FUNC)))
-(SETF (GET 'FUNC 'CHECK-IT::GENEX-TYPE) 'GENERATOR)
-(SETF (GET 'FUNC 'CHECK-IT::GENERATOR-FORM)
-      `(LAMBDA ,'(FUNC) (MAKE-INSTANCE ','FUNC ,@'(:FUNC FUNC))))
-(DEFMETHOD GENERATE ((GENERATOR FUNC))
-  (LET ((FUNC (SLOT-VALUE GENERATOR 'FUNC)))
-    (FUNCALL FUNC)))
+  (defmethod generate ((generator func))
+    (let ((func (slot-value generator 'func)))
+      (funcall func)))
+  )
 
 ;;(generate (generator (func (lambda () 22))))
-
-(defparameter *g* (generator (func (lambda ()
-                                     (list
-                                      (generate (generator (maybe (integer))))
-                                      (generate (generator (maybe (string)))))))))
-
-(generate *g*)
 
 (defgeneric generator-for-schema (schema))
 (defgeneric generator-for-type (type type-schema))
@@ -51,15 +46,25 @@
   (let ((assoc-generator
           (generator (func (lambda ()
                              (cons (attribute-name attribute)
-                               (generate (generator-for-schema (attribute-type attribute)))))))))
+                                   (generate (generator-for-schema (attribute-type attribute)))))))))
     (if (attribute-required-p attribute)
         assoc-generator
-        (generator (maybe assoc-generator)))))
+        (generator
+         (chain ((gen assoc-generator))
+                (generator (maybe gen)))))))
 
 (defmethod generator-for-schema ((schema object-schema))
   (generator
    (func (lambda ()
-           (mapcar #'generate
-                   (remove nil
+           (remove nil
+                   (mapcar #'generate
                            (loop for attribute in (object-attributes schema)
                                  collect (attribute-generator attribute))))))))
+
+(defmethod generator-for-schema ((schema schema-reference-schema))
+  (find-schema (schemata::referenced-schema schema)))
+
+;; Plug into check-it
+;; Allows to call check-it:generate with a schema directly to generate random data.
+(defmethod check-it::generate ((generator schemata:schema))
+  (generate (generator-for-schema generator)))
