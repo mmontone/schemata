@@ -28,6 +28,7 @@
            #:attribute-type
            #:attribute-type-name
            #:attribute-option
+           #:attribute-required-p
            #:attribute-optional-p
            #:attribute-accessor
            #:attribute-validator
