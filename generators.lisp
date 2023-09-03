@@ -62,7 +62,11 @@
                                  collect (attribute-generator attribute))))))))
 
 (defmethod generator-for-schema ((schema schema-reference-schema))
-  (find-schema (schemata::referenced-schema schema)))
+  (schemata::referenced-schema schema))
+
+(defmethod generator-for-schema ((schema list-schema))
+  (let ((element-generator (generator-for-schema (schemata::elements-schema schema))))
+    (generator (list element-generator))))
 
 ;; Plug into check-it
 ;; Allows to call check-it:generate with a schema directly to generate random data.
