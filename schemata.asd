@@ -11,7 +11,8 @@
                :net-telent-date
                :access
                :generic-serializer
-               :trivial-types)
+               :trivial-types
+               :closer-mop)
   :components ((:file "package")
                (:file "schema")
                (:file "schema-class")
