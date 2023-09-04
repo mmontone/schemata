@@ -23,6 +23,7 @@
            #:object-option
            #:find-object-attribute
            #:schema-documentation
+           #:schema-generator
            #:object-class
            #:attribute-name
            #:attribute-type

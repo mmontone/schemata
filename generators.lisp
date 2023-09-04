@@ -33,6 +33,11 @@
 (defgeneric generator-for-schema (schema))
 (defgeneric generator-for-type (type type-schema))
 
+(defmethod generator-for-schema :around ((schema schema))
+  (if (schema-generator schema)
+      (schema-generator schema)
+      (call-next-method)))
+
 (defmethod generator-for-schema ((schema type-schema))
   (generator-for-type (schema-type schema) schema))
 
