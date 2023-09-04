@@ -3,11 +3,19 @@
   (:export
    :json-schema
    :render-json-schema
-   :schema-from-json-schema))
+   :schema-from-json-schema
+   :decode-json-schema))
 
 (in-package :schemata.json-schema)
 
 ;; JSON-schema (WIP)
+
+(defun decode-json-schema (source)
+  "Decode SOURCE with a JSON-Schema. Create a Schemata schema as result."
+  (schema-from-json-schema
+   (let ((cl-json:*identifier-name-to-key* 'identity)
+         (cl-json:*json-identifier-name-to-lisp* 'identity))
+     (json:decode-json-from-source source))))
 
 (defun json-schema (schema)
   (with-output-to-string (s)
