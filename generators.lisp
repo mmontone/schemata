@@ -52,9 +52,7 @@
                   (generate (attribute-type attribute))))))
     (if (attribute-required-p attribute)
         (generator assoc-generator)
-        (generator
-         (chain ((gen assoc-generator))
-                (generator (maybe gen)))))))
+        (generator (maybe assoc-generator)))))
 
 (defmethod generator-for-schema ((schema object-schema))
   (lambda ()
