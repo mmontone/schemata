@@ -29,13 +29,15 @@ See: parse-api-input (function)"
                                            input
                                            :test #'equalp
                                            :key #'string)))
-               (when (and (not attribute-input)
-                          (not (attribute-optional-p attribute)))
-                 (validation-error "~A not provided" (attribute-name attribute)))
-               (let ((attribute-value (unserialize-schema-attribute attribute (cdr attribute-input) format)))
-                 (setf (slot-value instance (or (attribute-slot attribute)
-                                                (attribute-name attribute)))
-                       attribute-value))))
+               (cond
+                 ((and (not attribute-input)
+                       (not (attribute-optional-p attribute)))
+                  (validation-error "~A not provided" (attribute-name attribute)))
+                 (attribute-input
+                  (let ((attribute-value (unserialize-schema-attribute attribute (cdr attribute-input) format)))
+                    (setf (slot-value instance (or (attribute-slot attribute)
+                                                   (attribute-name attribute)))
+                          attribute-value))))))
     (initialize-instance instance)
     instance))
 
@@ -43,13 +45,7 @@ See: parse-api-input (function)"
   (let ((unserializer (attribute-unserializer attribute)))
     (if unserializer
         (funcall unserializer)
-        (if (null input)
-            (when (not (attribute-optional-p attribute))
-              (validation-error
-               "Attribute ~A is not optional but value was not provided"
-               (attribute-name attribute)))
-                                        ; else
-            (unserialize-with-schema (attribute-type attribute) input format)))))
+        (unserialize-with-schema (attribute-type attribute) input format))))
 
 (defmethod unserialize-with-schema ((schema type-schema) data format)
   (unserialize-with-type (schema-type schema) data format))
