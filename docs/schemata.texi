@@ -38,6 +38,7 @@ Copyright @copyright{} 2021 Mariano Montone
 * Installation::
 * Usage::
 * Schema types::
+* Data generation::
 * Reference::
 * Index::
 @end menu
@@ -275,6 +276,43 @@ SCHEMATA> (generic-serializer:with-serializer :json
             (generic-serializer:serialize (make-instance 'person :name "Mariano" :age 44)))
 {"name":"Mariano","age":44}
 @end verbatim
+
+@node Data generation
+@chapter Data generation
+
+Schemata can generate random data from schemas. It uses @code{check-it} library generators for that.
+
+Load @code{schemata-generators} system.
+
+Then call @code{check-it:generate} with a schema object.
+
+Example:
+
+@lisp
+(defschema person
+    (object person
+            ((name string)
+             (age integer :required nil)
+             (friend (ref person) :required nil))))
+@end lisp
+
+@lisp
+(generate (find-schema 'person))
+@end lisp
+
+can generate:
+
+@example
+((NAME . "21p7E0w8")
+ (FRIEND (NAME . "hD39Dwo")
+  (FRIEND (NAME . "QFC67xg206") (AGE . 4)
+   (FRIEND (NAME . "bRtUL1z51")
+    (FRIEND (NAME . "0")
+     (FRIEND (NAME . "ddB57idmh32C4T") (AGE . 1)
+      (FRIEND (NAME . "eNKzc") (AGE . 8))))))))
+@end example
+
+For more control over the generation, attach a generator to schemas via @code{:generator} initarg.
 
 @node Reference
 @chapter Reference

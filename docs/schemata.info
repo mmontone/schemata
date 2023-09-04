@@ -20,6 +20,7 @@ Top
 * Installation::
 * Usage::
 * Schema types::
+* Data generation::
 * Reference::
 * Index::
 
@@ -140,7 +141,7 @@ See *note PATCH-WITH-SCHEMA: SCHEMATA:PATCH-WITH-SCHEMA function.and
 *note POPULATE-WITH-SCHEMA: SCHEMATA:POPULATE-WITH-SCHEMA function.
 
 
-File: schemata.info,  Node: Schema types,  Next: Reference,  Prev: Usage,  Up: Top
+File: schemata.info,  Node: Schema types,  Next: Data generation,  Prev: Usage,  Up: Top
 
 4 Schema types
 **************
@@ -265,9 +266,45 @@ SCHEMATA> (generic-serializer:with-serializer :json
 {"name":"Mariano","age":44}
 
 
-File: schemata.info,  Node: Reference,  Next: Index,  Prev: Schema types,  Up: Top
+File: schemata.info,  Node: Data generation,  Next: Reference,  Prev: Schema types,  Up: Top
 
-5 Reference
+5 Data generation
+*****************
+
+Schemata can generate random data from schemas.  It uses 'check-it'
+library generators for that.
+
+   Load 'schemata-generators' system.
+
+   Then call 'check-it:generate' with a schema object.
+
+   Example:
+
+     (defschema person
+         (object person
+                 ((name string)
+                  (age integer :required nil)
+                  (friend (ref person) :required nil))))
+
+     (generate (find-schema 'person))
+
+   can generate:
+
+     ((NAME . "21p7E0w8")
+      (FRIEND (NAME . "hD39Dwo")
+       (FRIEND (NAME . "QFC67xg206") (AGE . 4)
+        (FRIEND (NAME . "bRtUL1z51")
+         (FRIEND (NAME . "0")
+          (FRIEND (NAME . "ddB57idmh32C4T") (AGE . 1)
+           (FRIEND (NAME . "eNKzc") (AGE . 8))))))))
+
+   For more control over the generation, attach a generator to schemas
+via ':generator' initarg.
+
+
+File: schemata.info,  Node: Reference,  Next: Index,  Prev: Data generation,  Up: Top
+
+6 Reference
 ***********
 
 * Menu:
@@ -277,7 +314,7 @@ File: schemata.info,  Node: Reference,  Next: Index,  Prev: Schema types,  Up: T
 
 File: schemata.info,  Node: SCHEMATA package,  Up: Reference
 
-5.1 SCHEMATA package
+6.1 SCHEMATA package
 ====================
 
  -- PACKAGE: SCHEMATA
@@ -539,7 +576,7 @@ Classes
 
 File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
 
-6 Index
+7 Index
 *******
 
  [index ]
@@ -623,59 +660,60 @@ File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
 
 Tag Table:
 Node: Top267
-Node: Intro425
-Ref: introduction536
-Node: Installation1015
-Ref: installation1128
-Node: Usage1177
-Ref: usage1283
-Node: Schema types4361
-Node: Reference8418
-Ref: reference8529
-Node: SCHEMATA package8560
-Ref: SCHEMATA:SCHEMA macro8748
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro8833
-Ref: SCHEMATA:DEFSCHEMA macro8979
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function9149
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function9219
-Ref: SCHEMATA:ATTRIBUTE-NAME function9306
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function9370
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function9443
-Ref: SCHEMATA:ATTRIBUTE-TYPE function9511
-Ref: SCHEMATA:OBJECT-NAME function9575
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function9636
-Ref: SCHEMATA:OBJECT-CLASS function9703
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function9765
-Ref: SCHEMATA:SCHEMA-GENERATOR function9838
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function9904
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function9973
-Ref: SCHEMATA:SCHEMA-TYPE function10111
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function10172
-Ref: SCHEMATA:ATTRIBUTE-PARSER function10241
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10307
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function10398
-Ref: SCHEMATA:VALIDATION-ERROR function10584
-Ref: SCHEMATA:ATTRIBUTE-READER function10646
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function10699
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function11540
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function11596
-Ref: SCHEMATA:ATTRIBUTE-WRITER function11877
-Ref: SCHEMATA:SCHEMA-SPEC function11930
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function11975
-Ref: SCHEMATA:FIND-SCHEMA function12177
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function12280
-Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function12337
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function12450
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function12566
-Ref: SCHEMATA:VALIDATION-ERROR class12680
-Ref: SCHEMATA:ATTRIBUTE class12811
-Ref: SCHEMATA:LIST-SCHEMA class13917
-Ref: SCHEMATA:SCHEMA-CLASS class14260
-Ref: SCHEMATA:OBJECT-SCHEMA class14636
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class16051
-Ref: SCHEMATA:SCHEMA class16350
-Ref: SCHEMATA:TYPE-SCHEMA class16799
-Ref: SCHEMATA:SCHEMA-OBJECT class17045
-Node: Index17145
+Node: Intro445
+Ref: introduction556
+Node: Installation1035
+Ref: installation1148
+Node: Usage1197
+Ref: usage1303
+Node: Schema types4381
+Node: Data generation8444
+Node: Reference9402
+Ref: reference9516
+Node: SCHEMATA package9547
+Ref: SCHEMATA:SCHEMA macro9735
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro9820
+Ref: SCHEMATA:DEFSCHEMA macro9966
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function10136
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function10206
+Ref: SCHEMATA:ATTRIBUTE-NAME function10293
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function10357
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function10430
+Ref: SCHEMATA:ATTRIBUTE-TYPE function10498
+Ref: SCHEMATA:OBJECT-NAME function10562
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function10623
+Ref: SCHEMATA:OBJECT-CLASS function10690
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function10752
+Ref: SCHEMATA:SCHEMA-GENERATOR function10825
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function10891
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function10960
+Ref: SCHEMATA:SCHEMA-TYPE function11098
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function11159
+Ref: SCHEMATA:ATTRIBUTE-PARSER function11228
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function11294
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function11385
+Ref: SCHEMATA:VALIDATION-ERROR function11571
+Ref: SCHEMATA:ATTRIBUTE-READER function11633
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function11686
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function12527
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function12583
+Ref: SCHEMATA:ATTRIBUTE-WRITER function12864
+Ref: SCHEMATA:SCHEMA-SPEC function12917
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function12962
+Ref: SCHEMATA:FIND-SCHEMA function13164
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function13267
+Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function13324
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function13437
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function13553
+Ref: SCHEMATA:VALIDATION-ERROR class13667
+Ref: SCHEMATA:ATTRIBUTE class13798
+Ref: SCHEMATA:LIST-SCHEMA class14904
+Ref: SCHEMATA:SCHEMA-CLASS class15247
+Ref: SCHEMATA:OBJECT-SCHEMA class15623
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class17038
+Ref: SCHEMATA:SCHEMA class17337
+Ref: SCHEMATA:TYPE-SCHEMA class17786
+Ref: SCHEMATA:SCHEMA-OBJECT class18032
+Node: Index18132
 
 End Tag Table

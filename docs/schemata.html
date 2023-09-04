@@ -90,11 +90,12 @@ ul.no-bullet {list-style: none}
     <li><a id="toc-SATISFIES_002dSCHEMA-type" href="#SATISFIES_002dSCHEMA-type">4.5 SATISFIES-SCHEMA type</a></li>
     <li><a id="toc-SCHEMA_002dCLASS-metaclass" href="#SCHEMA_002dCLASS-metaclass">4.6 SCHEMA-CLASS metaclass</a></li>
   </ul></li>
-  <li><a id="toc-Reference-1" href="#Reference">5 Reference</a>
+  <li><a id="toc-Data-generation-1" href="#Data-generation">5 Data generation</a></li>
+  <li><a id="toc-Reference-1" href="#Reference">6 Reference</a>
   <ul class="no-bullet">
-    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">5.1 SCHEMATA package</a></li>
+    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">6.1 SCHEMATA package</a></li>
   </ul></li>
-  <li><a id="toc-Index-1" href="#Index" rel="index">6 Index</a></li>
+  <li><a id="toc-Index-1" href="#Index" rel="index">7 Index</a></li>
 </ul>
 </div>
 
@@ -115,9 +116,11 @@ Next: <a href="#Intro" accesskey="n" rel="next">Intro</a> &nbsp; [<a href="#SEC_
 </td></tr>
 <tr><td align="left" valign="top">&bull; <a href="#Schema-types" accesskey="4">Schema types</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Reference" accesskey="5">Reference</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+<tr><td align="left" valign="top">&bull; <a href="#Data-generation" accesskey="5">Data generation</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
-<tr><td align="left" valign="top">&bull; <a href="#Index" rel="index" accesskey="6">Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+<tr><td align="left" valign="top">&bull; <a href="#Reference" accesskey="6">Reference</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
+</td></tr>
+<tr><td align="left" valign="top">&bull; <a href="#Index" rel="index" accesskey="7">Index</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
 </td></tr>
 </table>
 
@@ -246,7 +249,7 @@ Next: <a href="#Schema-types" accesskey="n" rel="next">Schema types</a>, Previou
 <hr>
 <span id="Schema-types"></span><div class="header">
 <p>
-Next: <a href="#Reference" accesskey="n" rel="next">Reference</a>, Previous: <a href="#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Data-generation" accesskey="n" rel="next">Data generation</a>, Previous: <a href="#Usage" accesskey="p" rel="prev">Usage</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
 <span id="Schema-types-1"></span><h2 class="chapter">4 Schema types</h2>
 <span id="Type-schemas"></span><h3 class="section">4.1 Type schemas</h3>
@@ -357,11 +360,52 @@ SCHEMATA&gt; (generic-serializer:with-serializer :json
 {&quot;name&quot;:&quot;Mariano&quot;,&quot;age&quot;:44}
 </pre>
 <hr>
+<span id="Data-generation"></span><div class="header">
+<p>
+Next: <a href="#Reference" accesskey="n" rel="next">Reference</a>, Previous: <a href="#Schema-types" accesskey="p" rel="prev">Schema types</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+</div>
+<span id="Data-generation-1"></span><h2 class="chapter">5 Data generation</h2>
+
+<p>Schemata can generate random data from schemas. It uses <code>check-it</code> library generators for that.
+</p>
+<p>Load <code>schemata-generators</code> system.
+</p>
+<p>Then call <code>check-it:generate</code> with a schema object.
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg"><i><span class="symbol">defschema</span></i> person
+      <span class="paren2">(<span class="lisp-bg">object person
+              <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg">name string</span>)</span>
+               <span class="paren4">(<span class="lisp-bg">age integer <span class="keyword">:required</span> nil</span>)</span>
+               <span class="paren4">(<span class="lisp-bg">friend <span class="paren5">(<span class="lisp-bg">ref person</span>)</span> <span class="keyword">:required</span> nil</span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">generate <span class="paren2">(<span class="lisp-bg">find-schema 'person</span>)</span></span>)</span>
+</pre></div>
+
+<p>can generate:
+</p>
+<div class="example">
+<pre class="example">((NAME . &quot;21p7E0w8&quot;)
+ (FRIEND (NAME . &quot;hD39Dwo&quot;)
+  (FRIEND (NAME . &quot;QFC67xg206&quot;) (AGE . 4)
+   (FRIEND (NAME . &quot;bRtUL1z51&quot;)
+    (FRIEND (NAME . &quot;0&quot;)
+     (FRIEND (NAME . &quot;ddB57idmh32C4T&quot;) (AGE . 1)
+      (FRIEND (NAME . &quot;eNKzc&quot;) (AGE . 8))))))))
+</pre></div>
+
+<p>For more control over the generation, attach a generator to schemas via <code>:generator</code> initarg.
+</p>
+<hr>
 <span id="Reference"></span><div class="header">
 <p>
-Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Schema-types" accesskey="p" rel="prev">Schema types</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
+Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Data-generation" accesskey="p" rel="prev">Data generation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Reference-1"></span><h2 class="chapter">5 Reference</h2>
+<span id="Reference-1"></span><h2 class="chapter">6 Reference</h2>
 <span id="reference"></span>
 <table class="menu" border="0" cellspacing="0">
 <tr><td align="left" valign="top">&bull; <a href="#SCHEMATA-package" accesskey="1">SCHEMATA package</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
@@ -373,7 +417,7 @@ Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#S
 <p>
 Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="SCHEMATA-package-1"></span><h3 class="section">5.1 SCHEMATA package</h3>
+<span id="SCHEMATA-package-1"></span><h3 class="section">6.1 SCHEMATA package</h3>
 <dl>
 <dt id="index-SCHEMATA">PACKAGE: <strong>SCHEMATA</strong></dt>
 </dl>
@@ -749,7 +793,7 @@ Attributes members of EXCLUDE parameter are not populated.
 <p>
 Previous: <a href="#Reference" accesskey="p" rel="prev">Reference</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Index-1"></span><h2 class="chapter">6 Index</h2>
+<span id="Index-1"></span><h2 class="chapter">7 Index</h2>
 
 <table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_cp_letter-S"><b>S</b></a>
  &nbsp; 
