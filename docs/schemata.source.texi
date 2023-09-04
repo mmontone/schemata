@@ -55,6 +55,8 @@ It features:
 @itemize @bullet
 @item Validation using schemas.
 @item Serialization and unserialization using schemas.
+@item Generation of (random) data from schemas. (incomplete implementation atm)
+@item JSON-Schema parsing (incomplete implementation atm).
 @item Integration with Common Lisp type system.
 @item A schema class metaclass.
 @end itemize

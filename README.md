@@ -4,6 +4,14 @@ Generic purpose schema library for serialization and validation of data.
 
 This library is used by CL-REST-SERVER for API serialization and validation.
 
+It features:
+- Validation using schemas.
+- Serialization and unserialization using schemas.
+- Generation of (random) data from schemas. (incomplete implementation atm)
+- JSON-Schema parsing (incomplete implementation atm)
+- Itegration with Common Lisp type system.
+- A schema class metaclass.
+
 ## Example
 
 ```lisp
@@ -38,8 +46,6 @@ This library is used by CL-REST-SERVER for API serialization and validation.
                              :documentation "email"))
              (:documentation "customer data fetched")))
 ```
-
-Then you can validate data using that schema, and serialize/unserialize data too.
 
 [Read the full documentation](https://mmontone.github.io/schemata/ "Full documentation")
 

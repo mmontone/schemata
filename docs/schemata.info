@@ -38,6 +38,9 @@ validation.
 
    * Validation using schemas.
    * Serialization and unserialization using schemas.
+   * Generation of (random) data from schemas.  (incomplete
+     implementation atm)
+   * JSON-Schema parsing (incomplete implementation atm).
    * Integration with Common Lisp type system.
    * A schema class metaclass.
 
@@ -444,6 +447,17 @@ Classes
           'schemata::schema-name'; writer:
           '(setf schemata::schema-name)'
 
+ -- Class: SCHEMATA:LIST-SCHEMA
+
+     Class precedence list: 'list-schema, schema, standard-object, t'
+
+     Slots:
+        * 'elements-schema' -- type: '(not null)'; initarg:
+          ':elements-schema'; reader: 'schemata::elements-schema';
+          writer: '(setf schemata::elements-schema)'
+
+          Schema of the elements of the list
+
  -- Class: SCHEMATA:VALIDATION-ERROR
 
      Class precedence list: 'validation-error, error, serious-condition,
@@ -601,54 +615,55 @@ Tag Table:
 Node: Top267
 Node: Intro425
 Ref: introduction536
-Node: Installation872
-Ref: installation985
-Node: Usage1034
-Ref: usage1140
-Node: Schema types4218
-Node: Reference8275
-Ref: reference8386
-Node: SCHEMATA package8417
-Ref: SCHEMATA:DEFSCHEMA macro8605
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro8738
-Ref: SCHEMATA:SCHEMA macro8884
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function9006
-Ref: SCHEMATA:ATTRIBUTE-NAME function9144
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function9208
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function9295
-Ref: SCHEMATA:OBJECT-CLASS function9365
-Ref: SCHEMATA:ATTRIBUTE-PARSER function9427
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function9493
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function9562
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function9635
-Ref: SCHEMATA:SCHEMA-TYPE function9708
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function9769
-Ref: SCHEMATA:OBJECT-NAME function9838
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function9899
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function9966
-Ref: SCHEMATA:ATTRIBUTE-TYPE function10034
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10098
-Ref: SCHEMATA:ATTRIBUTE-READER function10189
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function10242
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function10339
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function10541
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function10657
-Ref: SCHEMATA:SCHEMA-SPEC function10843
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function10888
-Ref: SCHEMATA:VALIDATION-ERROR function10944
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function11006
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function11847
-Ref: SCHEMATA:ATTRIBUTE-WRITER function11904
-Ref: SCHEMATA:FIND-SCHEMA function11957
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function12060
-Ref: SCHEMATA:OBJECT-SCHEMA class12358
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class13773
-Ref: SCHEMATA:VALIDATION-ERROR class14072
-Ref: SCHEMATA:ATTRIBUTE class14203
-Ref: SCHEMATA:TYPE-SCHEMA class15309
-Ref: SCHEMATA:SCHEMA class15555
-Ref: SCHEMATA:SCHEMA-OBJECT class16006
-Ref: SCHEMATA:SCHEMA-CLASS class16106
-Node: Index16482
+Node: Installation1015
+Ref: installation1128
+Node: Usage1177
+Ref: usage1283
+Node: Schema types4361
+Node: Reference8418
+Ref: reference8529
+Node: SCHEMATA package8560
+Ref: SCHEMATA:DEFSCHEMA macro8748
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro8881
+Ref: SCHEMATA:SCHEMA macro9027
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function9149
+Ref: SCHEMATA:ATTRIBUTE-NAME function9287
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function9351
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function9438
+Ref: SCHEMATA:OBJECT-CLASS function9508
+Ref: SCHEMATA:ATTRIBUTE-PARSER function9570
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function9636
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function9705
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function9778
+Ref: SCHEMATA:SCHEMA-TYPE function9851
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function9912
+Ref: SCHEMATA:OBJECT-NAME function9981
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function10042
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function10109
+Ref: SCHEMATA:ATTRIBUTE-TYPE function10177
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10241
+Ref: SCHEMATA:ATTRIBUTE-READER function10332
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function10385
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function10482
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function10684
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function10800
+Ref: SCHEMATA:SCHEMA-SPEC function10986
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function11031
+Ref: SCHEMATA:VALIDATION-ERROR function11087
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function11149
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function11990
+Ref: SCHEMATA:ATTRIBUTE-WRITER function12047
+Ref: SCHEMATA:FIND-SCHEMA function12100
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function12203
+Ref: SCHEMATA:OBJECT-SCHEMA class12501
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class13916
+Ref: SCHEMATA:LIST-SCHEMA class14215
+Ref: SCHEMATA:VALIDATION-ERROR class14558
+Ref: SCHEMATA:ATTRIBUTE class14689
+Ref: SCHEMATA:TYPE-SCHEMA class15795
+Ref: SCHEMATA:SCHEMA class16041
+Ref: SCHEMATA:SCHEMA-OBJECT class16492
+Ref: SCHEMATA:SCHEMA-CLASS class16592
+Node: Index16968
 
 End Tag Table

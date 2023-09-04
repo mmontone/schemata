@@ -137,6 +137,8 @@ Next: <a href="#Installation" accesskey="n" rel="next">Installation</a>, Previou
 <ul>
 <li> Validation using schemas.
 </li><li> Serialization and unserialization using schemas.
+</li><li> Generation of (random) data from schemas. (incomplete implementation atm)
+</li><li> JSON-Schema parsing (incomplete implementation atm).
 </li><li> Integration with Common Lisp type system.
 </li><li> A schema class metaclass.
 </li></ul>
@@ -613,6 +615,22 @@ DATA should be an association list.
 <li> <code>name</code> &mdash; type: <code>symbol<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
 
 </li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aLIST_002dSCHEMA"></span>
+<span id="SCHEMATA_003aLIST_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aLIST_002dSCHEMA-1">Class: <strong>SCHEMATA:LIST-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>list-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>elements-schema</code> &mdash; type: <code>(not&nbsp;null)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:elements-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::elements-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::elements-schema)</span><!-- /@w --></code>
+
+<p>Schema of the elements of the list</p></li></ul>
 
 </dd></dl>
 
