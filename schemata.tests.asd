@@ -5,4 +5,8 @@
   :version "0.0.1"
   :serial t
   :depends-on (:schemata :stefil :generic-serializer)
-  :components ((:file "tests")))
+  :components ((:module "tests"
+                :components
+                ((:file "tests"))))
+  :perform (asdf:test-op (op c)
+-                         (uiop:symbol-call :schemata.tests :run-tests)))
