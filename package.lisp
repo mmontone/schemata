@@ -55,4 +55,6 @@
            #:schema-object
            #:def-schema-class
            #:schema-class
-           #:schema-class-schema))
+           #:schema-class-schema
+
+           #:generate-schema-from-class))

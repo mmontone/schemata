@@ -288,85 +288,70 @@ External definitions
 Macros
 ------
 
- -- Macro: SCHEMATA:DEFSCHEMA (name schema)
+ -- Macro: SCHEMATA:SCHEMA (schema-def)
 
-     Register SCHEMA under NAME. The schema can then be accessed via
-     FIND-SCHEMA.
+     Wrapper macro for schema definitions.
 
  -- Macro: SCHEMATA:DEF-SCHEMA-CLASS (name direct-superclasses
           direct-slots &rest options)
 
      Helper macro to define schema classes
 
- -- Macro: SCHEMATA:SCHEMA (schema-def)
+ -- Macro: SCHEMATA:DEFSCHEMA (name schema)
 
-     Wrapper macro for schema definitions.
+     Register SCHEMA under NAME. The schema can then be accessed via
+     FIND-SCHEMA.
 
 Generic functions
 -----------------
 
- -- Generic-Function: SCHEMATA:PARSE-WITH-SCHEMA (schema string-or-data)
-
-     Parses the string to an association list using the schema
-
- -- Generic-Function: SCHEMATA:ATTRIBUTE-NAME (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:SCHEMA-DOCUMENTATION (sb-pcl::object)
 
  -- Generic-Function: SCHEMATA:UNSERIALIZE-WITH-SCHEMA (schema data
           format)
 
- -- Generic-Function: SCHEMATA:SCHEMA-DOCUMENTATION (sb-pcl::object)
-
- -- Generic-Function: SCHEMATA:OBJECT-CLASS (sb-pcl::object)
-
- -- Generic-Function: SCHEMATA:ATTRIBUTE-PARSER (sb-pcl::object)
-
- -- Generic-Function: SCHEMATA:ATTRIBUTE-VALIDATOR (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-NAME (sb-pcl::object)
 
  -- Generic-Function: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR (sb-pcl::object)
 
- -- Generic-Function: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-ACCESSOR (sb-pcl::object)
 
- -- Generic-Function: SCHEMATA:SCHEMA-TYPE (sb-pcl::object)
-
- -- Generic-Function: SCHEMATA:ATTRIBUTE-FORMATTER (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-TYPE (sb-pcl::object)
 
  -- Generic-Function: SCHEMATA:OBJECT-NAME (sb-pcl::object)
 
  -- Generic-Function: SCHEMATA:OBJECT-ATTRIBUTES (sb-pcl::object)
 
- -- Generic-Function: SCHEMATA:ATTRIBUTE-ACCESSOR (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:OBJECT-CLASS (sb-pcl::object)
 
- -- Generic-Function: SCHEMATA:ATTRIBUTE-TYPE (sb-pcl::object)
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME (sb-pcl::object)
+
+ -- Generic-Function: SCHEMATA:SCHEMA-GENERATOR (sb-pcl::object)
+
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-VALIDATOR (sb-pcl::object)
+
+ -- Generic-Function: SCHEMATA:PARSE-WITH-SCHEMA (schema string-or-data)
+
+     Parses the string to an association list using the schema
+
+ -- Generic-Function: SCHEMATA:SCHEMA-TYPE (sb-pcl::object)
+
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-FORMATTER (sb-pcl::object)
+
+ -- Generic-Function: SCHEMATA:ATTRIBUTE-PARSER (sb-pcl::object)
 
  -- Generic-Function: SCHEMATA:ATTRIBUTE-REQUIRED-P (sb-pcl::object)
 
 Functions
 ---------
 
- -- Function: SCHEMATA:ATTRIBUTE-READER (attribute)
-
- -- Function: SCHEMATA:FIND-OBJECT-ATTRIBUTE (object attribute-name &key
-          (error-p t))
-
- -- Function: SCHEMATA:POPULATE-WITH-SCHEMA (schema object data &key
-          exclude)
-
-     Populate CLOS objects from data + schema.  Attributes members of
-     EXCLUDE parameter are not populated.
-
- -- Function: SCHEMATA:SCHEMA-CLASS-SCHEMA (schema-class)
-
-     Generate a schema using the schema class meta info
-
  -- Function: SCHEMATA:SERIALIZE-WITH-SCHEMA (schema input &optional
           (serializer generic-serializer::*serializer*) (stream
           generic-serializer::*serializer-output*))
 
- -- Function: SCHEMATA:SCHEMA-SPEC (schema)
-
- -- Function: SCHEMATA:ATTRIBUTE-TYPE-NAME (attribute)
-
  -- Function: SCHEMATA:VALIDATION-ERROR (message &rest args)
+
+ -- Function: SCHEMATA:ATTRIBUTE-READER (attribute)
 
  -- Function: SCHEMATA:VALIDATE-WITH-SCHEMA (schema data &key
           (collect-errors *collect-validation-errors*) (error-p
@@ -385,13 +370,7 @@ Functions
      validation errors are returned as the function result and no error
      is signaled.
 
- -- Function: SCHEMATA:ATTRIBUTE-OPTIONAL-P (attribute)
-
- -- Function: SCHEMATA:ATTRIBUTE-WRITER (attribute)
-
- -- Function: SCHEMATA:FIND-SCHEMA (name &optional (errorp t))
-
-     Find a schema definition by name
+ -- Function: SCHEMATA:ATTRIBUTE-TYPE-NAME (attribute)
 
  -- Function: SCHEMATA:PATCH-WITH-SCHEMA (schema object data)
 
@@ -400,8 +379,93 @@ Functions
      rest api operations implementations.  DATA should be an association
      list.
 
+ -- Function: SCHEMATA:ATTRIBUTE-WRITER (attribute)
+
+ -- Function: SCHEMATA:SCHEMA-SPEC (schema)
+
+ -- Function: SCHEMATA:POPULATE-WITH-SCHEMA (schema object data &key
+          exclude)
+
+     Populate CLOS objects from data + schema.  Attributes members of
+     EXCLUDE parameter are not populated.
+
+ -- Function: SCHEMATA:FIND-SCHEMA (name &optional (errorp t))
+
+     Find a schema definition by name
+
+ -- Function: SCHEMATA:ATTRIBUTE-OPTIONAL-P (attribute)
+
+ -- Function: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS (class)
+
+     Generate a schema from CLASS, using reflection.
+
+ -- Function: SCHEMATA:SCHEMA-CLASS-SCHEMA (schema-class)
+
+     Generate a schema using the schema class meta info
+
+ -- Function: SCHEMATA:FIND-OBJECT-ATTRIBUTE (object attribute-name &key
+          (error-p t))
+
 Classes
 -------
+
+ -- Class: SCHEMATA:VALIDATION-ERROR
+
+     Class precedence list: 'validation-error, error, serious-condition,
+     condition, t'
+
+ -- Class: SCHEMATA:ATTRIBUTE
+
+     Class precedence list: 'attribute, schema, attribute-properties,
+     standard-object, t'
+
+     Slots:
+        * 'name' -- type: 'symbol'; initarg: ':name'; reader:
+          'schemata:attribute-name'; writer:
+          '(setf schemata:attribute-name)'
+
+        * 'type' -- type: 'schemata:schema'; initarg: ':type'; reader:
+          'schemata:attribute-type'; writer:
+          '(setf schemata:attribute-type)'
+
+        * 'accessor' -- type: '(or null symbol)'; initarg: ':accessor';
+          reader: 'schemata:attribute-accessor'; writer:
+          '(setf schemata:attribute-accessor)'
+
+        * 'writer' -- type:
+          '(or null                                            trivial-types:function-designator)';
+          initarg: ':writer'
+
+        * 'reader' -- type:
+          '(or null                                            trivial-types:function-designator)';
+          initarg: ':reader'
+
+        * 'slot' -- type: '(or null symbol)'; initarg: ':slot'; reader:
+          'schemata::attribute-slot'; writer:
+          '(setf schemata::attribute-slot)'
+
+ -- Class: SCHEMATA:LIST-SCHEMA
+
+     Class precedence list: 'list-schema, schema, standard-object, t'
+
+     Slots:
+        * 'elements-schema' -- type: '(not null)'; initarg:
+          ':elements-schema'; reader: 'schemata::elements-schema';
+          writer: '(setf schemata::elements-schema)'
+
+          Schema of the elements of the list
+
+ -- Class: SCHEMATA:SCHEMA-CLASS
+
+     Metaclass for schema objects
+
+     Class precedence list: 'schema-class, standard-class, class,
+     specializer, metaobject, standard-object, t'
+
+     Slots:
+        * 'schema-name' -- type: '(or null string symbol)'; initarg:
+          ':schema-name'; reader: 'schemata::schema-name'; writer:
+          '(setf schemata::schema-name)'
 
  -- Class: SCHEMATA:OBJECT-SCHEMA
 
@@ -447,60 +511,6 @@ Classes
           'schemata::schema-name'; writer:
           '(setf schemata::schema-name)'
 
- -- Class: SCHEMATA:LIST-SCHEMA
-
-     Class precedence list: 'list-schema, schema, standard-object, t'
-
-     Slots:
-        * 'elements-schema' -- type: '(not null)'; initarg:
-          ':elements-schema'; reader: 'schemata::elements-schema';
-          writer: '(setf schemata::elements-schema)'
-
-          Schema of the elements of the list
-
- -- Class: SCHEMATA:VALIDATION-ERROR
-
-     Class precedence list: 'validation-error, error, serious-condition,
-     condition, t'
-
- -- Class: SCHEMATA:ATTRIBUTE
-
-     Class precedence list: 'attribute, schema, attribute-properties,
-     standard-object, t'
-
-     Slots:
-        * 'name' -- type: 'symbol'; initarg: ':name'; reader:
-          'schemata:attribute-name'; writer:
-          '(setf schemata:attribute-name)'
-
-        * 'type' -- type: 'schemata:schema'; initarg: ':type'; reader:
-          'schemata:attribute-type'; writer:
-          '(setf schemata:attribute-type)'
-
-        * 'accessor' -- type: '(or null symbol)'; initarg: ':accessor';
-          reader: 'schemata:attribute-accessor'; writer:
-          '(setf schemata:attribute-accessor)'
-
-        * 'writer' -- type:
-          '(or null                                            trivial-types:function-designator)';
-          initarg: ':writer'
-
-        * 'reader' -- type:
-          '(or null                                            trivial-types:function-designator)';
-          initarg: ':reader'
-
-        * 'slot' -- type: '(or null symbol)'; initarg: ':slot'; reader:
-          'schemata::attribute-slot'; writer:
-          '(setf schemata::attribute-slot)'
-
- -- Class: SCHEMATA:TYPE-SCHEMA
-
-     Class precedence list: 'type-schema, schema, standard-object, t'
-
-     Slots:
-        * 'type' -- type: 't'; initarg: ':type'; reader:
-          'schemata:schema-type'; writer: '(setf schemata:schema-type)'
-
  -- Class: SCHEMATA:SCHEMA
 
      Class precedence list: 'schema, standard-object, t'
@@ -511,24 +521,20 @@ Classes
           writer: '(setf schemata:schema-documentation)'
 
         * 'generator' -- type: 't'; initarg: ':generator'; reader:
-          'schemata::schema-generator'; writer:
-          '(setf schemata::schema-generator)'
+          'schemata:schema-generator'; writer:
+          '(setf schemata:schema-generator)'
+
+ -- Class: SCHEMATA:TYPE-SCHEMA
+
+     Class precedence list: 'type-schema, schema, standard-object, t'
+
+     Slots:
+        * 'type' -- type: 't'; initarg: ':type'; reader:
+          'schemata:schema-type'; writer: '(setf schemata:schema-type)'
 
  -- Class: SCHEMATA:SCHEMA-OBJECT
 
      Class precedence list: 'schema-object, standard-object, t'
-
- -- Class: SCHEMATA:SCHEMA-CLASS
-
-     Metaclass for schema objects
-
-     Class precedence list: 'schema-class, standard-class, class,
-     specializer, metaobject, standard-object, t'
-
-     Slots:
-        * 'schema-name' -- type: '(or null string symbol)'; initarg:
-          ':schema-name'; reader: 'schemata::schema-name'; writer:
-          '(setf schemata::schema-name)'
 
 
 File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
@@ -544,70 +550,74 @@ File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
  [index ]
 * Menu:
 
-* SCHEMATA:ATTRIBUTE-ACCESSOR:           SCHEMATA package.    (line  60)
-* SCHEMATA:ATTRIBUTE-ACCESSOR <1>:       SCHEMATA package.    (line  60)
-* SCHEMATA:ATTRIBUTE-ADD-VALIDATOR:      SCHEMATA package.    (line  48)
-* SCHEMATA:ATTRIBUTE-ADD-VALIDATOR <1>:  SCHEMATA package.    (line  48)
+* SCHEMATA:ATTRIBUTE-ACCESSOR:           SCHEMATA package.    (line  40)
+* SCHEMATA:ATTRIBUTE-ACCESSOR <1>:       SCHEMATA package.    (line  40)
+* SCHEMATA:ATTRIBUTE-ADD-VALIDATOR:      SCHEMATA package.    (line  38)
+* SCHEMATA:ATTRIBUTE-ADD-VALIDATOR <1>:  SCHEMATA package.    (line  38)
 * SCHEMATA:ATTRIBUTE-EXTERNAL-NAME:      SCHEMATA package.    (line  50)
 * SCHEMATA:ATTRIBUTE-EXTERNAL-NAME <1>:  SCHEMATA package.    (line  50)
-* SCHEMATA:ATTRIBUTE-FORMATTER:          SCHEMATA package.    (line  54)
-* SCHEMATA:ATTRIBUTE-FORMATTER <1>:      SCHEMATA package.    (line  54)
-* SCHEMATA:ATTRIBUTE-NAME:               SCHEMATA package.    (line  35)
-* SCHEMATA:ATTRIBUTE-NAME <1>:           SCHEMATA package.    (line  35)
-* SCHEMATA:ATTRIBUTE-OPTIONAL-P:         SCHEMATA package.    (line 111)
-* SCHEMATA:ATTRIBUTE-OPTIONAL-P <1>:     SCHEMATA package.    (line 111)
-* SCHEMATA:ATTRIBUTE-PARSER:             SCHEMATA package.    (line  44)
-* SCHEMATA:ATTRIBUTE-PARSER <1>:         SCHEMATA package.    (line  44)
-* SCHEMATA:ATTRIBUTE-READER:             SCHEMATA package.    (line  69)
-* SCHEMATA:ATTRIBUTE-READER <1>:         SCHEMATA package.    (line  69)
-* SCHEMATA:ATTRIBUTE-REQUIRED-P:         SCHEMATA package.    (line  64)
-* SCHEMATA:ATTRIBUTE-REQUIRED-P <1>:     SCHEMATA package.    (line  64)
-* SCHEMATA:ATTRIBUTE-TYPE:               SCHEMATA package.    (line  62)
-* SCHEMATA:ATTRIBUTE-TYPE <1>:           SCHEMATA package.    (line  62)
-* SCHEMATA:ATTRIBUTE-TYPE-NAME:          SCHEMATA package.    (line  90)
-* SCHEMATA:ATTRIBUTE-TYPE-NAME <1>:      SCHEMATA package.    (line  90)
-* SCHEMATA:ATTRIBUTE-VALIDATOR:          SCHEMATA package.    (line  46)
-* SCHEMATA:ATTRIBUTE-VALIDATOR <1>:      SCHEMATA package.    (line  46)
-* SCHEMATA:ATTRIBUTE-WRITER:             SCHEMATA package.    (line 113)
-* SCHEMATA:ATTRIBUTE-WRITER <1>:         SCHEMATA package.    (line 113)
-* SCHEMATA:DEF-SCHEMA-CLASS:             SCHEMATA package.    (line  19)
-* SCHEMATA:DEF-SCHEMA-CLASS <1>:         SCHEMATA package.    (line  19)
-* SCHEMATA:DEFSCHEMA:                    SCHEMATA package.    (line  14)
-* SCHEMATA:DEFSCHEMA <1>:                SCHEMATA package.    (line  14)
-* SCHEMATA:FIND-OBJECT-ATTRIBUTE:        SCHEMATA package.    (line  71)
-* SCHEMATA:FIND-OBJECT-ATTRIBUTE <1>:    SCHEMATA package.    (line  71)
+* SCHEMATA:ATTRIBUTE-FORMATTER:          SCHEMATA package.    (line  62)
+* SCHEMATA:ATTRIBUTE-FORMATTER <1>:      SCHEMATA package.    (line  62)
+* SCHEMATA:ATTRIBUTE-NAME:               SCHEMATA package.    (line  36)
+* SCHEMATA:ATTRIBUTE-NAME <1>:           SCHEMATA package.    (line  36)
+* SCHEMATA:ATTRIBUTE-OPTIONAL-P:         SCHEMATA package.    (line 119)
+* SCHEMATA:ATTRIBUTE-OPTIONAL-P <1>:     SCHEMATA package.    (line 119)
+* SCHEMATA:ATTRIBUTE-PARSER:             SCHEMATA package.    (line  64)
+* SCHEMATA:ATTRIBUTE-PARSER <1>:         SCHEMATA package.    (line  64)
+* SCHEMATA:ATTRIBUTE-READER:             SCHEMATA package.    (line  77)
+* SCHEMATA:ATTRIBUTE-READER <1>:         SCHEMATA package.    (line  77)
+* SCHEMATA:ATTRIBUTE-REQUIRED-P:         SCHEMATA package.    (line  66)
+* SCHEMATA:ATTRIBUTE-REQUIRED-P <1>:     SCHEMATA package.    (line  66)
+* SCHEMATA:ATTRIBUTE-TYPE:               SCHEMATA package.    (line  42)
+* SCHEMATA:ATTRIBUTE-TYPE <1>:           SCHEMATA package.    (line  42)
+* SCHEMATA:ATTRIBUTE-TYPE-NAME:          SCHEMATA package.    (line  96)
+* SCHEMATA:ATTRIBUTE-TYPE-NAME <1>:      SCHEMATA package.    (line  96)
+* SCHEMATA:ATTRIBUTE-VALIDATOR:          SCHEMATA package.    (line  54)
+* SCHEMATA:ATTRIBUTE-VALIDATOR <1>:      SCHEMATA package.    (line  54)
+* SCHEMATA:ATTRIBUTE-WRITER:             SCHEMATA package.    (line 105)
+* SCHEMATA:ATTRIBUTE-WRITER <1>:         SCHEMATA package.    (line 105)
+* SCHEMATA:DEF-SCHEMA-CLASS:             SCHEMATA package.    (line  18)
+* SCHEMATA:DEF-SCHEMA-CLASS <1>:         SCHEMATA package.    (line  18)
+* SCHEMATA:DEFSCHEMA:                    SCHEMATA package.    (line  23)
+* SCHEMATA:DEFSCHEMA <1>:                SCHEMATA package.    (line  23)
+* SCHEMATA:FIND-OBJECT-ATTRIBUTE:        SCHEMATA package.    (line 129)
+* SCHEMATA:FIND-OBJECT-ATTRIBUTE <1>:    SCHEMATA package.    (line 129)
 * SCHEMATA:FIND-SCHEMA:                  SCHEMATA package.    (line 115)
 * SCHEMATA:FIND-SCHEMA <1>:              SCHEMATA package.    (line 115)
-* SCHEMATA:OBJECT-ATTRIBUTES:            SCHEMATA package.    (line  58)
-* SCHEMATA:OBJECT-ATTRIBUTES <1>:        SCHEMATA package.    (line  58)
-* SCHEMATA:OBJECT-CLASS:                 SCHEMATA package.    (line  42)
-* SCHEMATA:OBJECT-CLASS <1>:             SCHEMATA package.    (line  42)
-* SCHEMATA:OBJECT-NAME:                  SCHEMATA package.    (line  56)
-* SCHEMATA:OBJECT-NAME <1>:              SCHEMATA package.    (line  56)
-* SCHEMATA:PARSE-WITH-SCHEMA:            SCHEMATA package.    (line  31)
-* SCHEMATA:PARSE-WITH-SCHEMA <1>:        SCHEMATA package.    (line  31)
-* SCHEMATA:PATCH-WITH-SCHEMA:            SCHEMATA package.    (line 119)
-* SCHEMATA:PATCH-WITH-SCHEMA <1>:        SCHEMATA package.    (line 119)
-* SCHEMATA:POPULATE-WITH-SCHEMA:         SCHEMATA package.    (line  74)
-* SCHEMATA:POPULATE-WITH-SCHEMA <1>:     SCHEMATA package.    (line  74)
-* SCHEMATA:SCHEMA:                       SCHEMATA package.    (line  24)
-* SCHEMATA:SCHEMA <1>:                   SCHEMATA package.    (line  24)
-* SCHEMATA:SCHEMA-CLASS-SCHEMA:          SCHEMATA package.    (line  80)
-* SCHEMATA:SCHEMA-CLASS-SCHEMA <1>:      SCHEMATA package.    (line  80)
-* SCHEMATA:SCHEMA-DOCUMENTATION:         SCHEMATA package.    (line  40)
-* SCHEMATA:SCHEMA-DOCUMENTATION <1>:     SCHEMATA package.    (line  40)
-* SCHEMATA:SCHEMA-SPEC:                  SCHEMATA package.    (line  88)
-* SCHEMATA:SCHEMA-SPEC <1>:              SCHEMATA package.    (line  88)
-* SCHEMATA:SCHEMA-TYPE:                  SCHEMATA package.    (line  52)
-* SCHEMATA:SCHEMA-TYPE <1>:              SCHEMATA package.    (line  52)
-* SCHEMATA:SERIALIZE-WITH-SCHEMA:        SCHEMATA package.    (line  84)
-* SCHEMATA:SERIALIZE-WITH-SCHEMA <1>:    SCHEMATA package.    (line  84)
-* SCHEMATA:UNSERIALIZE-WITH-SCHEMA:      SCHEMATA package.    (line  37)
-* SCHEMATA:UNSERIALIZE-WITH-SCHEMA <1>:  SCHEMATA package.    (line  37)
-* SCHEMATA:VALIDATE-WITH-SCHEMA:         SCHEMATA package.    (line  94)
-* SCHEMATA:VALIDATE-WITH-SCHEMA <1>:     SCHEMATA package.    (line  94)
-* SCHEMATA:VALIDATION-ERROR:             SCHEMATA package.    (line  92)
-* SCHEMATA:VALIDATION-ERROR <1>:         SCHEMATA package.    (line  92)
+* SCHEMATA:GENERATE-SCHEMA-FROM-CLASS:   SCHEMATA package.    (line 121)
+* SCHEMATA:GENERATE-SCHEMA-FROM-CLASS <1>: SCHEMATA package.  (line 121)
+* SCHEMATA:OBJECT-ATTRIBUTES:            SCHEMATA package.    (line  46)
+* SCHEMATA:OBJECT-ATTRIBUTES <1>:        SCHEMATA package.    (line  46)
+* SCHEMATA:OBJECT-CLASS:                 SCHEMATA package.    (line  48)
+* SCHEMATA:OBJECT-CLASS <1>:             SCHEMATA package.    (line  48)
+* SCHEMATA:OBJECT-NAME:                  SCHEMATA package.    (line  44)
+* SCHEMATA:OBJECT-NAME <1>:              SCHEMATA package.    (line  44)
+* SCHEMATA:PARSE-WITH-SCHEMA:            SCHEMATA package.    (line  56)
+* SCHEMATA:PARSE-WITH-SCHEMA <1>:        SCHEMATA package.    (line  56)
+* SCHEMATA:PATCH-WITH-SCHEMA:            SCHEMATA package.    (line  98)
+* SCHEMATA:PATCH-WITH-SCHEMA <1>:        SCHEMATA package.    (line  98)
+* SCHEMATA:POPULATE-WITH-SCHEMA:         SCHEMATA package.    (line 109)
+* SCHEMATA:POPULATE-WITH-SCHEMA <1>:     SCHEMATA package.    (line 109)
+* SCHEMATA:SCHEMA:                       SCHEMATA package.    (line  14)
+* SCHEMATA:SCHEMA <1>:                   SCHEMATA package.    (line  14)
+* SCHEMATA:SCHEMA-CLASS-SCHEMA:          SCHEMATA package.    (line 125)
+* SCHEMATA:SCHEMA-CLASS-SCHEMA <1>:      SCHEMATA package.    (line 125)
+* SCHEMATA:SCHEMA-DOCUMENTATION:         SCHEMATA package.    (line  31)
+* SCHEMATA:SCHEMA-DOCUMENTATION <1>:     SCHEMATA package.    (line  31)
+* SCHEMATA:SCHEMA-GENERATOR:             SCHEMATA package.    (line  52)
+* SCHEMATA:SCHEMA-GENERATOR <1>:         SCHEMATA package.    (line  52)
+* SCHEMATA:SCHEMA-SPEC:                  SCHEMATA package.    (line 107)
+* SCHEMATA:SCHEMA-SPEC <1>:              SCHEMATA package.    (line 107)
+* SCHEMATA:SCHEMA-TYPE:                  SCHEMATA package.    (line  60)
+* SCHEMATA:SCHEMA-TYPE <1>:              SCHEMATA package.    (line  60)
+* SCHEMATA:SERIALIZE-WITH-SCHEMA:        SCHEMATA package.    (line  71)
+* SCHEMATA:SERIALIZE-WITH-SCHEMA <1>:    SCHEMATA package.    (line  71)
+* SCHEMATA:UNSERIALIZE-WITH-SCHEMA:      SCHEMATA package.    (line  33)
+* SCHEMATA:UNSERIALIZE-WITH-SCHEMA <1>:  SCHEMATA package.    (line  33)
+* SCHEMATA:VALIDATE-WITH-SCHEMA:         SCHEMATA package.    (line  79)
+* SCHEMATA:VALIDATE-WITH-SCHEMA <1>:     SCHEMATA package.    (line  79)
+* SCHEMATA:VALIDATION-ERROR:             SCHEMATA package.    (line  75)
+* SCHEMATA:VALIDATION-ERROR <1>:         SCHEMATA package.    (line  75)
 
 
 
@@ -623,47 +633,49 @@ Node: Schema types4361
 Node: Reference8418
 Ref: reference8529
 Node: SCHEMATA package8560
-Ref: SCHEMATA:DEFSCHEMA macro8748
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro8881
-Ref: SCHEMATA:SCHEMA macro9027
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function9149
-Ref: SCHEMATA:ATTRIBUTE-NAME function9287
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function9351
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function9438
-Ref: SCHEMATA:OBJECT-CLASS function9508
-Ref: SCHEMATA:ATTRIBUTE-PARSER function9570
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function9636
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function9705
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function9778
-Ref: SCHEMATA:SCHEMA-TYPE function9851
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function9912
-Ref: SCHEMATA:OBJECT-NAME function9981
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function10042
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function10109
-Ref: SCHEMATA:ATTRIBUTE-TYPE function10177
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10241
-Ref: SCHEMATA:ATTRIBUTE-READER function10332
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function10385
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function10482
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function10684
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function10800
-Ref: SCHEMATA:SCHEMA-SPEC function10986
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function11031
-Ref: SCHEMATA:VALIDATION-ERROR function11087
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function11149
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function11990
-Ref: SCHEMATA:ATTRIBUTE-WRITER function12047
-Ref: SCHEMATA:FIND-SCHEMA function12100
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function12203
-Ref: SCHEMATA:OBJECT-SCHEMA class12501
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class13916
-Ref: SCHEMATA:LIST-SCHEMA class14215
-Ref: SCHEMATA:VALIDATION-ERROR class14558
-Ref: SCHEMATA:ATTRIBUTE class14689
-Ref: SCHEMATA:TYPE-SCHEMA class15795
-Ref: SCHEMATA:SCHEMA class16041
-Ref: SCHEMATA:SCHEMA-OBJECT class16492
-Ref: SCHEMATA:SCHEMA-CLASS class16592
-Node: Index16968
+Ref: SCHEMATA:SCHEMA macro8748
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro8833
+Ref: SCHEMATA:DEFSCHEMA macro8979
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function9149
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function9219
+Ref: SCHEMATA:ATTRIBUTE-NAME function9306
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function9370
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function9443
+Ref: SCHEMATA:ATTRIBUTE-TYPE function9511
+Ref: SCHEMATA:OBJECT-NAME function9575
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function9636
+Ref: SCHEMATA:OBJECT-CLASS function9703
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function9765
+Ref: SCHEMATA:SCHEMA-GENERATOR function9838
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function9904
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function9973
+Ref: SCHEMATA:SCHEMA-TYPE function10111
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function10172
+Ref: SCHEMATA:ATTRIBUTE-PARSER function10241
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10307
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function10398
+Ref: SCHEMATA:VALIDATION-ERROR function10584
+Ref: SCHEMATA:ATTRIBUTE-READER function10646
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function10699
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function11540
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function11596
+Ref: SCHEMATA:ATTRIBUTE-WRITER function11877
+Ref: SCHEMATA:SCHEMA-SPEC function11930
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function11975
+Ref: SCHEMATA:FIND-SCHEMA function12177
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function12280
+Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function12337
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function12450
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function12566
+Ref: SCHEMATA:VALIDATION-ERROR class12680
+Ref: SCHEMATA:ATTRIBUTE class12811
+Ref: SCHEMATA:LIST-SCHEMA class13917
+Ref: SCHEMATA:SCHEMA-CLASS class14260
+Ref: SCHEMATA:OBJECT-SCHEMA class14636
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class16051
+Ref: SCHEMATA:SCHEMA class16350
+Ref: SCHEMATA:TYPE-SCHEMA class16799
+Ref: SCHEMATA:SCHEMA-OBJECT class17045
+Node: Index17145
 
 End Tag Table

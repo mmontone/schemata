@@ -291,3 +291,27 @@ The schema can then be accessed via FIND-SCHEMA."
                  :ignore-unknown-attributes (ignore-unknown-attributes schema))))
     (list-schema
      (list 'list-of (schema-spec (elements-schema schema))))))
+
+(defun generate-schema-from-class (class)
+  "Generate a schema from CLASS, using reflection."
+  (let ((attributes
+          (loop for slot in (c2mop:class-slots class)
+        if (null (c2mop:slot-definition-type slot))
+          do (warn "Cannot create a schema attribute for ~a because it has no type." (c2mop:slot-definition-name slot))
+        else
+          collect (make-instance 'attribute
+                                 :name (c2mop:slot-definition-name slot)
+                                 :required (not (typep nil (c2mop:slot-definition-type slot)))
+                                 ;; TODO: use accessors, writers, readers specificed in slots
+                                 :writer (lambda (value obj) (setf (slot-value obj (c2mop:slot-definition-name slot)) value))
+                                 :reader (lambda (obj) (slot-value obj (c2mop:slot-definition-name slot)))
+                                 ;; TODO. FIXME.
+                                 ;;:documentation (c2mop:slot-definition-documentation slot)
+                                 :type (make-instance 'type-schema :type (c2mop:slot-definition-type slot))))))
+    (make-instance 'object-schema
+                   :name (class-name class)
+                   :documentation (documentation class t)
+                   :attributes attributes
+                   :class (class-name class))))
+                   
+                   
