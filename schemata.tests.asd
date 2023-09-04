@@ -9,4 +9,4 @@
                 :components
                 ((:file "tests"))))
   :perform (asdf:test-op (op c)
--                         (uiop:symbol-call :schemata.tests :run-tests)))
+                         (uiop:symbol-call :schemata.tests :run-tests)))
