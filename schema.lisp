@@ -162,6 +162,10 @@ The schema can then be accessed via FIND-SCHEMA."
          :initform nil
          :type (or null symbol))))
 
+(defmethod print-object ((attr attribute) stream)
+  (print-unreadable-object (attr stream :type t :identity t)
+    (prin1 (attribute-name attr) stream)))
+
 (defun attribute-optional-p (attribute)
   (not (attribute-required-p attribute)))
 
