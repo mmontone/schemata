@@ -360,7 +360,7 @@ The schema can then be accessed via FIND-SCHEMA."
         :slot (attribute-slot attribute)))
 
 (defun schema-spec (schema)
-  (typecase schema
+  (etypecase schema
     (type-schema
      (schema-type schema))
     (schema-reference-schema
@@ -373,7 +373,9 @@ The schema can then be accessed via FIND-SCHEMA."
                  :unserializer (object-unserializer schema)
                  :ignore-unknown-attributes (ignore-unknown-attributes schema))))
     (list-of-schema
-     (list 'list-of (schema-spec (elements-schema schema))))))
+     (list 'list-of (schema-spec (elements-schema schema))))
+    (or-schema
+     (list* 'or (mapcar #'schema-spec (schemas-of schema))))))
 
 (defun generate-schema-from-class (class)
   "Generate a schema from CLASS, using reflection."

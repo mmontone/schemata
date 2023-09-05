@@ -142,10 +142,11 @@ Args:
                            (cdr data-attribute))))))
 
 (defmethod schema-validate ((schema or-schema) data)
-  (when (schemas-of schema)
+  (if (schemas-of schema)
     (handler-case (schema-validate (first (schemas-of schema)) data)
       (validation-error ()
-        (schema-validate (make-instance 'or-schema :schemas (rest (schemas-of schema))) data)))))
+        (schema-validate (make-instance 'or-schema :schemas (rest (schemas-of schema))) data)))
+    (validation-error "~s fails to validate: ~a" data (schema-spec schema))))
 
 (defmethod schema-validate ((schema and-schema) data)
   (loop for subschema in (schemas-of schema)
