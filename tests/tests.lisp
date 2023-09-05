@@ -463,3 +463,43 @@
       (validate-with-schema alist-schema '((:x . 22) (:y . "foo"))))
     )
   )
+
+(deftest plists-test ()
+  (signals validation-error
+    (validate-with-schema
+     (schema (plist-of symbol string))
+     'something))
+  (finishes
+    (validate-with-schema
+     (schema (plist-of symbol string))
+     '()))
+  (signals validation-error
+    (validate-with-schema
+     (schema (plist-of symbol string))
+     '(foo)))
+  (signals validation-error
+    (validate-with-schema
+     (schema (plist-of symbol integer))
+     '(:aaa "foo")))
+  (finishes
+    (validate-with-schema
+     (schema (plist-of symbol integer))
+     '(foo 22)))
+
+  (let ((plist-schema (schema (plist (:x integer :y string)))))
+    ;; non list errors
+    (signals validation-error
+      (validate-with-schema plist-schema 'foo))
+    ;; required keys
+    (signals validation-error
+      (validate-with-schema plist-schema '()))
+    ;; malformation
+    (signals validation-error
+      (validate-with-schema plist-schema '(:x 22 :z :y "lala")))
+    ;; values
+    (signals validation-error
+      (validate-with-schema plist-schema '(:x 22 :y 33)))
+    (finishes
+      (validate-with-schema plist-schema '(:x 22 :y "foo")))
+    )
+  )

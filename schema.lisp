@@ -125,6 +125,25 @@ The schema can then be accessed via FIND-SCHEMA."
                      :accessor allow-other-keys-p
                      :initform t)))
 
+(defclass plist-of-schema (schema)
+  ((key-schema :initarg :key-schema
+               :accessor key-schema)
+   (value-schema :initarg :value-schema
+                 :accessor value-schema)))
+
+(defclass plist-schema (schema)
+  ((members :initarg :members
+            :accessor plist-members)
+   (required-keys :initarg :required-keys
+                  :initform t
+                  :accessor required-keys)
+   (optional-keys :initarg :optional-keys
+                  :initform nil
+                  :accessor optional-keys)
+   (allow-other-keys :initarg :allow-other-keys
+                     :accessor allow-other-keys-p
+                     :initform t)))
+
 (defclass object-schema (schema)
   ((name :initarg :name
          :accessor object-name
@@ -278,6 +297,22 @@ The schema can then be accessed via FIND-SCHEMA."
                               (check-type (car member) (or symbol string))
                               (cons (car member) (parse-schema (cdr member))))
                             alist)
+           options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'plist-of)) schema)
+  (destructuring-bind (key-schema value-schema) (rest schema)
+    (make-instance 'plist-of-schema
+                   :key-schema (parse-schema key-schema)
+                   :value-schema (parse-schema value-schema))))
+
+(defmethod parse-schema-type ((schema-type (eql 'plist)) schema)
+  (destructuring-bind (plist &rest options) (rest schema)
+    (apply #'make-instance 'plist-schema
+           :members (loop for key in plist by #'cddr
+                          for value in (rest plist) by #'cddr
+                          collect 
+                          (cons (the (or symbol string) key)
+                                (parse-schema value)))
            options)))
 
 (defmethod parse-schema-type ((schema-type (eql 'schema)) schema)

@@ -175,8 +175,8 @@ Args:
     (schema-validate (elements-schema schema) val)))
 
 (defmethod schema-validate ((schema alist-of-schema) data)
-  (unless (listp data)
-    (validation-error "~s is not a list" data))
+  (unless (trivial-types:association-list-p data)
+    (validation-error "~s is not an association list" data))
   (dolist (elem data)
     (unless (consp elem)
       (validation-error "~s is not a cons" elem))
@@ -195,6 +195,25 @@ Args:
                       (member (car member) (optional-keys schema)))
             (validation-error "~s is required" (car member)))
           (schema-validate (cdr member) (cdr assoc))))))
+
+(defmethod schema-validate ((schema plist-of-schema) data)
+  (unless (trivial-types:property-list-p data)
+    (validation-error "~s is not a property list" data))
+  (alexandria:doplist (key val data)
+    (schema-validate (key-schema schema) key)
+    (schema-validate (value-schema schema) val)))
+
+(defmethod schema-validate ((schema plist-schema) data)
+  ;; TODO: take into account the allow-other-keys option
+  (unless (trivial-types:property-list-p data)
+    (validation-error "~s is not a property list" data))
+  (dolist (member (plist-members schema))
+    (let* ((no-value (gensym))
+           (val (getf data (car member) no-value)))
+      (when (and (eq val no-value)
+                 (not (member (car member) (optional-keys schema))))
+        (validation-error "~s is required" (car member)))
+      (schema-validate (cdr member) val))))
 
 (defmethod schema-validate ((schema schema-reference-schema) data)
   (schema-validate (referenced-schema schema) data))
