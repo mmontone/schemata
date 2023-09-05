@@ -187,33 +187,32 @@
   (let ((schema-name
           (or (schema-name schema-class)
               (class-name schema-class))))
-    (register-schema schema-name 
-                     (eval
-                      (list 'schema
-                            (list 'object schema-name
-                                  (loop for slot in (closer-mop:class-slots schema-class)
-                                        when (and (typep slot 'schema-effective-slot-definition)
-                                                  (schema-slot-p slot))
-                                          collect
-                                          (let ((slot-schema-name (or (schema-name slot)
-                                                                      (closer-mop:slot-definition-name slot))))
-                               
-                                            (list slot-schema-name
-                                                  (or (slot-schema slot)
-                                                      (c2mop:slot-definition-type slot))
-                                                  :slot (c2mop:slot-definition-name slot)
-                                                  :required (attribute-required-p slot)
-                                                  :required-message (attribute-required-message slot)
-                                                  :default (or (attribute-default slot)
-                                                               (c2mop:slot-definition-initform slot))
-                                                  :validator (attribute-validator slot)
-                                                  :add-validator (attribute-add-validator slot)
-                                                  :parser (attribute-parser slot)
-                                                  :formatter (attribute-formatter slot)
-                                                  :external-name (attribute-external-name slot)
-                                                  :serializer (attribute-serializer slot)
-                                                  :unserializer (attribute-unserializer slot))))
-                                  (list :class (class-name schema-class))))))))
+    (register-schema schema-name
+                     (parse-schema
+                      (list 'object schema-name
+                            (loop for slot in (closer-mop:class-slots schema-class)
+                                  when (and (typep slot 'schema-effective-slot-definition)
+                                            (schema-slot-p slot))
+                                    collect
+                                    (let ((slot-schema-name (or (schema-name slot)
+                                                                (closer-mop:slot-definition-name slot))))
+
+                                      (list slot-schema-name
+                                            (or (slot-schema slot)
+                                                (c2mop:slot-definition-type slot))
+                                            :slot (c2mop:slot-definition-name slot)
+                                            :required (attribute-required-p slot)
+                                            :required-message (attribute-required-message slot)
+                                            :default (or (attribute-default slot)
+                                                         (c2mop:slot-definition-initform slot))
+                                            :validator (attribute-validator slot)
+                                            :add-validator (attribute-add-validator slot)
+                                            :parser (attribute-parser slot)
+                                            :formatter (attribute-formatter slot)
+                                            :external-name (attribute-external-name slot)
+                                            :serializer (attribute-serializer slot)
+                                            :unserializer (attribute-unserializer slot))))
+                            (list :class (class-name schema-class)))))))
 
 (defmethod generic-serializer::serialize ((object schema-object)
                                           &optional

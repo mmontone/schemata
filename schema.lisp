@@ -11,17 +11,23 @@ serialized when optional. Useful for treatment of special values, like :null in 
 (defun null-value (value)
   (member value *null-values*))
 
-(defun schema-validation-function-name (schema-name)
+(defparameter *satisfies-function-names*
+  (make-hash-table :test 'equalp))
+
+(defun schema-satisfies-function-name (schema-spec)
   "The name of the function used by SATISFIES-SCHEMA type."
-  (intern (format nil "VALID-~a-SCHEMA-P" schema-name)))
+  (alexandria:if-let (func-name (gethash schema-spec *satisfies-function-names*))
+    func-name
+    (let ((func-name (intern (format nil "SATISFIES-~a-SCHEMA-P" (gensym)))))
+      (setf (gethash schema-spec *satisfies-function-names*) func-name)
+      (setf (symbol-function func-name)
+            (lambda (data)
+              (null (validate-with-schema (parse-schema schema-spec) data :error-p nil))))
+      func-name)))
 
 (defun register-schema (name schema)
   "Register SCHEMA under NAME."
-  (setf (gethash name *schemas*) schema)
-  ;; Create the function for SATISFIES-SCHEMA type.
-  (setf (symbol-function (schema-validation-function-name name))
-        (lambda (data)
-          (null (validate-with-schema (find-schema name) data :error-p nil)))))
+  (setf (gethash name *schemas*) schema))
 
 (defmacro defschema (name schema)
   "Register SCHEMA under NAME.
@@ -34,9 +40,9 @@ The schema can then be accessed via FIND-SCHEMA."
   "Wrapper macro for schema definitions."
   `(parse-schema ',schema-def))
 
-(deftype satisfies-schema (schema-name)
+(deftype satisfies-schema (schema-spec)
   "Common Lisp type for schemas."
-  `(satisfies ,(schema-validation-function-name schema-name)))
+  `(satisfies ,(schema-satisfies-function-name schema-spec)))
 
 (defclass schema ()
   ((documentation :initarg :documentation
