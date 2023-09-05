@@ -59,6 +59,14 @@ The schema can then be accessed via FIND-SCHEMA."
 (defun referenced-schema (schema)
   (find-schema (schema-name schema)))
 
+(defclass or-schema (schema)
+  ((schemas :initarg :schemas
+            :accessor schemas-of)))
+
+(defclass and-schema (schema)
+  ((schemas :initarg :schemas
+            :accessor schemas-of)))
+
 (defclass type-schema (schema)
   ((type :initarg :type
          :accessor schema-type)))
@@ -208,6 +216,12 @@ The schema can then be accessed via FIND-SCHEMA."
            :name name
            :attributes (mapcar #'parse-attribute attributes)
            options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'or)) schema)
+  (make-instance 'or-schema :schemas (mapcar #'parse-schema (rest schema))))
+
+(defmethod parse-schema-type ((schema-type (eql 'and)) schema)
+  (make-instance 'and-schema :schemas (mapcar #'parse-schema (rest schema))))
 
 (defmethod parse-schema-type ((schema-type (eql 'cons)) schema)
   (destructuring-bind (car-schema cdr-schema) (rest schema)
