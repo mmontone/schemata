@@ -17,6 +17,10 @@
            #:object
            #:ref
            #:list-of
+           #:alist
+           #:alist-of
+           #:plist
+           #:plist-of
            #:object-name
            #:object-attributes
            #:object-options

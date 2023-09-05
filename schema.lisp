@@ -259,7 +259,7 @@ The schema can then be accessed via FIND-SCHEMA."
            args)))
 
 (defmethod parse-schema-type ((schema-type (eql 'alist-of)) schema)
-  (destructuring-bind (key-schema value-schema) (rest schema)
+  (destructuring-bind (key-schema . value-schema) (second schema)
     (make-instance 'alist-of-schema
                    :key-schema (parse-schema key-schema)
                    :value-schema (parse-schema value-schema))))

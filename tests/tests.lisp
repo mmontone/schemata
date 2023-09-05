@@ -288,19 +288,19 @@
 
   ;; Fails
   (signals validation-error
-           (let ((data '((id . 22) (realname . "asdf") (age . "23")
-                         (best-friend . 33))))
-             (parse-with-schema
-              (find-schema 'user-schema)
-              data)))
+    (let ((data '((id . 22) (realname . "asdf") (age . "23")
+                  (best-friend . 33))))
+      (parse-with-schema
+       (find-schema 'user-schema)
+       data)))
 
   ;; Fails
   (signals validation-error
-           (let ((data '((id . 22) (realname . "asdf") (age . "23")
-                         (best-friend . ((id . 34))))))
-             (parse-with-schema
-              (find-schema 'user-schema)
-              data)))
+    (let ((data '((id . 22) (realname . "asdf") (age . "23")
+                  (best-friend . ((id . 34))))))
+      (parse-with-schema
+       (find-schema 'user-schema)
+       data)))
 
   ;; Ok
   (finishes
@@ -342,11 +342,11 @@
 
   ;; Fails
   (signals validation-error
-           (let ((data '((id . 22) (realname . "asdf") (age . "23")
-                         (best-friend . 33))))
-             (unserialize-with-schema
-              (find-schema 'user-schema)
-              data :json)))
+    (let ((data '((id . 22) (realname . "asdf") (age . "23")
+                  (best-friend . 33))))
+      (unserialize-with-schema
+       (find-schema 'user-schema)
+       data :json)))
 
   ;; Fails
   (signals validation-error
@@ -422,3 +422,44 @@
     (is (string= (realname user) "John"))
     (is (= (age user) 30))
     (is (= (id user) 2))))
+
+(deftest alists-test ()
+  (signals validation-error
+    (validate-with-schema
+     (schema (alist-of (symbol . string)))
+     'something))
+  (finishes
+    (validate-with-schema
+     (schema (alist-of (symbol . string)))
+     '()))
+  (signals validation-error
+    (validate-with-schema
+     (schema (alist-of (symbol . string)))
+     '(foo)))
+  (signals validation-error
+    (validate-with-schema
+     (schema (alist-of (symbol . string)))
+     '((22 . "foo"))))
+  (finishes
+    (validate-with-schema
+     (schema (alist-of (symbol . string)))
+     '((foo . "foo"))))
+
+  (let ((alist-schema (schema (alist ((:x . integer)
+                                      (:y . string))))))
+    ;; non list errors
+    (signals validation-error
+      (validate-with-schema alist-schema 'foo))
+    ;; required keys
+    (signals validation-error
+      (validate-with-schema alist-schema '()))
+    ;; malformation
+    (signals validation-error
+      (validate-with-schema alist-schema '(:x 22 :y "lala")))
+    ;; values
+    (signals validation-error
+      (validate-with-schema alist-schema '((:x . 22) (:y . 33))))
+    (finishes
+      (validate-with-schema alist-schema '((:x . 22) (:y . "foo"))))
+    )
+  )

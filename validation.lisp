@@ -183,8 +183,9 @@ Args:
     (schema-validate (value-schema schema) (cdr elem))))
 
 (defmethod schema-validate ((schema alist-schema) data)
-  (unless (listp data)
-    (validation-error "~s is not a list" data))
+  ;; TODO: take into account the allow-other-keys option
+  (unless (trivial-types:association-list-p data)
+    (validation-error "~s is not an association list" data))
   (dolist (member (alist-members schema))
     (let ((assoc (assoc (car member) data)))
       (if (null assoc)
