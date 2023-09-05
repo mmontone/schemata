@@ -141,6 +141,12 @@ Args:
           (schema-validate schema-attribute
                            (cdr data-attribute))))))
 
+(defmethod schema-validate ((schema cons-schema) data)
+  (unless (typep data 'cons)
+    (validation-error "~s is not a CONS" data))
+  (schema-validate (car-schema schema) (car data))
+  (schema-validate (cdr-schema schema) (cdr data)))
+
 (defmethod schema-validate ((schema list-schema) data)
   (unless (listp data)
     (validation-error "~s is not a list" data))

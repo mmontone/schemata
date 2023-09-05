@@ -67,6 +67,16 @@ The schema can then be accessed via FIND-SCHEMA."
   (print-unreadable-object (object stream :type t :identity t)
     (princ (schema-type object) stream)))
 
+(defclass cons-schema (schema)
+  ((car-schema :initarg :car-schema
+               :accessor car-schema)
+   (cdr-schema :initarg :cdr-schema
+               :accessor cdr-schema)))
+
+(defmethod print-object ((schema cons-schema) stream)
+  (print-unreadable-object (schema stream :type t :identity t)
+    (format stream "~a ~a" (car-schema schema) (cdr-schema schema))))
+
 (defclass list-schema (schema)
   ((schemas :initarg :schemas
             :accessor list-schemas
@@ -199,6 +209,12 @@ The schema can then be accessed via FIND-SCHEMA."
            :attributes (mapcar #'parse-attribute attributes)
            options)))
 
+(defmethod parse-schema-type ((schema-type (eql 'cons)) schema)
+  (destructuring-bind (car-schema cdr-schema) (rest schema)
+    (make-instance 'cons-schema
+                   :car-schema (parse-schema car-schema)
+                   :cdr-schema (parse-schema cdr-schema))))
+
 (defmethod parse-schema-type ((schema-type (eql 'list)) schema)
   (make-instance 'list-schema :schemas (mapcar #'parse-schema (rest schema))))
 
@@ -208,6 +224,8 @@ The schema can then be accessed via FIND-SCHEMA."
     (apply #'make-instance 'list-of-schema
            :elements-schema (parse-schema elements-schema)
            args)))
+
+
 
 (defmethod parse-schema-type ((schema-type (eql 'schema)) schema)
   (make-instance 'schema-reference-schema :schema-name (cadr schema)))
@@ -308,21 +326,20 @@ The schema can then be accessed via FIND-SCHEMA."
   "Generate a schema from CLASS, using reflection."
   (let ((attributes
           (loop for slot in (c2mop:class-slots class)
-        if (null (c2mop:slot-definition-type slot))
-          do (warn "Cannot create a schema attribute for ~a because it has no type." (c2mop:slot-definition-name slot))
-        else
-          collect (make-instance 'attribute
-                                 :name (c2mop:slot-definition-name slot)
-                                 :required (not (typep nil (c2mop:slot-definition-type slot)))
-                                 ;; TODO: use accessors, writers, readers specificed in slots
-                                 :writer (lambda (value obj) (setf (slot-value obj (c2mop:slot-definition-name slot)) value))
-                                 :reader (lambda (obj) (slot-value obj (c2mop:slot-definition-name slot)))
-                                 ;; TODO. FIXME.
-                                 ;;:documentation (c2mop:slot-definition-documentation slot)
-                                 :type (make-instance 'type-schema :type (c2mop:slot-definition-type slot))))))
+                if (null (c2mop:slot-definition-type slot))
+                  do (warn "Cannot create a schema attribute for ~a because it has no type." (c2mop:slot-definition-name slot))
+                else
+                  collect (make-instance 'attribute
+                                         :name (c2mop:slot-definition-name slot)
+                                         :required (not (typep nil (c2mop:slot-definition-type slot)))
+                                         ;; TODO: use accessors, writers, readers specificed in slots
+                                         :writer (lambda (value obj) (setf (slot-value obj (c2mop:slot-definition-name slot)) value))
+                                         :reader (lambda (obj) (slot-value obj (c2mop:slot-definition-name slot)))
+                                         ;; TODO. FIXME.
+                                         ;;:documentation (c2mop:slot-definition-documentation slot)
+                                         :type (make-instance 'type-schema :type (c2mop:slot-definition-type slot))))))
     (make-instance 'object-schema
                    :name (class-name class)
                    :documentation (documentation class t)
                    :attributes attributes
-                   :class (class-name class))))     
-                   
+                   :class (class-name class))))
