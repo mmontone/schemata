@@ -11,8 +11,8 @@
 (defmethod print-object ((validation-error validation-error) stream)
   (print-unreadable-object (validation-error stream :type t :identity t)
     (apply #'format stream
-            (simple-condition-format-control validation-error)
-            (simple-condition-format-arguments validation-error))))
+           (simple-condition-format-control validation-error)
+           (simple-condition-format-arguments validation-error))))
 
 (define-condition validation-error-collection (validation-error)
   ((validation-errors :initarg :validation-errors
@@ -106,7 +106,7 @@ Args:
 
   (unless (trivial-types:association-list-p data)
     (validation-error "Not an object data: ~s" data))
-  
+
   ;; Check unknown attributes first
   (unless (or *ignore-unknown-object-attributes*
               (ignore-unknown-attributes schema))
@@ -141,10 +141,19 @@ Args:
           (schema-validate schema-attribute
                            (cdr data-attribute))))))
 
+(defmethod schema-validate ((schema list-schema) data)
+  (unless (listp data)
+    (validation-error "~s is not a list" data))
+  (unless (= (length (list-schemas schema))
+             (length data))
+    (validation-error "~s has invalid number of elements (~a expected)" data (length (list-schemas schema))))
+  (loop for elem-schema in (list-schemas schema)
+        for elem in data
+        do (schema-validate elem-schema elem)))
+
 (defmethod schema-validate ((schema list-of-schema) data)
-  (when (not (listp data))
-    (validation-error "~A is not a list"
-                      data))
+  (unless (listp data)
+    (validation-error "~s is not a list" data))
   (dolist (val data)
     (schema-validate (elements-schema schema) val)))
 

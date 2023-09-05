@@ -67,11 +67,20 @@ The schema can then be accessed via FIND-SCHEMA."
   (print-unreadable-object (object stream :type t :identity t)
     (princ (schema-type object) stream)))
 
+(defclass list-schema (schema)
+  ((schemas :initarg :schemas
+            :accessor list-schemas
+            :initform nil)))
+
 (defclass list-of-schema (schema)
   ((elements-schema :initarg :elements-schema
                     :accessor elements-schema
                     :type (not null)
                     :documentation "Schema of the elements of the list")))
+
+(defmethod print-object ((schema list-of-schema) stream)
+  (print-unreadable-object (schema stream :type t :identity t)
+    (print-object (elements-schema schema) stream)))
 
 (defclass object-schema (schema)
   ((name :initarg :name
@@ -189,6 +198,9 @@ The schema can then be accessed via FIND-SCHEMA."
            :name name
            :attributes (mapcar #'parse-attribute attributes)
            options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'list)) schema)
+  (make-instance 'list-schema :schemas (mapcar #'parse-schema (rest schema))))
 
 (defmethod parse-schema-type ((schema-type (eql 'list-of)) schema)
   (destructuring-bind (elements-schema &rest args)
@@ -312,6 +324,5 @@ The schema can then be accessed via FIND-SCHEMA."
                    :name (class-name class)
                    :documentation (documentation class t)
                    :attributes attributes
-                   :class (class-name class))))
-                   
+                   :class (class-name class))))     
                    
