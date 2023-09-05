@@ -44,7 +44,7 @@ See: parse-api-input (function)"
 (defmethod parse-with-schema ((schema schema-reference-schema) data )
   (parse-with-schema (referenced-schema schema) data ))
 
-(defmethod parse-with-schema ((schema list-schema) data )
+(defmethod parse-with-schema ((schema list-of-schema) data )
   (loop for elem in (the list data)
         collect (parse-with-schema (elements-schema schema) elem )))
 

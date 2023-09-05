@@ -57,7 +57,7 @@
        ;; else, serialize the attribute value
        (generic-serializer:serialize input serializer stream)))))
 
-(defmethod %serialize-with-schema ((schema list-schema) serializer input stream)
+(defmethod %serialize-with-schema ((schema list-of-schema) serializer input stream)
   (generic-serializer:with-list ("LIST" :serializer serializer
                                         :stream stream)
     (loop for elem in (coerce input 'list)

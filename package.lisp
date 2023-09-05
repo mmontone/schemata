@@ -46,7 +46,7 @@
 
            #:object-schema
            #:type-schema
-           #:list-schema
+           #:list-of-schema
            #:attribute
            #:schema-reference-schema
            #:schema-spec

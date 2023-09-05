@@ -53,7 +53,7 @@ See: parse-api-input (function)"
 (defmethod unserialize-with-schema ((schema schema-reference-schema) data format)
   (unserialize-with-schema (referenced-schema schema) data format))
 
-(defmethod unserialize-with-schema ((schema list-schema) data format)
+(defmethod unserialize-with-schema ((schema list-of-schema) data format)
   (loop for elem in (the list data)
         collect (unserialize-with-schema (elements-schema schema) elem format)))
 

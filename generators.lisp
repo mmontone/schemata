@@ -72,7 +72,7 @@
 (defmethod generator-for-schema ((schema schema-reference-schema))
   (schemata::referenced-schema schema))
 
-(defmethod generator-for-schema ((schema list-schema))
+(defmethod generator-for-schema ((schema list-of-schema))
   (let ((element-generator (generator-for-schema (schemata::elements-schema schema))))
     (generator (list element-generator))))
 

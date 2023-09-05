@@ -141,7 +141,7 @@ Args:
           (schema-validate schema-attribute
                            (cdr data-attribute))))))
 
-(defmethod schema-validate ((schema list-schema) data)
+(defmethod schema-validate ((schema list-of-schema) data)
   (when (not (listp data))
     (validation-error "~A is not a list"
                       data))

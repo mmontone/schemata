@@ -67,7 +67,7 @@ The schema can then be accessed via FIND-SCHEMA."
   (print-unreadable-object (object stream :type t :identity t)
     (princ (schema-type object) stream)))
 
-(defclass list-schema (schema)
+(defclass list-of-schema (schema)
   ((elements-schema :initarg :elements-schema
                     :accessor elements-schema
                     :type (not null)
@@ -193,7 +193,7 @@ The schema can then be accessed via FIND-SCHEMA."
 (defmethod parse-schema-type ((schema-type (eql 'list-of)) schema)
   (destructuring-bind (elements-schema &rest args)
       (rest schema)
-    (apply #'make-instance 'list-schema
+    (apply #'make-instance 'list-of-schema
            :elements-schema (parse-schema elements-schema)
            args)))
 
@@ -289,7 +289,7 @@ The schema can then be accessed via FIND-SCHEMA."
                  :serializer (object-serializer schema)
                  :unserializer (object-unserializer schema)
                  :ignore-unknown-attributes (ignore-unknown-attributes schema))))
-    (list-schema
+    (list-of-schema
      (list 'list-of (schema-spec (elements-schema schema))))))
 
 (defun generate-schema-from-class (class)
