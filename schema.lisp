@@ -100,6 +100,25 @@ The schema can then be accessed via FIND-SCHEMA."
   (print-unreadable-object (schema stream :type t :identity t)
     (print-object (elements-schema schema) stream)))
 
+(defclass alist-of-schema (schema)
+  ((key-schema :initarg :key-schema
+               :accessor key-schema)
+   (value-schema :initarg :value-schema
+                 :accessor value-schema)))
+
+(defclass alist-schema (schema)
+  ((members :initarg :members
+            :accessor alist-members)
+   (required-keys :initarg :required-keys
+                  :initform t
+                  :accessor required-keys)
+   (optional-keys :initarg :optional-keys
+                  :initform nil
+                  :accessor optional-keys)
+   (allow-other-keys :initarg :allow-other-keys
+                     :accessor allow-other-keys-p
+                     :initform t)))
+
 (defclass object-schema (schema)
   ((name :initarg :name
          :accessor object-name
@@ -239,7 +258,21 @@ The schema can then be accessed via FIND-SCHEMA."
            :elements-schema (parse-schema elements-schema)
            args)))
 
+(defmethod parse-schema-type ((schema-type (eql 'alist-of)) schema)
+  (destructuring-bind (key-schema value-schema) (rest schema)
+    (make-instance 'alist-of-schema
+                   :key-schema (parse-schema key-schema)
+                   :value-schema (parse-schema value-schema))))
 
+(defmethod parse-schema-type ((schema-type (eql 'alist)) schema)
+  (destructuring-bind (alist &rest options) (rest schema)
+    (apply #'make-instance 'alist-schema
+           :members (mapcar (lambda (member)
+                              (check-type member cons)
+                              (check-type (car member) (or symbol string))
+                              (cons (car member) (parse-schema (cdr member))))
+                            alist)
+           options)))
 
 (defmethod parse-schema-type ((schema-type (eql 'schema)) schema)
   (make-instance 'schema-reference-schema :schema-name (cadr schema)))

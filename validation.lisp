@@ -173,6 +173,27 @@ Args:
   (dolist (val data)
     (schema-validate (elements-schema schema) val)))
 
+(defmethod schema-validate ((schema alist-of-schema) data)
+  (unless (listp data)
+    (validation-error "~s is not a list" data))
+  (dolist (elem data)
+    (unless (consp elem)
+      (validation-error "~s is not a cons" elem))
+    (schema-validate (key-schema schema) (car elem))
+    (schema-validate (value-schema schema) (cdr elem))))
+
+(defmethod schema-validate ((schema alist-schema) data)
+  (unless (listp data)
+    (validation-error "~s is not a list" data))
+  (dolist (member (alist-members schema))
+    (let ((assoc (assoc (car member) data)))
+      (if (null assoc)
+          (unless (or (eql (optional-keys schema) t)
+                      (eql (required-keys schema) nil)
+                      (member (car member) (optional-keys schema)))
+            (validation-error "~s is required" (car member)))
+          (schema-validate (cdr member) (cdr assoc))))))
+
 (defmethod schema-validate ((schema schema-reference-schema) data)
   (schema-validate (referenced-schema schema) data))
 
