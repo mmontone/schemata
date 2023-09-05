@@ -321,7 +321,7 @@
 
   ;; Ok
   (finishes
-    (let ((data '((id . 22) (realname . "asdf"))))
+    (let ((data '((id . 22) (realname . "asdf") (age . "22"))))
       (unserialize-with-schema
        (find-schema 'user-schema)
        data :json)))
@@ -359,7 +359,7 @@
   ;; Ok
   (finishes
     (let ((data '((id . 22) (realname . "asdf") (age . "23")
-                  (best-friend . ((id . 34) (realname . "dfdf"))))))
+                  (best-friend . ((id . 34) (realname . "dfdf") (age . 44))))))
       (unserialize-with-schema
        (find-schema 'user-schema)
        data :json))))
