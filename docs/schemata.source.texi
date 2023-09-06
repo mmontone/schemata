@@ -191,11 +191,23 @@ SCHEMATA> (schema (object person
 #<OBJECT-SCHEMA {1001843543}>
 @end verbatim
 
-@section List schema
+@section List schemas
 
-Homogeneous list of schemas are specified via @code{list-of}.
+@subsection list-of
 
-Example:
+Schema for lists with elements of certain type/schema.
+
+Syntax: @code{(list-of list-element-schema)}
+
+Examples:
+
+@lisp
+(schema (list-of string))
+@end lisp
+
+@lisp
+(schema (list-of (or string number)))
+@end lisp
 
 @verbatim
 SCHEMATA> (defparameter *s* (schema (list-of integer)))
@@ -205,6 +217,88 @@ SCHEMATA> (validate-with-schema *s* '(1 2 "foo"))
 SCHEMATA> (validate-with-schema *s* '(1 2 3))
 NIL
 @end verbatim
+
+@subsection list
+
+Schema for list with all its elements specified with schemas.
+
+Syntax: @code{(list &rest schemas)}
+
+Examples:
+
+@lisp
+(schema (list string number boolean))
+@end lisp
+
+@subsection alist-of
+
+Schema for association lists with certain type of keys and values.
+
+Syntax: @code{(alist-of (key-schema . value-schema))}
+
+Examples:
+
+@lisp
+(schema (alist-of (keyword . string)))
+@end lisp
+
+@subsection alist
+
+Schema for association lists with certain keys and values.
+
+Syntax: @code{(alist association-list &rest options)}
+
+where association-list is a list of conses with key and schema.
+
+Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+
+Examples:
+
+@lisp
+(schema (alist ((:x . string)(:y . number))))
+@end lisp
+
+@lisp
+(schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+@end lisp
+
+@subsection plist-of
+
+Schema for property lists with certain type of keys and values.
+
+Syntax: @code{(plist-of key-schema value-schema)}
+
+Examples:
+
+@lisp
+(schema (plist-of keyword string))
+@end lisp
+
+@subsection plist
+
+Schema for property lists with certain keys and values.
+
+Syntax: @code{(plist property-list &rest options)}
+
+where property-list specifies the schemas for the keys.
+
+Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+
+Examples:
+
+@lisp
+(schema (plist (:x string :y number)))
+@end lisp
+
+@lisp
+(schema (plist (:x string :y number) :optional-keys (:y)))
+@end lisp
+
+@section HASH-TABLE schemas
+
+@section CONS schema
+
+@section AND and OR schemas
 
 @section Schema references
 
@@ -233,7 +327,7 @@ SCHEMATA> (validate-with-schema *list-of-person* '((("names" . "Mariano")) (("na
 ; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "Attributes not part of schema: ~a" {1008CD3DD3}>.
 @end verbatim
 
-@section SATISFIES-SCHEMA type
+@chapter SATISFIES-SCHEMA type
 
 Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA type.
 Schemas can be thought as types over data.
@@ -254,7 +348,7 @@ SCHEMATA> (let ((x "foo"))
 "foo"
 @end verbatim
 
-@section SCHEMA-CLASS metaclass
+@chapter SCHEMA-CLASS metaclass
 
 SCHEMA-CLASS classes get an schema attached.
 

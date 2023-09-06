@@ -85,17 +85,28 @@ ul.no-bullet {list-style: none}
   <ul class="no-bullet">
     <li><a id="toc-Type-schemas" href="#Type-schemas">4.1 Type schemas</a></li>
     <li><a id="toc-Object-schema" href="#Object-schema">4.2 Object schema</a></li>
-    <li><a id="toc-List-schema" href="#List-schema">4.3 List schema</a></li>
-    <li><a id="toc-Schema-references" href="#Schema-references">4.4 Schema references</a></li>
-    <li><a id="toc-SATISFIES_002dSCHEMA-type" href="#SATISFIES_002dSCHEMA-type">4.5 SATISFIES-SCHEMA type</a></li>
-    <li><a id="toc-SCHEMA_002dCLASS-metaclass" href="#SCHEMA_002dCLASS-metaclass">4.6 SCHEMA-CLASS metaclass</a></li>
+    <li><a id="toc-List-schemas" href="#List-schemas">4.3 List schemas</a>
+    <ul class="no-bullet">
+      <li><a id="toc-list_002dof" href="#list_002dof">4.3.1 list-of</a></li>
+      <li><a id="toc-list" href="#list">4.3.2 list</a></li>
+      <li><a id="toc-alist_002dof" href="#alist_002dof">4.3.3 alist-of</a></li>
+      <li><a id="toc-alist" href="#alist">4.3.4 alist</a></li>
+      <li><a id="toc-plist_002dof" href="#plist_002dof">4.3.5 plist-of</a></li>
+      <li><a id="toc-plist" href="#plist">4.3.6 plist</a></li>
+    </ul></li>
+    <li><a id="toc-HASH_002dTABLE-schemas" href="#HASH_002dTABLE-schemas">4.4 HASH-TABLE schemas</a></li>
+    <li><a id="toc-CONS-schema" href="#CONS-schema">4.5 CONS schema</a></li>
+    <li><a id="toc-AND-and-OR-schemas" href="#AND-and-OR-schemas">4.6 AND and OR schemas</a></li>
+    <li><a id="toc-Schema-references" href="#Schema-references">4.7 Schema references</a></li>
   </ul></li>
-  <li><a id="toc-Data-generation-1" href="#Data-generation">5 Data generation</a></li>
-  <li><a id="toc-Reference-1" href="#Reference">6 Reference</a>
+  <li><a id="toc-SATISFIES_002dSCHEMA-type" href="#SATISFIES_002dSCHEMA-type">5 SATISFIES-SCHEMA type</a></li>
+  <li><a id="toc-SCHEMA_002dCLASS-metaclass" href="#SCHEMA_002dCLASS-metaclass">6 SCHEMA-CLASS metaclass</a></li>
+  <li><a id="toc-Data-generation-1" href="#Data-generation">7 Data generation</a></li>
+  <li><a id="toc-Reference-1" href="#Reference">8 Reference</a>
   <ul class="no-bullet">
-    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">6.1 SCHEMATA package</a></li>
+    <li><a id="toc-SCHEMATA-package-1" href="#SCHEMATA-package">8.1 SCHEMATA package</a></li>
   </ul></li>
-  <li><a id="toc-Index-1" href="#Index" rel="index">7 Index</a></li>
+  <li><a id="toc-Index-1" href="#Index" rel="index">9 Index</a></li>
 </ul>
 </div>
 
@@ -281,12 +292,24 @@ Attributes are specified as: <code>(attribute-name attribute-type &amp;rest opti
                            (age integer :required nil))))
 #&lt;OBJECT-SCHEMA {1001843543}&gt;
 </pre>
-<span id="List-schema"></span><h3 class="section">4.3 List schema</h3>
+<span id="List-schemas"></span><h3 class="section">4.3 List schemas</h3>
 
-<p>Homogeneous list of schemas are specified via <code>list-of</code>.
+<span id="list_002dof"></span><h4 class="subsection">4.3.1 list-of</h4>
+
+<p>Schema for lists with elements of certain type/schema.
 </p>
-<p>Example:
+<p>Syntax: <code>(list-of list-element-schema)</code>
 </p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">list-of string</span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">list-of <span class="paren3">(<span class="lisp-bg">or string number</span>)</span></span>)</span></span>)</span>
+</pre></div>
+
 <pre class="verbatim">SCHEMATA&gt; (defparameter *s* (schema (list-of integer)))
 *S*
 SCHEMATA&gt; (validate-with-schema *s* '(1 2 &quot;foo&quot;))
@@ -294,7 +317,89 @@ SCHEMATA&gt; (validate-with-schema *s* '(1 2 &quot;foo&quot;))
 SCHEMATA&gt; (validate-with-schema *s* '(1 2 3))
 NIL
 </pre>
-<span id="Schema-references"></span><h3 class="section">4.4 Schema references</h3>
+<span id="list"></span><h4 class="subsection">4.3.2 list</h4>
+
+<p>Schema for list with all its elements specified with schemas.
+</p>
+<p>Syntax: <code>(list &amp;rest schemas)</code>
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">list string number boolean</span>)</span></span>)</span>
+</pre></div>
+
+<span id="alist_002dof"></span><h4 class="subsection">4.3.3 alist-of</h4>
+
+<p>Schema for association lists with certain type of keys and values.
+</p>
+<p>Syntax: <code>(alist-of (key-schema . value-schema))</code>
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">alist-of <span class="paren3">(<span class="lisp-bg">keyword . string</span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="alist"></span><h4 class="subsection">4.3.4 alist</h4>
+
+<p>Schema for association lists with certain keys and values.
+</p>
+<p>Syntax: <code>(alist association-list &amp;rest options)</code>
+</p>
+<p>where association-list is a list of conses with key and schema.
+</p>
+<p>Options can be <code>:required-keys</code>, <code>:optional-keys</code> and <code>:allow-other-keys</code>.
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">alist <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg"><span class="keyword">:x</span> . string</span>)</span><span class="paren4">(<span class="lisp-bg"><span class="keyword">:y</span> . number</span>)</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">alist <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg"><span class="keyword">:x</span> . string</span>)</span><span class="paren4">(<span class="lisp-bg"><span class="keyword">:y</span> . number</span>)</span></span>)</span> <span class="keyword">:optional-keys</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="plist_002dof"></span><h4 class="subsection">4.3.5 plist-of</h4>
+
+<p>Schema for property lists with certain type of keys and values.
+</p>
+<p>Syntax: <code>(plist-of key-schema value-schema)</code>
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">plist-of keyword string</span>)</span></span>)</span>
+</pre></div>
+
+<span id="plist"></span><h4 class="subsection">4.3.6 plist</h4>
+
+<p>Schema for property lists with certain keys and values.
+</p>
+<p>Syntax: <code>(plist property-list &amp;rest options)</code>
+</p>
+<p>where property-list specifies the schemas for the keys.
+</p>
+<p>Options can be <code>:required-keys</code>, <code>:optional-keys</code> and <code>:allow-other-keys</code>.
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">plist <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">plist <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span> <span class="keyword">:optional-keys</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<span id="HASH_002dTABLE-schemas"></span><h3 class="section">4.4 HASH-TABLE schemas</h3>
+
+<span id="CONS-schema"></span><h3 class="section">4.5 CONS schema</h3>
+
+<span id="AND-and-OR-schemas"></span><h3 class="section">4.6 AND and OR schemas</h3>
+
+<span id="Schema-references"></span><h3 class="section">4.7 Schema references</h3>
 
 <p>Defined schemas can be referenced via either &lsquo;(schema schema-name)&lsquo; or &lsquo;(ref schema-name)&lsquo; (they are identical).
 </p>
@@ -319,7 +424,7 @@ NIL
 SCHEMATA&gt; (validate-with-schema *list-of-person* '(((&quot;names&quot; . &quot;Mariano&quot;)) ((&quot;name&quot; . &quot;Peter&quot;))))
 ; Evaluation aborted on #&lt;SCHEMATA:VALIDATION-ERROR &quot;Attributes not part of schema: ~a&quot; {1008CD3DD3}&gt;.
 </pre>
-<span id="SATISFIES_002dSCHEMA-type"></span><h3 class="section">4.5 SATISFIES-SCHEMA type</h3>
+<span id="SATISFIES_002dSCHEMA-type"></span><h2 class="chapter">5 SATISFIES-SCHEMA type</h2>
 
 <p>Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA type.
 Schemas can be thought as types over data.
@@ -338,7 +443,7 @@ SCHEMATA&gt; (let ((x &quot;foo&quot;))
             x)
 &quot;foo&quot;
 </pre>
-<span id="SCHEMA_002dCLASS-metaclass"></span><h3 class="section">4.6 SCHEMA-CLASS metaclass</h3>
+<span id="SCHEMA_002dCLASS-metaclass"></span><h2 class="chapter">6 SCHEMA-CLASS metaclass</h2>
 
 <p>SCHEMA-CLASS classes get an schema attached.
 </p>
@@ -364,7 +469,7 @@ SCHEMATA&gt; (generic-serializer:with-serializer :json
 <p>
 Next: <a href="#Reference" accesskey="n" rel="next">Reference</a>, Previous: <a href="#Schema-types" accesskey="p" rel="prev">Schema types</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Data-generation-1"></span><h2 class="chapter">5 Data generation</h2>
+<span id="Data-generation-1"></span><h2 class="chapter">7 Data generation</h2>
 
 <p>Schemata can generate random data from schemas. It uses <code>check-it</code> library generators for that.
 </p>
@@ -405,7 +510,7 @@ Next: <a href="#Reference" accesskey="n" rel="next">Reference</a>, Previous: <a 
 <p>
 Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#Data-generation" accesskey="p" rel="prev">Data generation</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Reference-1"></span><h2 class="chapter">6 Reference</h2>
+<span id="Reference-1"></span><h2 class="chapter">8 Reference</h2>
 <span id="reference"></span>
 <table class="menu" border="0" cellspacing="0">
 <tr><td align="left" valign="top">&bull; <a href="#SCHEMATA-package" accesskey="1">SCHEMATA package</a></td><td>&nbsp;&nbsp;</td><td align="left" valign="top">
@@ -417,7 +522,7 @@ Next: <a href="#Index" accesskey="n" rel="next">Index</a>, Previous: <a href="#D
 <p>
 Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="SCHEMATA-package-1"></span><h3 class="section">6.1 SCHEMATA package</h3>
+<span id="SCHEMATA-package-1"></span><h3 class="section">8.1 SCHEMATA package</h3>
 <dl>
 <dt id="index-SCHEMATA">PACKAGE: <strong>SCHEMATA</strong></dt>
 </dl>
@@ -709,8 +814,14 @@ Input can be a string or an association list.
 <span id="SCHEMATA_003aPLIST_002dOF_002dSCHEMA-class"></span><dl>
 <dt id="index-SCHEMATA_003aPLIST_002dOF_002dSCHEMA-1">Class: <strong>SCHEMATA:PLIST-OF-SCHEMA</strong></dt>
 <dd>
-
-
+<p>Schema for property lists with certain type of keys and values.
+</p>
+<p>Syntax: (plist-of key-schema value-schema)
+</p>
+<p>Examples:
+</p>
+<p>(schema (plist-of keyword string))
+</p>
 <p>Class precedence list: <code>plist-of-schema, schema, standard-object, t</code>
 </p>
 <p>Slots:
@@ -747,7 +858,7 @@ Input can be a string or an association list.
 <dd>
 <p>Schema for association lists with certain type of keys and values.
 </p>
-<p>Syntax: (alist-of (key-schema . value-schema) &amp;rest options)
+<p>Syntax: (alist-of (key-schema . value-schema))
 </p>
 <p>Examples:
 </p>
@@ -769,7 +880,19 @@ Input can be a string or an association list.
 <span id="SCHEMATA_003aPLIST_002dSCHEMA-class"></span><dl>
 <dt id="index-SCHEMATA_003aPLIST_002dSCHEMA-1">Class: <strong>SCHEMATA:PLIST-SCHEMA</strong></dt>
 <dd>
-
+<p>Schema for property lists with certain keys and values.
+</p>
+<p>Syntax: (plist property-list &amp;rest options)
+</p>
+<p>where property-list specifies the schemas for the keys.
+</p>
+<p>Options can be :required-keys, :optional-keys and :allow-other-keys.
+</p>
+<p>Examples:
+</p>
+<p>(schema (plist (:x string :y number)))
+    (schema (plist (:x string :y number) :optional-keys (:y)))
+</p>
 
 <p>Class precedence list: <code>plist-schema, schema, standard-object, t</code>
 </p>
@@ -836,9 +959,11 @@ For instance, for the schema: (list symbol number symbol),
 <dd>
 <p>Schema for association lists with certain keys and values.
 </p>
-<p>Syntax: (alist alist &amp;rest options)
+<p>Syntax: (alist association-list &amp;rest options)
 </p>
-<p>where alist is a list of conses with key and schema.
+<p>where association-list is a list of conses with key and schema.
+</p>
+<p>Options can be :required-keys, :optional-keys and :allow-other-keys.
 </p>
 <p>Examples:
 </p>
@@ -990,7 +1115,7 @@ If a list, then the keys listed are considered optional.</p></li><li> <code>allo
 <p>
 Previous: <a href="#Reference" accesskey="p" rel="prev">Reference</a>, Up: <a href="#Top" accesskey="u" rel="up">Top</a> &nbsp; [<a href="#SEC_Contents" title="Table of contents" rel="contents">Contents</a>][<a href="#Index" title="Index" rel="index">Index</a>]</p>
 </div>
-<span id="Index-1"></span><h2 class="chapter">7 Index</h2>
+<span id="Index-1"></span><h2 class="chapter">9 Index</h2>
 
 <table><tr><th valign="top">Jump to: &nbsp; </th><td><a class="summary-letter" href="#Index_cp_letter-S"><b>S</b></a>
  &nbsp; 

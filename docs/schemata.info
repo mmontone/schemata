@@ -181,12 +181,21 @@ SCHEMATA> (schema (object person
                            (age integer :required nil))))
 #<OBJECT-SCHEMA {1001843543}>
 
-4.3 List schema
-===============
+4.3 List schemas
+================
 
-Homogeneous list of schemas are specified via 'list-of'.
+4.3.1 list-of
+-------------
 
-   Example:
+Schema for lists with elements of certain type/schema.
+
+   Syntax: '(list-of list-element-schema)'
+
+   Examples:
+
+     (schema (list-of string))
+
+     (schema (list-of (or string number)))
 
 SCHEMATA> (defparameter *s* (schema (list-of integer)))
 *S*
@@ -195,7 +204,85 @@ SCHEMATA> (validate-with-schema *s* '(1 2 "foo"))
 SCHEMATA> (validate-with-schema *s* '(1 2 3))
 NIL
 
-4.4 Schema references
+4.3.2 list
+----------
+
+Schema for list with all its elements specified with schemas.
+
+   Syntax: '(list &rest schemas)'
+
+   Examples:
+
+     (schema (list string number boolean))
+
+4.3.3 alist-of
+--------------
+
+Schema for association lists with certain type of keys and values.
+
+   Syntax: '(alist-of (key-schema . value-schema))'
+
+   Examples:
+
+     (schema (alist-of (keyword . string)))
+
+4.3.4 alist
+-----------
+
+Schema for association lists with certain keys and values.
+
+   Syntax: '(alist association-list &rest options)'
+
+   where association-list is a list of conses with key and schema.
+
+   Options can be ':required-keys', ':optional-keys' and
+':allow-other-keys'.
+
+   Examples:
+
+     (schema (alist ((:x . string)(:y . number))))
+
+     (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+
+4.3.5 plist-of
+--------------
+
+Schema for property lists with certain type of keys and values.
+
+   Syntax: '(plist-of key-schema value-schema)'
+
+   Examples:
+
+     (schema (plist-of keyword string))
+
+4.3.6 plist
+-----------
+
+Schema for property lists with certain keys and values.
+
+   Syntax: '(plist property-list &rest options)'
+
+   where property-list specifies the schemas for the keys.
+
+   Options can be ':required-keys', ':optional-keys' and
+':allow-other-keys'.
+
+   Examples:
+
+     (schema (plist (:x string :y number)))
+
+     (schema (plist (:x string :y number) :optional-keys (:y)))
+
+4.4 HASH-TABLE schemas
+======================
+
+4.5 CONS schema
+===============
+
+4.6 AND and OR schemas
+======================
+
+4.7 Schema references
 =====================
 
 Defined schemas can be referenced via either '(schema schema-name)' or
@@ -222,8 +309,8 @@ NIL
 SCHEMATA> (validate-with-schema *list-of-person* '((("names" . "Mariano")) (("name" . "Peter"))))
 ; Evaluation aborted on #<SCHEMATA:VALIDATION-ERROR "Attributes not part of schema: ~a" {1008CD3DD3}>.
 
-4.5 SATISFIES-SCHEMA type
-=========================
+5 SATISFIES-SCHEMA type
+***********************
 
 Schemata integrates with the Lisp type system via the SATISFIES-SCHEMA
 type.  Schemas can be thought as types over data.  Defined schemas can
@@ -243,8 +330,8 @@ SCHEMATA> (let ((x "foo"))
             x)
 "foo"
 
-4.6 SCHEMA-CLASS metaclass
-==========================
+6 SCHEMA-CLASS metaclass
+************************
 
 SCHEMA-CLASS classes get an schema attached.
 
@@ -268,7 +355,7 @@ SCHEMATA> (generic-serializer:with-serializer :json
 
 File: schemata.info,  Node: Data generation,  Next: Reference,  Prev: Schema types,  Up: Top
 
-5 Data generation
+7 Data generation
 *****************
 
 Schemata can generate random data from schemas.  It uses 'check-it'
@@ -304,7 +391,7 @@ via ':generator' initarg.
 
 File: schemata.info,  Node: Reference,  Next: Index,  Prev: Data generation,  Up: Top
 
-6 Reference
+8 Reference
 ***********
 
 * Menu:
@@ -314,7 +401,7 @@ File: schemata.info,  Node: Reference,  Next: Index,  Prev: Data generation,  Up
 
 File: schemata.info,  Node: SCHEMATA package,  Up: Reference
 
-6.1 SCHEMATA package
+8.1 SCHEMATA package
 ====================
 
  -- PACKAGE: SCHEMATA
@@ -523,6 +610,14 @@ Classes
 
  -- Class: SCHEMATA:PLIST-OF-SCHEMA
 
+     Schema for property lists with certain type of keys and values.
+
+     Syntax: (plist-of key-schema value-schema)
+
+     Examples:
+
+     (schema (plist-of keyword string))
+
      Class precedence list: 'plist-of-schema, schema, standard-object,
      t'
 
@@ -551,7 +646,7 @@ Classes
 
      Schema for association lists with certain type of keys and values.
 
-     Syntax: (alist-of (key-schema .  value-schema) &rest options)
+     Syntax: (alist-of (key-schema .  value-schema))
 
      Examples:
 
@@ -569,6 +664,20 @@ Classes
           '(setf schemata::value-schema)'
 
  -- Class: SCHEMATA:PLIST-SCHEMA
+
+     Schema for property lists with certain keys and values.
+
+     Syntax: (plist property-list &rest options)
+
+     where property-list specifies the schemas for the keys.
+
+     Options can be :required-keys, :optional-keys and
+     :allow-other-keys.
+
+     Examples:
+
+     (schema (plist (:x string :y number))) (schema (plist (:x string :y
+     number) :optional-keys (:y)))
 
      Class precedence list: 'plist-schema, schema, standard-object, t'
 
@@ -624,9 +733,12 @@ Classes
 
      Schema for association lists with certain keys and values.
 
-     Syntax: (alist alist &rest options)
+     Syntax: (alist association-list &rest options)
 
-     where alist is a list of conses with key and schema.
+     where association-list is a list of conses with key and schema.
+
+     Options can be :required-keys, :optional-keys and
+     :allow-other-keys.
 
      Examples:
 
@@ -783,7 +895,7 @@ Classes
 
 File: schemata.info,  Node: Index,  Prev: Reference,  Up: Top
 
-7 Index
+9 Index
 *******
 
  [index ]
@@ -874,60 +986,60 @@ Ref: installation1148
 Node: Usage1197
 Ref: usage1303
 Node: Schema types4381
-Node: Data generation8444
-Node: Reference9402
-Ref: reference9516
-Node: SCHEMATA package9547
-Ref: SCHEMATA:SCHEMA macro9735
-Ref: SCHEMATA:DEFSCHEMA macro9820
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro9953
-Ref: SCHEMATA:SCHEMA-TYPE function10136
-Ref: SCHEMATA:OBJECT-NAME function10197
-Ref: SCHEMATA:OBJECT-CLASS function10258
-Ref: SCHEMATA:SCHEMA-GENERATOR function10320
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function10386
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function10456
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function10524
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function10597
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function10670
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function10757
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function10826
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function10896
-Ref: SCHEMATA:ATTRIBUTE-TYPE function11034
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function11098
-Ref: SCHEMATA:ATTRIBUTE-NAME function11165
-Ref: SCHEMATA:ATTRIBUTE-PARSER function11229
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function11295
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function11385
-Ref: SCHEMATA:ATTRIBUTE-READER function11441
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function11494
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function11696
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function11753
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function11869
-Ref: SCHEMATA:SCHEMA-SPEC function12055
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function12100
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function12197
-Ref: SCHEMATA:ATTRIBUTE-WRITER function12478
-Ref: SCHEMATA:VALIDATION-ERROR function12531
-Ref: SCHEMATA:FIND-SCHEMA function12593
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function12696
-Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function13537
-Ref: SCHEMATA:OBJECT-SCHEMA class13667
-Ref: SCHEMATA:CONS-SCHEMA class15082
-Ref: SCHEMATA:LIST-OF-SCHEMA class15661
-Ref: SCHEMATA:PLIST-OF-SCHEMA class16187
-Ref: SCHEMATA:SCHEMA class16618
-Ref: SCHEMATA:ALIST-OF-SCHEMA class17067
-Ref: SCHEMATA:PLIST-SCHEMA class17701
-Ref: SCHEMATA:LIST-SCHEMA class18479
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class19093
-Ref: SCHEMATA:ALIST-SCHEMA class19392
-Ref: SCHEMATA:SCHEMA-CLASS class21067
-Ref: SCHEMATA:SCHEMA-OBJECT class21443
-Ref: SCHEMATA:TYPE-SCHEMA class21543
-Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class21909
-Ref: SCHEMATA:VALIDATION-ERROR class24319
-Ref: SCHEMATA:ATTRIBUTE class24450
-Node: Index25556
+Node: Data generation10121
+Node: Reference11079
+Ref: reference11193
+Node: SCHEMATA package11224
+Ref: SCHEMATA:SCHEMA macro11412
+Ref: SCHEMATA:DEFSCHEMA macro11497
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro11630
+Ref: SCHEMATA:SCHEMA-TYPE function11813
+Ref: SCHEMATA:OBJECT-NAME function11874
+Ref: SCHEMATA:OBJECT-CLASS function11935
+Ref: SCHEMATA:SCHEMA-GENERATOR function11997
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function12063
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function12133
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function12201
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function12274
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function12347
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function12434
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function12503
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function12573
+Ref: SCHEMATA:ATTRIBUTE-TYPE function12711
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function12775
+Ref: SCHEMATA:ATTRIBUTE-NAME function12842
+Ref: SCHEMATA:ATTRIBUTE-PARSER function12906
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function12972
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function13062
+Ref: SCHEMATA:ATTRIBUTE-READER function13118
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function13171
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function13373
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function13430
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function13546
+Ref: SCHEMATA:SCHEMA-SPEC function13732
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function13777
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function13874
+Ref: SCHEMATA:ATTRIBUTE-WRITER function14155
+Ref: SCHEMATA:VALIDATION-ERROR function14208
+Ref: SCHEMATA:FIND-SCHEMA function14270
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function14373
+Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function15214
+Ref: SCHEMATA:OBJECT-SCHEMA class15344
+Ref: SCHEMATA:CONS-SCHEMA class16759
+Ref: SCHEMATA:LIST-OF-SCHEMA class17338
+Ref: SCHEMATA:PLIST-OF-SCHEMA class17864
+Ref: SCHEMATA:SCHEMA class18471
+Ref: SCHEMATA:ALIST-OF-SCHEMA class18920
+Ref: SCHEMATA:PLIST-SCHEMA class19540
+Ref: SCHEMATA:LIST-SCHEMA class20697
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class21311
+Ref: SCHEMATA:ALIST-SCHEMA class21610
+Ref: SCHEMATA:SCHEMA-CLASS class23387
+Ref: SCHEMATA:SCHEMA-OBJECT class23763
+Ref: SCHEMATA:TYPE-SCHEMA class23863
+Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class24229
+Ref: SCHEMATA:VALIDATION-ERROR class26639
+Ref: SCHEMATA:ATTRIBUTE class26770
+Node: Index27876
 
 End Tag Table

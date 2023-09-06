@@ -150,7 +150,7 @@ Examples:
                  :accessor value-schema))
   (:documentation "Schema for association lists with certain type of keys and values.
 
-Syntax: (alist-of (key-schema . value-schema) &rest options)
+Syntax: (alist-of (key-schema . value-schema))
 
 Examples:
 
@@ -177,9 +177,11 @@ If a list, then the keys listed are considered optional.")
                      :documentation "Whether other keys than the specified are allowed in the data being checked."))
   (:documentation "Schema for association lists with certain keys and values.
 
-Syntax: (alist alist &rest options)
+Syntax: (alist association-list &rest options)
 
-where alist is a list of conses with key and schema.
+where association-list is a list of conses with key and schema.
+
+Options can be :required-keys, :optional-keys and :allow-other-keys.
 
 Examples:
 
@@ -191,7 +193,14 @@ Examples:
   ((key-schema :initarg :key-schema
                :accessor key-schema)
    (value-schema :initarg :value-schema
-                 :accessor value-schema)))
+                 :accessor value-schema))
+  (:documentation "Schema for property lists with certain type of keys and values.
+
+Syntax: (plist-of key-schema value-schema)
+
+Examples:
+
+    (schema (plist-of keyword string))"))
 
 (defclass plist-schema (schema)
   ((members :initarg :members
@@ -204,7 +213,20 @@ Examples:
                   :accessor optional-keys)
    (allow-other-keys :initarg :allow-other-keys
                      :accessor allow-other-keys-p
-                     :initform t)))
+                     :initform t))
+  (:documentation "Schema for property lists with certain keys and values.
+
+Syntax: (plist property-list &rest options)
+
+where property-list specifies the schemas for the keys.
+
+Options can be :required-keys, :optional-keys and :allow-other-keys.
+
+Examples:
+
+    (schema (plist (:x string :y number)))
+    (schema (plist (:x string :y number) :optional-keys (:y)))
+"))
 
 (defclass hash-table-of-schema (schema)
   ((key-schema :initarg :key-schema
