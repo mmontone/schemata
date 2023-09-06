@@ -143,10 +143,10 @@ Args:
 
 (defmethod schema-validate ((schema or-schema) data)
   (if (schemas-of schema)
-    (handler-case (schema-validate (first (schemas-of schema)) data)
-      (validation-error ()
-        (schema-validate (make-instance 'or-schema :schemas (rest (schemas-of schema))) data)))
-    (validation-error "~s fails to validate: ~a" data (schema-spec schema))))
+      (handler-case (schema-validate (first (schemas-of schema)) data)
+        (validation-error ()
+          (schema-validate (make-instance 'or-schema :schemas (rest (schemas-of schema))) data)))
+      (validation-error "~s fails to validate: ~a" data (schema-spec schema))))
 
 (defmethod schema-validate ((schema and-schema) data)
   (loop for subschema in (schemas-of schema)
@@ -184,7 +184,6 @@ Args:
     (schema-validate (value-schema schema) (cdr elem))))
 
 (defmethod schema-validate ((schema alist-schema) data)
-  ;; TODO: take into account the allow-other-keys option
   (unless (trivial-types:association-list-p data)
     (validation-error "~s is not an association list" data))
   (dolist (member (alist-members schema))
@@ -194,7 +193,13 @@ Args:
                       (eql (required-keys schema) nil)
                       (member (car member) (optional-keys schema)))
             (validation-error "~s is required" (car member)))
-          (schema-validate (cdr member) (cdr assoc))))))
+          (schema-validate (cdr member) (cdr assoc)))))
+  (unless (allow-other-keys-p schema)
+    (let* ((allowed-keys (mapcar #'car (alist-members schema)))
+           (data-keys (mapcar #'car data))
+           (disallowed-keys (set-difference data-keys allowed-keys)))
+      (when disallowed-keys
+        (validation-error "Keys not allowed: ~s" disallowed-keys)))))
 
 (defmethod schema-validate ((schema plist-of-schema) data)
   (unless (trivial-types:property-list-p data)
@@ -203,8 +208,11 @@ Args:
     (schema-validate (key-schema schema) key)
     (schema-validate (value-schema schema) val)))
 
+(defun plist-keys (plist)
+  (loop for key in plist by #'cddr
+        collect key))
+
 (defmethod schema-validate ((schema plist-schema) data)
-  ;; TODO: take into account the allow-other-keys option
   (unless (trivial-types:property-list-p data)
     (validation-error "~s is not a property list" data))
   (dolist (member (plist-members schema))
@@ -213,7 +221,16 @@ Args:
       (when (and (eq val no-value)
                  (not (member (car member) (optional-keys schema))))
         (validation-error "~s is required" (car member)))
-      (schema-validate (cdr member) val))))
+      (unless (and (member (car member) (optional-keys schema))
+                   (eq val no-value))
+        (schema-validate (cdr member) val))))
+  (unless (allow-other-keys-p schema)
+    (let* ((allowed-keys (mapcar #'car (plist-members schema)))
+           (data-keys (plist-keys data))
+           (disallowed-keys (set-difference data-keys allowed-keys)))
+      (when disallowed-keys
+        (validation-error "Keys not allowed: ~s" disallowed-keys)))))
+
 
 (defmethod schema-validate ((schema schema-reference-schema) data)
   (schema-validate (referenced-schema schema) data))
