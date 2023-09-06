@@ -321,57 +321,59 @@ Examples:
 (defun attribute-optional-p (attribute)
   (not (attribute-required-p attribute)))
 
-(defun parse-schema (schema)
+(defun parse-schema (schema-spec)
   (cond
-    ((listp schema)
-     (parse-schema-type (car schema) schema))
+    ;; Schema specs with a list form dispach using PARSE-SCHEMA-TYPE
+    ((listp schema-spec)
+     (parse-schema-type (car schema-spec) schema-spec))
+    ;; When schema is not a list spec, try to find a registered schema first
+    ((find-schema schema-spec nil)
+     (make-instance 'schema-reference-schema :schema-name schema-spec))
+    ;; If not found, and it is a valid type specifier, then build a type-schema
+    ((trivial-types:type-specifier-p schema-spec)
+     (make-instance 'type-schema :type schema-spec))
+    (t (error "Cannot parse schema: ~S" schema-spec))))
 
-    ((find-schema schema nil)
-     (make-instance 'schema-reference-schema :schema-name schema))
-    ((trivial-types:type-specifier-p schema)
-     (make-instance 'type-schema :type schema))
-    (t (error "Cannot parse schema: ~S" schema))))
+(defgeneric parse-schema-type (schema-type schema-spec))
 
-(defgeneric parse-schema-type (schema-type schema))
-
-(defmethod parse-schema-type ((schema-type (eql 'object)) schema)
+(defmethod parse-schema-type ((schema-type (eql 'object)) schema-spec)
   (destructuring-bind (name attributes &optional options)
-      (rest schema)
+      (rest schema-spec)
     (apply #'make-instance 'object-schema
            :name name
            :attributes (mapcar #'parse-attribute attributes)
            options)))
 
-(defmethod parse-schema-type ((schema-type (eql 'or)) schema)
-  (make-instance 'or-schema :schemas (mapcar #'parse-schema (rest schema))))
+(defmethod parse-schema-type ((schema-type (eql 'or)) schema-spec)
+  (make-instance 'or-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
 
-(defmethod parse-schema-type ((schema-type (eql 'and)) schema)
-  (make-instance 'and-schema :schemas (mapcar #'parse-schema (rest schema))))
+(defmethod parse-schema-type ((schema-type (eql 'and)) schema-spec)
+  (make-instance 'and-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
 
-(defmethod parse-schema-type ((schema-type (eql 'cons)) schema)
-  (destructuring-bind (car-schema cdr-schema) (rest schema)
+(defmethod parse-schema-type ((schema-type (eql 'cons)) schema-spec)
+  (destructuring-bind (car-schema cdr-schema) (rest schema-spec)
     (make-instance 'cons-schema
                    :car-schema (parse-schema car-schema)
                    :cdr-schema (parse-schema cdr-schema))))
 
-(defmethod parse-schema-type ((schema-type (eql 'list)) schema)
-  (make-instance 'list-schema :schemas (mapcar #'parse-schema (rest schema))))
+(defmethod parse-schema-type ((schema-type (eql 'list)) schema-spec)
+  (make-instance 'list-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
 
-(defmethod parse-schema-type ((schema-type (eql 'list-of)) schema)
+(defmethod parse-schema-type ((schema-type (eql 'list-of)) schema-spec)
   (destructuring-bind (elements-schema &rest args)
-      (rest schema)
+      (rest schema-spec)
     (apply #'make-instance 'list-of-schema
            :elements-schema (parse-schema elements-schema)
            args)))
 
-(defmethod parse-schema-type ((schema-type (eql 'alist-of)) schema)
-  (destructuring-bind (key-schema . value-schema) (second schema)
+(defmethod parse-schema-type ((schema-type (eql 'alist-of)) schema-spec)
+  (destructuring-bind (key-schema . value-schema) (second schema-spec)
     (make-instance 'alist-of-schema
                    :key-schema (parse-schema key-schema)
                    :value-schema (parse-schema value-schema))))
 
-(defmethod parse-schema-type ((schema-type (eql 'alist)) schema)
-  (destructuring-bind (alist &rest options) (rest schema)
+(defmethod parse-schema-type ((schema-type (eql 'alist)) schema-spec)
+  (destructuring-bind (alist &rest options) (rest schema-spec)
     (apply #'make-instance 'alist-schema
            :members (mapcar (lambda (member)
                               (check-type member cons)
@@ -380,34 +382,34 @@ Examples:
                             alist)
            options)))
 
-(defmethod parse-schema-type ((schema-type (eql 'plist-of)) schema)
-  (destructuring-bind (key-schema value-schema) (rest schema)
+(defmethod parse-schema-type ((schema-type (eql 'plist-of)) schema-spec)
+  (destructuring-bind (key-schema value-schema) (rest schema-spec)
     (make-instance 'plist-of-schema
                    :key-schema (parse-schema key-schema)
                    :value-schema (parse-schema value-schema))))
 
-(defmethod parse-schema-type ((schema-type (eql 'plist)) schema)
-  (destructuring-bind (plist &rest options) (rest schema)
+(defmethod parse-schema-type ((schema-type (eql 'plist)) schema-spec)
+  (destructuring-bind (plist &rest options) (rest schema-spec)
     (apply #'make-instance 'plist-schema
            :members (loop for key in plist by #'cddr
                           for value in (rest plist) by #'cddr
-                          collect 
+                          collect
                           (cons (the (or symbol string) key)
                                 (parse-schema value)))
            options)))
 
-(defmethod parse-schema-type ((schema-type (eql 'schema)) schema)
-  (make-instance 'schema-reference-schema :schema-name (cadr schema)))
+(defmethod parse-schema-type ((schema-type (eql 'schema)) schema-spec)
+  (make-instance 'schema-reference-schema :schema-name (cadr schema-spec)))
 
-(defmethod parse-schema-type ((schema-type (eql 'ref)) schema)
-  (make-instance 'schema-reference-schema :schema-name (cadr schema)))
+(defmethod parse-schema-type ((schema-type (eql 'ref)) schema-spec)
+  (make-instance 'schema-reference-schema :schema-name (cadr schema-spec)))
 
-(defmethod parse-schema-type ((schema-type t) schema)
+(defmethod parse-schema-type ((schema-type t) schema-spec)
   "If the other cases fail, just create a TYPE-SCHEMA."
-  (assert (trivial-types:type-specifier-p schema)
+  (assert (trivial-types:type-specifier-p schema-spec)
           nil
-          "Not a type specifier: ~s" schema)
-  (make-instance 'type-schema :type schema))
+          "Not a type specifier: ~s" schema-spec)
+  (make-instance 'type-schema :type schema-spec))
 
 (defun parse-attribute (attr)
   (destructuring-bind (name type &rest options)
