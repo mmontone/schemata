@@ -159,13 +159,13 @@ Examples:
 (defclass alist-schema (schema)
   ((members :initarg :members
             :accessor alist-members)
-   (required-keys :initarg :required-keys
+   (required-keys :initarg :required
                   :initform t
                   :accessor required-keys
                   :type (or boolean list)
                   :documentation "If T (default), all keys are considered required.
 If a list, only those listed are considered required.")
-   (optional-keys :initarg :optional-keys
+   (optional-keys :initarg :optional
                   :initform nil
                   :type (or boolean list)
                   :accessor optional-keys
@@ -181,12 +181,12 @@ Syntax: (alist association-list &rest options)
 
 where association-list is a list of conses with key and schema.
 
-Options can be :required-keys, :optional-keys and :allow-other-keys.
+Options can be :required, :optional and :allow-other-keys.
 
 Examples:
 
     (schema (alist ((:x . string)(:y . number))))
-    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+    (schema (alist ((:x . string)(:y . number)) :optional (:y)))
 "))
 
 (defclass plist-of-schema (schema)
@@ -205,10 +205,10 @@ Examples:
 (defclass plist-schema (schema)
   ((members :initarg :members
             :accessor plist-members)
-   (required-keys :initarg :required-keys
+   (required-keys :initarg :required
                   :initform t
                   :accessor required-keys)
-   (optional-keys :initarg :optional-keys
+   (optional-keys :initarg :optional
                   :initform nil
                   :accessor optional-keys)
    (allow-other-keys :initarg :allow-other-keys
@@ -220,12 +220,12 @@ Syntax: (plist property-list &rest options)
 
 where property-list specifies the schemas for the keys.
 
-Options can be :required-keys, :optional-keys and :allow-other-keys.
+Options can be :required, :optional and :allow-other-keys.
 
 Examples:
 
     (schema (plist (:x string :y number)))
-    (schema (plist (:x string :y number) :optional-keys (:y)))
+    (schema (plist (:x string :y number) :optional (:y)))
 "))
 
 (defclass hash-table-of-schema (schema)
@@ -237,10 +237,10 @@ Examples:
 (defclass hash-table-schema (schema)
   ((members :initarg :members
             :accessor plist-members)
-   (required-keys :initarg :required-keys
+   (required-keys :initarg :required
                   :initform t
                   :accessor required-keys)
-   (optional-keys :initarg :optional-keys
+   (optional-keys :initarg :optional
                   :initform nil
                   :accessor optional-keys)
    (allow-other-keys :initarg :allow-other-keys

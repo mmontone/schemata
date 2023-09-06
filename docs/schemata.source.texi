@@ -250,7 +250,7 @@ Syntax: @code{(alist association-list &rest options)}
 
 where association-list is a list of conses with key and schema.
 
-Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+Options can be @code{:required}, @code{:optional} and @code{:allow-other-keys}.
 
 Examples:
 
@@ -259,7 +259,7 @@ Examples:
 @end lisp
 
 @lisp
-(schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+(schema (alist ((:x . string)(:y . number)) :optional (:y)))
 @end lisp
 
 @subsection plist-of
@@ -282,7 +282,7 @@ Syntax: @code{(plist property-list &rest options)}
 
 where property-list specifies the schemas for the keys.
 
-Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+Options can be @code{:required}, @code{:optional} and @code{:allow-other-keys}.
 
 Examples:
 
@@ -291,7 +291,7 @@ Examples:
 @end lisp
 
 @lisp
-(schema (plist (:x string :y number) :optional-keys (:y)))
+(schema (plist (:x string :y number) :optional (:y)))
 @end lisp
 
 @section HASH-TABLE schemas

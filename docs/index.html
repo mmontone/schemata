@@ -349,7 +349,7 @@ NIL
 </p>
 <p>where association-list is a list of conses with key and schema.
 </p>
-<p>Options can be <code>:required-keys</code>, <code>:optional-keys</code> and <code>:allow-other-keys</code>.
+<p>Options can be <code>:required</code>, <code>:optional</code> and <code>:allow-other-keys</code>.
 </p>
 <p>Examples:
 </p>
@@ -358,7 +358,7 @@ NIL
 </pre></div>
 
 <div class="lisp">
-<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">alist <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg"><span class="keyword">:x</span> . string</span>)</span><span class="paren4">(<span class="lisp-bg"><span class="keyword">:y</span> . number</span>)</span></span>)</span> <span class="keyword">:optional-keys</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">alist <span class="paren3">(<span class="lisp-bg"><span class="paren4">(<span class="lisp-bg"><span class="keyword">:x</span> . string</span>)</span><span class="paren4">(<span class="lisp-bg"><span class="keyword">:y</span> . number</span>)</span></span>)</span> <span class="keyword">:optional</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
 </pre></div>
 
 <span id="plist_002dof"></span><h4 class="subsection">4.3.5 plist-of</h4>
@@ -381,7 +381,7 @@ NIL
 </p>
 <p>where property-list specifies the schemas for the keys.
 </p>
-<p>Options can be <code>:required-keys</code>, <code>:optional-keys</code> and <code>:allow-other-keys</code>.
+<p>Options can be <code>:required</code>, <code>:optional</code> and <code>:allow-other-keys</code>.
 </p>
 <p>Examples:
 </p>
@@ -390,7 +390,7 @@ NIL
 </pre></div>
 
 <div class="lisp">
-<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">plist <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span> <span class="keyword">:optional-keys</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">plist <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span> <span class="keyword">:optional</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
 </pre></div>
 
 <span id="HASH_002dTABLE-schemas"></span><h3 class="section">4.4 HASH-TABLE schemas</h3>
@@ -886,12 +886,12 @@ Input can be a string or an association list.
 </p>
 <p>where property-list specifies the schemas for the keys.
 </p>
-<p>Options can be :required-keys, :optional-keys and :allow-other-keys.
+<p>Options can be :required, :optional and :allow-other-keys.
 </p>
 <p>Examples:
 </p>
 <p>(schema (plist (:x string :y number)))
-    (schema (plist (:x string :y number) :optional-keys (:y)))
+    (schema (plist (:x string :y number) :optional (:y)))
 </p>
 
 <p>Class precedence list: <code>plist-schema, schema, standard-object, t</code>
@@ -900,9 +900,9 @@ Input can be a string or an association list.
 </p><ul>
 <li> <code>members</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:members<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::plist-members</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::plist-members)</span><!-- /@w --></code>
 
-</li><li> <code>required-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:required-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
+</li><li> <code>required-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:required<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
 
-</li><li> <code>optional-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:optional-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
+</li><li> <code>optional-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:optional<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
 
 </li><li> <code>allow-other-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:allow-other-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::allow-other-keys-p</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::allow-other-keys-p)</span><!-- /@w --></code>
 
@@ -963,12 +963,12 @@ For instance, for the schema: (list symbol number symbol),
 </p>
 <p>where association-list is a list of conses with key and schema.
 </p>
-<p>Options can be :required-keys, :optional-keys and :allow-other-keys.
+<p>Options can be :required, :optional and :allow-other-keys.
 </p>
 <p>Examples:
 </p>
 <p>(schema (alist ((:x . string)(:y . number))))
-    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+    (schema (alist ((:x . string)(:y . number)) :optional (:y)))
 </p>
 
 <p>Class precedence list: <code>alist-schema, schema, standard-object, t</code>
@@ -977,10 +977,10 @@ For instance, for the schema: (list symbol number symbol),
 </p><ul>
 <li> <code>members</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:members<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::alist-members</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::alist-members)</span><!-- /@w --></code>
 
-</li><li> <code>required-keys</code> &mdash; type: <code>(or&nbsp;boolean&nbsp;list)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:required-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
+</li><li> <code>required-keys</code> &mdash; type: <code>(or&nbsp;boolean&nbsp;list)<!-- /@w --></code>; initarg: <code>:required<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
 
 <p>If T (default), all keys are considered required.
-If a list, only those listed are considered required.</p></li><li> <code>optional-keys</code> &mdash; type: <code>(or&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:optional-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
+If a list, only those listed are considered required.</p></li><li> <code>optional-keys</code> &mdash; type: <code>(or&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list)<!-- /@w --></code>; initarg: <code>:optional<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
 
 <p>If T, then all keys are considered optional.
 If a list, then the keys listed are considered optional.</p></li><li> <code>allow-other-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:allow-other-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::allow-other-keys-p</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::allow-other-keys-p)</span><!-- /@w --></code>

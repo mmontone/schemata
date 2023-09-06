@@ -235,14 +235,13 @@ Schema for association lists with certain keys and values.
 
    where association-list is a list of conses with key and schema.
 
-   Options can be ':required-keys', ':optional-keys' and
-':allow-other-keys'.
+   Options can be ':required', ':optional' and ':allow-other-keys'.
 
    Examples:
 
      (schema (alist ((:x . string)(:y . number))))
 
-     (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+     (schema (alist ((:x . string)(:y . number)) :optional (:y)))
 
 4.3.5 plist-of
 --------------
@@ -264,14 +263,13 @@ Schema for property lists with certain keys and values.
 
    where property-list specifies the schemas for the keys.
 
-   Options can be ':required-keys', ':optional-keys' and
-':allow-other-keys'.
+   Options can be ':required', ':optional' and ':allow-other-keys'.
 
    Examples:
 
      (schema (plist (:x string :y number)))
 
-     (schema (plist (:x string :y number) :optional-keys (:y)))
+     (schema (plist (:x string :y number) :optional (:y)))
 
 4.4 HASH-TABLE schemas
 ======================
@@ -671,13 +669,12 @@ Classes
 
      where property-list specifies the schemas for the keys.
 
-     Options can be :required-keys, :optional-keys and
-     :allow-other-keys.
+     Options can be :required, :optional and :allow-other-keys.
 
      Examples:
 
      (schema (plist (:x string :y number))) (schema (plist (:x string :y
-     number) :optional-keys (:y)))
+     number) :optional (:y)))
 
      Class precedence list: 'plist-schema, schema, standard-object, t'
 
@@ -686,12 +683,12 @@ Classes
           'schemata::plist-members'; writer:
           '(setf schemata::plist-members)'
 
-        * 'required-keys' -- type: 't'; initarg: ':required-keys';
-          reader: 'schemata::required-keys'; writer:
+        * 'required-keys' -- type: 't'; initarg: ':required'; reader:
+          'schemata::required-keys'; writer:
           '(setf schemata::required-keys)'
 
-        * 'optional-keys' -- type: 't'; initarg: ':optional-keys';
-          reader: 'schemata::optional-keys'; writer:
+        * 'optional-keys' -- type: 't'; initarg: ':optional'; reader:
+          'schemata::optional-keys'; writer:
           '(setf schemata::optional-keys)'
 
         * 'allow-other-keys' -- type: 't'; initarg: ':allow-other-keys';
@@ -737,13 +734,12 @@ Classes
 
      where association-list is a list of conses with key and schema.
 
-     Options can be :required-keys, :optional-keys and
-     :allow-other-keys.
+     Options can be :required, :optional and :allow-other-keys.
 
      Examples:
 
      (schema (alist ((:x .  string)(:y .  number)))) (schema (alist ((:x
-     .  string)(:y .  number)) :optional-keys (:y)))
+     .  string)(:y .  number)) :optional (:y)))
 
      Class precedence list: 'alist-schema, schema, standard-object, t'
 
@@ -753,14 +749,14 @@ Classes
           '(setf schemata::alist-members)'
 
         * 'required-keys' -- type: '(or boolean list)'; initarg:
-          ':required-keys'; reader: 'schemata::required-keys'; writer:
+          ':required'; reader: 'schemata::required-keys'; writer:
           '(setf schemata::required-keys)'
 
           If T (default), all keys are considered required.  If a list,
           only those listed are considered required.
         * 'optional-keys' -- type:
           '(or                                                                                                     boolean                                                                                                     list)';
-          initarg: ':optional-keys'; reader: 'schemata::optional-keys';
+          initarg: ':optional'; reader: 'schemata::optional-keys';
           writer: '(setf schemata::optional-keys)'
 
           If T, then all keys are considered optional.  If a list, then
@@ -986,60 +982,60 @@ Ref: installation1148
 Node: Usage1197
 Ref: usage1303
 Node: Schema types4381
-Node: Data generation10121
-Node: Reference11079
-Ref: reference11193
-Node: SCHEMATA package11224
-Ref: SCHEMATA:SCHEMA macro11412
-Ref: SCHEMATA:DEFSCHEMA macro11497
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro11630
-Ref: SCHEMATA:SCHEMA-TYPE function11813
-Ref: SCHEMATA:OBJECT-NAME function11874
-Ref: SCHEMATA:OBJECT-CLASS function11935
-Ref: SCHEMATA:SCHEMA-GENERATOR function11997
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function12063
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function12133
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function12201
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function12274
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function12347
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function12434
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function12503
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function12573
-Ref: SCHEMATA:ATTRIBUTE-TYPE function12711
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function12775
-Ref: SCHEMATA:ATTRIBUTE-NAME function12842
-Ref: SCHEMATA:ATTRIBUTE-PARSER function12906
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function12972
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function13062
-Ref: SCHEMATA:ATTRIBUTE-READER function13118
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function13171
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function13373
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function13430
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function13546
-Ref: SCHEMATA:SCHEMA-SPEC function13732
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function13777
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function13874
-Ref: SCHEMATA:ATTRIBUTE-WRITER function14155
-Ref: SCHEMATA:VALIDATION-ERROR function14208
-Ref: SCHEMATA:FIND-SCHEMA function14270
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function14373
-Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function15214
-Ref: SCHEMATA:OBJECT-SCHEMA class15344
-Ref: SCHEMATA:CONS-SCHEMA class16759
-Ref: SCHEMATA:LIST-OF-SCHEMA class17338
-Ref: SCHEMATA:PLIST-OF-SCHEMA class17864
-Ref: SCHEMATA:SCHEMA class18471
-Ref: SCHEMATA:ALIST-OF-SCHEMA class18920
-Ref: SCHEMATA:PLIST-SCHEMA class19540
-Ref: SCHEMATA:LIST-SCHEMA class20697
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class21311
-Ref: SCHEMATA:ALIST-SCHEMA class21610
-Ref: SCHEMATA:SCHEMA-CLASS class23387
-Ref: SCHEMATA:SCHEMA-OBJECT class23763
-Ref: SCHEMATA:TYPE-SCHEMA class23863
-Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class24229
-Ref: SCHEMATA:VALIDATION-ERROR class26639
-Ref: SCHEMATA:ATTRIBUTE class26770
-Node: Index27876
+Node: Data generation10091
+Node: Reference11049
+Ref: reference11163
+Node: SCHEMATA package11194
+Ref: SCHEMATA:SCHEMA macro11382
+Ref: SCHEMATA:DEFSCHEMA macro11467
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro11600
+Ref: SCHEMATA:SCHEMA-TYPE function11783
+Ref: SCHEMATA:OBJECT-NAME function11844
+Ref: SCHEMATA:OBJECT-CLASS function11905
+Ref: SCHEMATA:SCHEMA-GENERATOR function11967
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function12033
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function12103
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function12171
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function12244
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function12317
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function12404
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function12473
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function12543
+Ref: SCHEMATA:ATTRIBUTE-TYPE function12681
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function12745
+Ref: SCHEMATA:ATTRIBUTE-NAME function12812
+Ref: SCHEMATA:ATTRIBUTE-PARSER function12876
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function12942
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function13032
+Ref: SCHEMATA:ATTRIBUTE-READER function13088
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function13141
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function13343
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function13400
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function13516
+Ref: SCHEMATA:SCHEMA-SPEC function13702
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function13747
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function13844
+Ref: SCHEMATA:ATTRIBUTE-WRITER function14125
+Ref: SCHEMATA:VALIDATION-ERROR function14178
+Ref: SCHEMATA:FIND-SCHEMA function14240
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function14343
+Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function15184
+Ref: SCHEMATA:OBJECT-SCHEMA class15314
+Ref: SCHEMATA:CONS-SCHEMA class16729
+Ref: SCHEMATA:LIST-OF-SCHEMA class17308
+Ref: SCHEMATA:PLIST-OF-SCHEMA class17834
+Ref: SCHEMATA:SCHEMA class18441
+Ref: SCHEMATA:ALIST-OF-SCHEMA class18890
+Ref: SCHEMATA:PLIST-SCHEMA class19510
+Ref: SCHEMATA:LIST-SCHEMA class20637
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class21251
+Ref: SCHEMATA:ALIST-SCHEMA class21550
+Ref: SCHEMATA:SCHEMA-CLASS class23297
+Ref: SCHEMATA:SCHEMA-OBJECT class23673
+Ref: SCHEMATA:TYPE-SCHEMA class23773
+Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class24139
+Ref: SCHEMATA:VALIDATION-ERROR class26549
+Ref: SCHEMATA:ATTRIBUTE class26680
+Node: Index27786
 
 End Tag Table

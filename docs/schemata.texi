@@ -250,7 +250,7 @@ Syntax: @code{(alist association-list &rest options)}
 
 where association-list is a list of conses with key and schema.
 
-Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+Options can be @code{:required}, @code{:optional} and @code{:allow-other-keys}.
 
 Examples:
 
@@ -259,7 +259,7 @@ Examples:
 @end lisp
 
 @lisp
-(schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+(schema (alist ((:x . string)(:y . number)) :optional (:y)))
 @end lisp
 
 @subsection plist-of
@@ -282,7 +282,7 @@ Syntax: @code{(plist property-list &rest options)}
 
 where property-list specifies the schemas for the keys.
 
-Options can be @code{:required-keys}, @code{:optional-keys} and @code{:allow-other-keys}.
+Options can be @code{:required}, @code{:optional} and @code{:allow-other-keys}.
 
 Examples:
 
@@ -291,7 +291,7 @@ Examples:
 @end lisp
 
 @lisp
-(schema (plist (:x string :y number) :optional-keys (:y)))
+(schema (plist (:x string :y number) :optional (:y)))
 @end lisp
 
 @section HASH-TABLE schemas
@@ -749,12 +749,12 @@ Syntax: (plist property-list &rest options)
 
 where property-list specifies the schemas for the keys.
 
-Options can be :required-keys, :optional-keys and :allow-other-keys.
+Options can be :required, :optional and :allow-other-keys.
 
 Examples:
 
     (schema (plist (:x string :y number)))
-    (schema (plist (:x string :y number) :optional-keys (:y)))
+    (schema (plist (:x string :y number) :optional (:y)))
 
 
 Class precedence list: @code{plist-schema, schema, standard-object, t}
@@ -763,9 +763,9 @@ Slots:
 @itemize
 @item @code{members} --- type: @code{@w{t}}; initarg: @code{@w{:members}}; reader: @code{@w{schemata::plist-members}}; writer: @code{@w{(setf schemata::plist-members)}}
 
-@item @code{required-keys} --- type: @code{@w{t}}; initarg: @code{@w{:required-keys}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
+@item @code{required-keys} --- type: @code{@w{t}}; initarg: @code{@w{:required}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
 
-@item @code{optional-keys} --- type: @code{@w{t}}; initarg: @code{@w{:optional-keys}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
+@item @code{optional-keys} --- type: @code{@w{t}}; initarg: @code{@w{:optional}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
 
 @item @code{allow-other-keys} --- type: @code{@w{t}}; initarg: @code{@w{:allow-other-keys}}; reader: @code{@w{schemata::allow-other-keys-p}}; writer: @code{@w{(setf schemata::allow-other-keys-p)}}
 
@@ -820,12 +820,12 @@ Syntax: (alist association-list &rest options)
 
 where association-list is a list of conses with key and schema.
 
-Options can be :required-keys, :optional-keys and :allow-other-keys.
+Options can be :required, :optional and :allow-other-keys.
 
 Examples:
 
     (schema (alist ((:x . string)(:y . number))))
-    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+    (schema (alist ((:x . string)(:y . number)) :optional (:y)))
 
 
 Class precedence list: @code{alist-schema, schema, standard-object, t}
@@ -834,12 +834,12 @@ Slots:
 @itemize
 @item @code{members} --- type: @code{@w{t}}; initarg: @code{@w{:members}}; reader: @code{@w{schemata::alist-members}}; writer: @code{@w{(setf schemata::alist-members)}}
 
-@item @code{required-keys} --- type: @code{@w{(or boolean list)}}; initarg: @code{@w{:required-keys}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
+@item @code{required-keys} --- type: @code{@w{(or boolean list)}}; initarg: @code{@w{:required}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
 
 If T (default), all keys are considered required.
 If a list, only those listed are considered required.@item @code{optional-keys} --- type: @code{@w{(or
                                                                                                     boolean
-                                                                                                    list)}}; initarg: @code{@w{:optional-keys}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
+                                                                                                    list)}}; initarg: @code{@w{:optional}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
 
 If T, then all keys are considered optional.
 If a list, then the keys listed are considered optional.@item @code{allow-other-keys} --- type: @code{@w{t}}; initarg: @code{@w{:allow-other-keys}}; reader: @code{@w{schemata::allow-other-keys-p}}; writer: @code{@w{(setf schemata::allow-other-keys-p)}}
