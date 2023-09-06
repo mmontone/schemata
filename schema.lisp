@@ -206,6 +206,25 @@ Examples:
                      :accessor allow-other-keys-p
                      :initform t)))
 
+(defclass hash-table-of-schema (schema)
+  ((key-schema :initarg :key-schema
+               :accessor key-schema)
+   (value-schema :initarg :value-schema
+                 :accessor value-schema)))
+
+(defclass hash-table-schema (schema)
+  ((members :initarg :members
+            :accessor plist-members)
+   (required-keys :initarg :required-keys
+                  :initform t
+                  :accessor required-keys)
+   (optional-keys :initarg :optional-keys
+                  :initform nil
+                  :accessor optional-keys)
+   (allow-other-keys :initarg :allow-other-keys
+                     :accessor allow-other-keys-p
+                     :initform t)))
+
 (defclass object-schema (schema)
   ((name :initarg :name
          :accessor object-name
