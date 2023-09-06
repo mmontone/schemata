@@ -75,7 +75,15 @@ The schema can then be accessed via FIND-SCHEMA."
 
 (defclass type-schema (schema)
   ((type :initarg :type
-         :accessor schema-type)))
+         :accessor schema-type))
+  (:documentation "Schema for a Common Lisp type.
+
+Syntax: (schema type)
+
+Examples:
+
+    (schema string)
+    (schema integer)"))
 
 (defmethod print-object ((object type-schema) stream)
   (print-unreadable-object (object stream :type t :identity t)
@@ -83,9 +91,18 @@ The schema can then be accessed via FIND-SCHEMA."
 
 (defclass cons-schema (schema)
   ((car-schema :initarg :car-schema
-               :accessor car-schema)
+               :accessor car-schema
+               :documentation "The schema of CAR.")
    (cdr-schema :initarg :cdr-schema
-               :accessor cdr-schema)))
+               :accessor cdr-schema
+               :documentation "The schema of CDR."))
+  (:documentation "Schema for CONSes.
+
+Syntax: (cons car-schema cdr-schema)
+
+Examples:
+
+    (schema (cons symbol string))"))
 
 (defmethod print-object ((schema cons-schema) stream)
   (print-unreadable-object (schema stream :type t :identity t)
@@ -94,13 +111,33 @@ The schema can then be accessed via FIND-SCHEMA."
 (defclass list-schema (schema)
   ((schemas :initarg :schemas
             :accessor list-schemas
-            :initform nil)))
+            :initform nil))
+  (:documentation "Schema for lists.
+
+Syntax: (list &rest schemas)
+
+Examples:
+
+    (schema (list string number))
+    (schema (list symbol number boolean))
+
+Data matches when it is a list of the same size and the list schemas match.
+For instance, for the schema: (list symbol number symbol),
+'(foo 33 bar) matches, but '(foo 33) does not."))
 
 (defclass list-of-schema (schema)
   ((elements-schema :initarg :elements-schema
                     :accessor elements-schema
                     :type (not null)
-                    :documentation "Schema of the elements of the list")))
+                    :documentation "Schema of the elements of the list"))
+  (:documentation "Schema for list with elements of certain type/schema.
+
+Syntax: (list-of schema)
+
+Examples:
+
+    (schema (list-of string))
+    (schema (list-of (or string number)))"))
 
 (defmethod print-object ((schema list-of-schema) stream)
   (print-unreadable-object (schema stream :type t :identity t)
@@ -110,20 +147,45 @@ The schema can then be accessed via FIND-SCHEMA."
   ((key-schema :initarg :key-schema
                :accessor key-schema)
    (value-schema :initarg :value-schema
-                 :accessor value-schema)))
+                 :accessor value-schema))
+  (:documentation "Schema for association lists with certain type of keys and values.
+
+Syntax: (alist-of (key-schema . value-schema) &rest options)
+
+Examples:
+
+    (schema (alist-of (keyword . string)))"))
 
 (defclass alist-schema (schema)
   ((members :initarg :members
             :accessor alist-members)
    (required-keys :initarg :required-keys
                   :initform t
-                  :accessor required-keys)
+                  :accessor required-keys
+                  :type (or boolean list)
+                  :documentation "If T (default), all keys are considered required.
+If a list, only those listed are considered required.")
    (optional-keys :initarg :optional-keys
                   :initform nil
-                  :accessor optional-keys)
+                  :type (or boolean list)
+                  :accessor optional-keys
+                  :documentation "If T, then all keys are considered optional.
+If a list, then the keys listed are considered optional.")
    (allow-other-keys :initarg :allow-other-keys
                      :accessor allow-other-keys-p
-                     :initform t)))
+                     :initform t
+                     :documentation "Whether other keys than the specified are allowed in the data being checked."))
+  (:documentation "Schema for association lists with certain keys and values.
+
+Syntax: (alist alist &rest options)
+
+where alist is a list of conses with key and schema.
+
+Examples:
+
+    (schema (alist ((:x . string)(:y . number))))
+    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+"))
 
 (defclass plist-of-schema (schema)
   ((key-schema :initarg :key-schema

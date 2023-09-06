@@ -45,13 +45,17 @@
            #:attribute-documentation
            #:attribute-external-name
 
-           #:serializable-class
-           #:serializable-class-schema
-
            #:object-schema
            #:type-schema
            #:list-of-schema
+           #:list-schema
+           #:cons-schema
+           #:alist-schema
+           #:alist-of-schema
+           #:plist-schema
+           #:plist-of-schema
            #:attribute
+           #:attribute-properties
            #:schema-reference-schema
            #:schema-spec
            #:satisfies-schema

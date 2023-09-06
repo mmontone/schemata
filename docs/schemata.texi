@@ -336,44 +336,19 @@ For more control over the generation, attach a generator to schemas via @code{:g
 Wrapper macro for schema definitions.
 @endcldefmacro
 
-@cldefmacro {SCHEMATA, DEF-SCHEMA-CLASS, (name direct-superclasses direct-slots &rest options)}
-
-Helper macro to define schema classes
-@endcldefmacro
-
 @cldefmacro {SCHEMATA, DEFSCHEMA, (name schema)}
 
 Register SCHEMA under NAME.
 The schema can then be accessed via FIND-SCHEMA.
 @endcldefmacro
 
+@cldefmacro {SCHEMATA, DEF-SCHEMA-CLASS, (name direct-superclasses direct-slots &rest options)}
+
+Helper macro to define schema classes
+@endcldefmacro
+
 @subheading Generic functions
-@cldefgeneric {SCHEMATA, SCHEMA-DOCUMENTATION, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, UNSERIALIZE-WITH-SCHEMA, (schema data format)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, ATTRIBUTE-NAME, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, ATTRIBUTE-ADD-VALIDATOR, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, ATTRIBUTE-ACCESSOR, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, ATTRIBUTE-TYPE, (sb-pcl::object)}
+@cldefgeneric {SCHEMATA, SCHEMA-TYPE, (sb-pcl::object)}
 
 
 @endcldefgeneric
@@ -383,17 +358,7 @@ The schema can then be accessed via FIND-SCHEMA.
 
 @endcldefgeneric
 
-@cldefgeneric {SCHEMATA, OBJECT-ATTRIBUTES, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
 @cldefgeneric {SCHEMATA, OBJECT-CLASS, (sb-pcl::object)}
-
-
-@endcldefgeneric
-
-@cldefgeneric {SCHEMATA, ATTRIBUTE-EXTERNAL-NAME, (sb-pcl::object)}
 
 
 @endcldefgeneric
@@ -403,17 +368,27 @@ The schema can then be accessed via FIND-SCHEMA.
 
 @endcldefgeneric
 
-@cldefgeneric {SCHEMATA, ATTRIBUTE-VALIDATOR, (sb-pcl::object)}
+@cldefgeneric {SCHEMATA, ATTRIBUTE-REQUIRED-P, (sb-pcl::object)}
 
 
 @endcldefgeneric
 
-@cldefgeneric {SCHEMATA, PARSE-WITH-SCHEMA, (schema string-or-data)}
+@cldefgeneric {SCHEMATA, ATTRIBUTE-ACCESSOR, (sb-pcl::object)}
 
-Parses the string to an association list using the schema
+
 @endcldefgeneric
 
-@cldefgeneric {SCHEMATA, SCHEMA-TYPE, (sb-pcl::object)}
+@cldefgeneric {SCHEMATA, ATTRIBUTE-ADD-VALIDATOR, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-EXTERNAL-NAME, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, UNSERIALIZE-WITH-SCHEMA, (schema data format)}
 
 
 @endcldefgeneric
@@ -423,23 +398,43 @@ Parses the string to an association list using the schema
 
 @endcldefgeneric
 
+@cldefgeneric {SCHEMATA, SCHEMA-DOCUMENTATION, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, PARSE-WITH-SCHEMA, (schema string-or-data)}
+
+Parses the string to an association list using the schema
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-TYPE, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, OBJECT-ATTRIBUTES, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
+@cldefgeneric {SCHEMATA, ATTRIBUTE-NAME, (sb-pcl::object)}
+
+
+@endcldefgeneric
+
 @cldefgeneric {SCHEMATA, ATTRIBUTE-PARSER, (sb-pcl::object)}
 
 
 @endcldefgeneric
 
-@cldefgeneric {SCHEMATA, ATTRIBUTE-REQUIRED-P, (sb-pcl::object)}
+@cldefgeneric {SCHEMATA, ATTRIBUTE-VALIDATOR, (sb-pcl::object)}
 
 
 @endcldefgeneric
 
 @subheading Functions
-@cldefun {SCHEMATA, SERIALIZE-WITH-SCHEMA, (schema input &optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))}
-
-
-@endcldefun
-
-@cldefun {SCHEMATA, VALIDATION-ERROR, (message &rest args)}
+@cldefun {SCHEMATA, ATTRIBUTE-TYPE-NAME, (attribute)}
 
 
 @endcldefun
@@ -449,21 +444,33 @@ Parses the string to an association list using the schema
 
 @endcldefun
 
-@cldefun {SCHEMATA, VALIDATE-WITH-SCHEMA, (schema data &key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))}
+@cldefun {SCHEMATA, POPULATE-WITH-SCHEMA, (schema object data &key exclude)}
 
-Validate input using schema.
-Useful for validating resource operations posted content (for :post and :put methods).
-Input can be a string or an association list.
-
-Args:
-  - schema (symbol or schema): The schema
-  - data (alist): The data to validate.
-  - format (keyword): The data format.
-  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
-  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
+Populate CLOS objects from data + schema.
+Attributes members of EXCLUDE parameter are not populated.
 @endcldefun
 
-@cldefun {SCHEMATA, ATTRIBUTE-TYPE-NAME, (attribute)}
+@cldefun {SCHEMATA, ATTRIBUTE-OPTIONAL-P, (attribute)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, SCHEMA-CLASS-SCHEMA, (schema-class)}
+
+Generate a schema using the schema class meta info
+@endcldefun
+
+@cldefun {SCHEMATA, SERIALIZE-WITH-SCHEMA, (schema input &optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, SCHEMA-SPEC, (schema)}
+
+
+@endcldefun
+
+@cldefun {SCHEMATA, FIND-OBJECT-ATTRIBUTE, (object attribute-name &key (error-p t))}
 
 
 @endcldefun
@@ -481,15 +488,9 @@ DATA should be an association list.
 
 @endcldefun
 
-@cldefun {SCHEMATA, SCHEMA-SPEC, (schema)}
+@cldefun {SCHEMATA, VALIDATION-ERROR, (message &rest args)}
 
 
-@endcldefun
-
-@cldefun {SCHEMATA, POPULATE-WITH-SCHEMA, (schema object data &key exclude)}
-
-Populate CLOS objects from data + schema.
-Attributes members of EXCLUDE parameter are not populated.
 @endcldefun
 
 @cldefun {SCHEMATA, FIND-SCHEMA, (name &optional (errorp t))}
@@ -497,9 +498,18 @@ Attributes members of EXCLUDE parameter are not populated.
 Find a schema definition by name
 @endcldefun
 
-@cldefun {SCHEMATA, ATTRIBUTE-OPTIONAL-P, (attribute)}
+@cldefun {SCHEMATA, VALIDATE-WITH-SCHEMA, (schema data &key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))}
 
+Validate input using schema.
+Useful for validating resource operations posted content (for :post and :put methods).
+Input can be a string or an association list.
 
+Args:
+  - schema (symbol or schema): The schema
+  - data (alist): The data to validate.
+  - format (keyword): The data format.
+  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
+  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
 @endcldefun
 
 @cldefun {SCHEMATA, GENERATE-SCHEMA-FROM-CLASS, (class)}
@@ -507,17 +517,303 @@ Find a schema definition by name
 Generate a schema from CLASS, using reflection.
 @endcldefun
 
-@cldefun {SCHEMATA, SCHEMA-CLASS-SCHEMA, (schema-class)}
-
-Generate a schema using the schema class meta info
-@endcldefun
-
-@cldefun {SCHEMATA, FIND-OBJECT-ATTRIBUTE, (object attribute-name &key (error-p t))}
-
-
-@endcldefun
-
 @subheading Classes
+@cldefclass {SCHEMATA, OBJECT-SCHEMA}
+
+
+
+Class precedence list: @code{object-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{name} --- type: @code{@w{(or string symbol)}}; initarg: @code{@w{:name}}; reader: @code{@w{schemata:object-name}}; writer: @code{@w{(setf schemata:object-name)}}
+
+The name of the object.@item @code{attributes} --- type: @code{@w{list}}; initarg: @code{@w{:attributes}}; reader: @code{@w{schemata:object-attributes}}; writer: @code{@w{(setf schemata:object-attributes)}}
+
+@item @code{class} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:class}}; reader: @code{@w{schemata:object-class}}; writer: @code{@w{(setf schemata:object-class)}}
+
+@item @code{ignore-unknown-attributes} --- type: @code{@w{boolean}}; initarg: @code{@w{:ignore-unknown-attributes}}; reader: @code{@w{schemata::ignore-unknown-attributes}}; writer: @code{@w{(setf schemata::ignore-unknown-attributes)}}
+
+@item @code{serializer} --- type: @code{@w{(or null
+                                               trivial-types:function-designator)}}; initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::object-serializer}}; writer: @code{@w{(setf schemata::object-serializer)}}
+
+@item @code{unserializer} --- type: @code{@w{(or null
+                                                 trivial-types:function-designator)}}; initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::object-unserializer}}; writer: @code{@w{(setf schemata::object-unserializer)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, CONS-SCHEMA}
+
+Schema for CONSes.
+
+Syntax: (cons car-schema cdr-schema)
+
+Examples:
+
+    (schema (cons symbol string))
+
+Class precedence list: @code{cons-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{car-schema} --- type: @code{@w{t}}; initarg: @code{@w{:car-schema}}; reader: @code{@w{schemata::car-schema}}; writer: @code{@w{(setf schemata::car-schema)}}
+
+The schema of CAR.@item @code{cdr-schema} --- type: @code{@w{t}}; initarg: @code{@w{:cdr-schema}}; reader: @code{@w{schemata::cdr-schema}}; writer: @code{@w{(setf schemata::cdr-schema)}}
+
+The schema of CDR.@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, LIST-OF-SCHEMA}
+
+Schema for list with elements of certain type/schema.
+
+Syntax: (list-of schema)
+
+Examples:
+
+    (schema (list-of string))
+    (schema (list-of (or string number)))
+
+Class precedence list: @code{list-of-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{elements-schema} --- type: @code{@w{(not null)}}; initarg: @code{@w{:elements-schema}}; reader: @code{@w{schemata::elements-schema}}; writer: @code{@w{(setf schemata::elements-schema)}}
+
+Schema of the elements of the list@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, PLIST-OF-SCHEMA}
+
+
+
+Class precedence list: @code{plist-of-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{key-schema} --- type: @code{@w{t}}; initarg: @code{@w{:key-schema}}; reader: @code{@w{schemata::key-schema}}; writer: @code{@w{(setf schemata::key-schema)}}
+
+@item @code{value-schema} --- type: @code{@w{t}}; initarg: @code{@w{:value-schema}}; reader: @code{@w{schemata::value-schema}}; writer: @code{@w{(setf schemata::value-schema)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA}
+
+
+
+Class precedence list: @code{schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{documentation} --- type: @code{@w{(or null string)}}; initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
+
+@item @code{generator} --- type: @code{@w{t}}; initarg: @code{@w{:generator}}; reader: @code{@w{schemata:schema-generator}}; writer: @code{@w{(setf schemata:schema-generator)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, ALIST-OF-SCHEMA}
+
+Schema for association lists with certain type of keys and values.
+
+Syntax: (alist-of (key-schema . value-schema) &rest options)
+
+Examples:
+
+    (schema (alist-of (keyword . string)))
+
+Class precedence list: @code{alist-of-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{key-schema} --- type: @code{@w{t}}; initarg: @code{@w{:key-schema}}; reader: @code{@w{schemata::key-schema}}; writer: @code{@w{(setf schemata::key-schema)}}
+
+@item @code{value-schema} --- type: @code{@w{t}}; initarg: @code{@w{:value-schema}}; reader: @code{@w{schemata::value-schema}}; writer: @code{@w{(setf schemata::value-schema)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, PLIST-SCHEMA}
+
+
+
+Class precedence list: @code{plist-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{members} --- type: @code{@w{t}}; initarg: @code{@w{:members}}; reader: @code{@w{schemata::plist-members}}; writer: @code{@w{(setf schemata::plist-members)}}
+
+@item @code{required-keys} --- type: @code{@w{t}}; initarg: @code{@w{:required-keys}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
+
+@item @code{optional-keys} --- type: @code{@w{t}}; initarg: @code{@w{:optional-keys}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
+
+@item @code{allow-other-keys} --- type: @code{@w{t}}; initarg: @code{@w{:allow-other-keys}}; reader: @code{@w{schemata::allow-other-keys-p}}; writer: @code{@w{(setf schemata::allow-other-keys-p)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, LIST-SCHEMA}
+
+Schema for lists.
+
+Syntax: (list &rest schemas)
+
+Examples:
+
+    (schema (list string number))
+    (schema (list symbol number boolean))
+
+Data matches when it is a list of the same size and the list schemas match.
+For instance, for the schema: (list symbol number symbol),
+'(foo 33 bar) matches, but '(foo 33) does not.
+
+Class precedence list: @code{list-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{schemas} --- type: @code{@w{t}}; initarg: @code{@w{:schemas}}; reader: @code{@w{schemata::list-schemas}}; writer: @code{@w{(setf schemata::list-schemas)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-REFERENCE-SCHEMA}
+
+
+
+Class precedence list: @code{schema-reference-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{name} --- type: @code{@w{symbol}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, ALIST-SCHEMA}
+
+Schema for association lists with certain keys and values.
+
+Syntax: (alist alist &rest options)
+
+where alist is a list of conses with key and schema.
+
+Examples:
+
+    (schema (alist ((:x . string)(:y . number))))
+    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+
+
+Class precedence list: @code{alist-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{members} --- type: @code{@w{t}}; initarg: @code{@w{:members}}; reader: @code{@w{schemata::alist-members}}; writer: @code{@w{(setf schemata::alist-members)}}
+
+@item @code{required-keys} --- type: @code{@w{(or boolean list)}}; initarg: @code{@w{:required-keys}}; reader: @code{@w{schemata::required-keys}}; writer: @code{@w{(setf schemata::required-keys)}}
+
+If T (default), all keys are considered required.
+If a list, only those listed are considered required.@item @code{optional-keys} --- type: @code{@w{(or
+                                                                                                    boolean
+                                                                                                    list)}}; initarg: @code{@w{:optional-keys}}; reader: @code{@w{schemata::optional-keys}}; writer: @code{@w{(setf schemata::optional-keys)}}
+
+If T, then all keys are considered optional.
+If a list, then the keys listed are considered optional.@item @code{allow-other-keys} --- type: @code{@w{t}}; initarg: @code{@w{:allow-other-keys}}; reader: @code{@w{schemata::allow-other-keys-p}}; writer: @code{@w{(setf schemata::allow-other-keys-p)}}
+
+Whether other keys than the specified are allowed in the data being checked.@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-CLASS}
+
+Metaclass for schema objects
+
+Class precedence list: @code{schema-class, standard-class, class, specializer, metaobject, standard-object, t}
+
+Slots:
+@itemize
+@item @code{schema-name} --- type: @code{@w{(or null string symbol)}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, SCHEMA-OBJECT}
+
+
+
+Class precedence list: @code{schema-object, standard-object, t}
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, TYPE-SCHEMA}
+
+Schema for a Common Lisp type.
+
+Syntax: (schema type)
+
+Examples:
+
+    (schema string)
+    (schema integer)
+
+Class precedence list: @code{type-schema, schema, standard-object, t}
+
+Slots:
+@itemize
+@item @code{type} --- type: @code{@w{t}}; initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
+
+@end itemize
+
+@endcldefclass
+
+@cldefclass {SCHEMATA, ATTRIBUTE-PROPERTIES}
+
+
+
+Class precedence list: @code{attribute-properties, standard-object, t}
+
+Slots:
+@itemize
+@item @code{required} --- type: @code{@w{boolean}}; initarg: @code{@w{:required}}; reader: @code{@w{schemata:attribute-required-p}}; writer: @code{@w{(setf schemata:attribute-required-p)}}
+
+@item @code{required-message} --- type: @code{@w{(or string null)}}; initarg: @code{@w{:required-message}}; reader: @code{@w{schemata::attribute-required-message}}; writer: @code{@w{(setf schemata::attribute-required-message)}}
+
+@item @code{default} --- type: @code{@w{t}}; initarg: @code{@w{:default}}; reader: @code{@w{schemata::attribute-default}}; writer: @code{@w{(setf schemata::attribute-default)}}
+
+@item @code{validator} --- type: @code{@w{(or null
+                                              trivial-types:function-designator)}}; initarg: @code{@w{:validator}}; reader: @code{@w{schemata:attribute-validator}}; writer: @code{@w{(setf schemata:attribute-validator)}}
+
+@item @code{add-validator} --- type: @code{@w{(or null
+                                                  trivial-types:function-designator)}}; initarg: @code{@w{:add-validator}}; reader: @code{@w{schemata:attribute-add-validator}}; writer: @code{@w{(setf schemata:attribute-add-validator)}}
+
+@item @code{parser} --- type: @code{@w{(or null
+                                           trivial-types:function-designator)}}; initarg: @code{@w{:parser}}; reader: @code{@w{schemata:attribute-parser}}; writer: @code{@w{(setf schemata:attribute-parser)}}
+
+@item @code{formatter} --- type: @code{@w{(or null
+                                              trivial-types:function-designator)}}; initarg: @code{@w{:formatter}}; reader: @code{@w{schemata:attribute-formatter}}; writer: @code{@w{(setf schemata:attribute-formatter)}}
+
+@item @code{external-name} --- type: @code{@w{(or string null)}}; initarg: @code{@w{:external-name}}; reader: @code{@w{schemata:attribute-external-name}}; writer: @code{@w{(setf schemata:attribute-external-name)}}
+
+@item @code{serializer} --- type: @code{@w{t}}; initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::attribute-serializer}}; writer: @code{@w{(setf schemata::attribute-serializer)}}
+
+@item @code{unserializer} --- type: @code{@w{(or null
+                                                 trivial-types:function-designator)}}; initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::attribute-unserializer}}; writer: @code{@w{(setf schemata::attribute-unserializer)}}
+
+@end itemize
+
+@endcldefclass
+
 @cldefclass {SCHEMATA, VALIDATION-ERROR}
 
 
@@ -549,112 +845,6 @@ Slots:
 @item @code{slot} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:slot}}; reader: @code{@w{schemata::attribute-slot}}; writer: @code{@w{(setf schemata::attribute-slot)}}
 
 @end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, LIST-SCHEMA}
-
-
-
-Class precedence list: @code{list-schema, schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{elements-schema} --- type: @code{@w{(not null)}}; initarg: @code{@w{:elements-schema}}; reader: @code{@w{schemata::elements-schema}}; writer: @code{@w{(setf schemata::elements-schema)}}
-
-Schema of the elements of the list@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, SCHEMA-CLASS}
-
-Metaclass for schema objects
-
-Class precedence list: @code{schema-class, standard-class, class, specializer, metaobject, standard-object, t}
-
-Slots:
-@itemize
-@item @code{schema-name} --- type: @code{@w{(or null string symbol)}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
-
-@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, OBJECT-SCHEMA}
-
-
-
-Class precedence list: @code{object-schema, schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{name} --- type: @code{@w{(or string symbol)}}; initarg: @code{@w{:name}}; reader: @code{@w{schemata:object-name}}; writer: @code{@w{(setf schemata:object-name)}}
-
-The name of the object.@item @code{attributes} --- type: @code{@w{list}}; initarg: @code{@w{:attributes}}; reader: @code{@w{schemata:object-attributes}}; writer: @code{@w{(setf schemata:object-attributes)}}
-
-@item @code{class} --- type: @code{@w{(or null symbol)}}; initarg: @code{@w{:class}}; reader: @code{@w{schemata:object-class}}; writer: @code{@w{(setf schemata:object-class)}}
-
-@item @code{ignore-unknown-attributes} --- type: @code{@w{boolean}}; initarg: @code{@w{:ignore-unknown-attributes}}; reader: @code{@w{schemata::ignore-unknown-attributes}}; writer: @code{@w{(setf schemata::ignore-unknown-attributes)}}
-
-@item @code{serializer} --- type: @code{@w{(or null
-                                               trivial-types:function-designator)}}; initarg: @code{@w{:serializer}}; reader: @code{@w{schemata::object-serializer}}; writer: @code{@w{(setf schemata::object-serializer)}}
-
-@item @code{unserializer} --- type: @code{@w{(or null
-                                                 trivial-types:function-designator)}}; initarg: @code{@w{:unserializer}}; reader: @code{@w{schemata::object-unserializer}}; writer: @code{@w{(setf schemata::object-unserializer)}}
-
-@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, SCHEMA-REFERENCE-SCHEMA}
-
-
-
-Class precedence list: @code{schema-reference-schema, schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{name} --- type: @code{@w{symbol}}; initarg: @code{@w{:schema-name}}; reader: @code{@w{schemata::schema-name}}; writer: @code{@w{(setf schemata::schema-name)}}
-
-@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, SCHEMA}
-
-
-
-Class precedence list: @code{schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{documentation} --- type: @code{@w{(or null string)}}; initarg: @code{@w{:documentation}}; reader: @code{@w{schemata:schema-documentation}}; writer: @code{@w{(setf schemata:schema-documentation)}}
-
-@item @code{generator} --- type: @code{@w{t}}; initarg: @code{@w{:generator}}; reader: @code{@w{schemata:schema-generator}}; writer: @code{@w{(setf schemata:schema-generator)}}
-
-@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, TYPE-SCHEMA}
-
-
-
-Class precedence list: @code{type-schema, schema, standard-object, t}
-
-Slots:
-@itemize
-@item @code{type} --- type: @code{@w{t}}; initarg: @code{@w{:type}}; reader: @code{@w{schemata:schema-type}}; writer: @code{@w{(setf schemata:schema-type)}}
-
-@end itemize
-
-@endcldefclass
-
-@cldefclass {SCHEMATA, SCHEMA-OBJECT}
-
-
-
-Class precedence list: @code{schema-object, standard-object, t}
 
 @endcldefclass
 

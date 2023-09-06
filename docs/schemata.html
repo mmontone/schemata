@@ -432,13 +432,6 @@ Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#
 <p>Wrapper macro for schema definitions.
 </p></dd></dl>
 
-<span id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS"></span>
-<span id="SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-macro"></span><dl>
-<dt id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-1">Macro: <strong>SCHEMATA:DEF-SCHEMA-CLASS</strong> <em>(name direct-superclasses direct-slots &amp;rest options)</em></dt>
-<dd>
-<p>Helper macro to define schema classes
-</p></dd></dl>
-
 <span id="index-SCHEMATA_003aDEFSCHEMA"></span>
 <span id="SCHEMATA_003aDEFSCHEMA-macro"></span><dl>
 <dt id="index-SCHEMATA_003aDEFSCHEMA-1">Macro: <strong>SCHEMATA:DEFSCHEMA</strong> <em>(name schema)</em></dt>
@@ -447,35 +440,17 @@ Up: <a href="#Reference" accesskey="u" rel="up">Reference</a> &nbsp; [<a href="#
 The schema can then be accessed via FIND-SCHEMA.
 </p></dd></dl>
 
+<span id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS"></span>
+<span id="SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-macro"></span><dl>
+<dt id="index-SCHEMATA_003aDEF_002dSCHEMA_002dCLASS-1">Macro: <strong>SCHEMATA:DEF-SCHEMA-CLASS</strong> <em>(name direct-superclasses direct-slots &amp;rest options)</em></dt>
+<dd>
+<p>Helper macro to define schema classes
+</p></dd></dl>
+
 <span id="Generic-functions"></span><h4 class="subheading">Generic functions</h4>
-<span id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION"></span>
-<span id="SCHEMATA_003aSCHEMA_002dDOCUMENTATION-function"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION-1">Generic-Function: <strong>SCHEMATA:SCHEMA-DOCUMENTATION</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA"></span>
-<span id="SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
-<dt id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-1">Generic-Function: <strong>SCHEMATA:UNSERIALIZE-WITH-SCHEMA</strong> <em>(schema data format)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aATTRIBUTE_002dNAME"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dNAME-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-NAME</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ADD-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dACCESSOR-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ACCESSOR</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dTYPE-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-TYPE</strong> <em>(sb-pcl::object)</em></dt>
+<span id="index-SCHEMATA_003aSCHEMA_002dTYPE"></span>
+<span id="SCHEMATA_003aSCHEMA_002dTYPE-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dTYPE-1">Generic-Function: <strong>SCHEMATA:SCHEMA-TYPE</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aOBJECT_002dNAME"></span>
@@ -483,19 +458,9 @@ The schema can then be accessed via FIND-SCHEMA.
 <dt id="index-SCHEMATA_003aOBJECT_002dNAME-1">Generic-Function: <strong>SCHEMATA:OBJECT-NAME</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES"></span>
-<span id="SCHEMATA_003aOBJECT_002dATTRIBUTES-function"></span><dl>
-<dt id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES-1">Generic-Function: <strong>SCHEMATA:OBJECT-ATTRIBUTES</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
 <span id="index-SCHEMATA_003aOBJECT_002dCLASS"></span>
 <span id="SCHEMATA_003aOBJECT_002dCLASS-function"></span><dl>
 <dt id="index-SCHEMATA_003aOBJECT_002dCLASS-1">Generic-Function: <strong>SCHEMATA:OBJECT-CLASS</strong> <em>(sb-pcl::object)</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-EXTERNAL-NAME</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aSCHEMA_002dGENERATOR"></span>
@@ -503,9 +468,39 @@ The schema can then be accessed via FIND-SCHEMA.
 <dt id="index-SCHEMATA_003aSCHEMA_002dGENERATOR-1">Generic-Function: <strong>SCHEMATA:SCHEMA-GENERATOR</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dVALIDATOR-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-REQUIRED-P</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dACCESSOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dACCESSOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ACCESSOR</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dADD_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-ADD-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dEXTERNAL_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-EXTERNAL-NAME</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aUNSERIALIZE_002dWITH_002dSCHEMA-1">Generic-Function: <strong>SCHEMATA:UNSERIALIZE-WITH-SCHEMA</strong> <em>(schema data format)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dFORMATTER-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-FORMATTER</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION"></span>
+<span id="SCHEMATA_003aSCHEMA_002dDOCUMENTATION-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dDOCUMENTATION-1">Generic-Function: <strong>SCHEMATA:SCHEMA-DOCUMENTATION</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aPARSE_002dWITH_002dSCHEMA"></span>
@@ -515,14 +510,19 @@ The schema can then be accessed via FIND-SCHEMA.
 <p>Parses the string to an association list using the schema
 </p></dd></dl>
 
-<span id="index-SCHEMATA_003aSCHEMA_002dTYPE"></span>
-<span id="SCHEMATA_003aSCHEMA_002dTYPE-function"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dTYPE-1">Generic-Function: <strong>SCHEMATA:SCHEMA-TYPE</strong> <em>(sb-pcl::object)</em></dt>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dTYPE-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-TYPE</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dFORMATTER-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dFORMATTER-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-FORMATTER</strong> <em>(sb-pcl::object)</em></dt>
+<span id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES"></span>
+<span id="SCHEMATA_003aOBJECT_002dATTRIBUTES-function"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dATTRIBUTES-1">Generic-Function: <strong>SCHEMATA:OBJECT-ATTRIBUTES</strong> <em>(sb-pcl::object)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dNAME-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-NAME</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aATTRIBUTE_002dPARSER"></span>
@@ -530,20 +530,15 @@ The schema can then be accessed via FIND-SCHEMA.
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dPARSER-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-PARSER</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dREQUIRED_002dP-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-REQUIRED-P</strong> <em>(sb-pcl::object)</em></dt>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dVALIDATOR-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dVALIDATOR-1">Generic-Function: <strong>SCHEMATA:ATTRIBUTE-VALIDATOR</strong> <em>(sb-pcl::object)</em></dt>
 </dl>
 
 <span id="Functions"></span><h4 class="subheading">Functions</h4>
-<span id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA"></span>
-<span id="SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
-<dt id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:SERIALIZE-WITH-SCHEMA</strong> <em>(schema input &amp;optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))</em></dt>
-</dl>
-
-<span id="index-SCHEMATA_003aVALIDATION_002dERROR"></span>
-<span id="SCHEMATA_003aVALIDATION_002dERROR-function"></span><dl>
-<dt id="index-SCHEMATA_003aVALIDATION_002dERROR-1">Function: <strong>SCHEMATA:VALIDATION-ERROR</strong> <em>(message &amp;rest args)</em></dt>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-1">Function: <strong>SCHEMATA:ATTRIBUTE-TYPE-NAME</strong> <em>(attribute)</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aATTRIBUTE_002dREADER"></span>
@@ -551,25 +546,39 @@ The schema can then be accessed via FIND-SCHEMA.
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dREADER-1">Function: <strong>SCHEMATA:ATTRIBUTE-READER</strong> <em>(attribute)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA"></span>
-<span id="SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-function"></span><dl>
-<dt id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:VALIDATE-WITH-SCHEMA</strong> <em>(schema data &amp;key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))</em></dt>
+<span id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:POPULATE-WITH-SCHEMA</strong> <em>(schema object data &amp;key exclude)</em></dt>
 <dd>
-<p>Validate input using schema.
-Useful for validating resource operations posted content (for :post and :put methods).
-Input can be a string or an association list.
-</p>
-<p>Args:
-  - schema (symbol or schema): The schema
-  - data (alist): The data to validate.
-  - format (keyword): The data format.
-  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
-  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
+<p>Populate CLOS objects from data + schema.
+Attributes members of EXCLUDE parameter are not populated.
 </p></dd></dl>
 
-<span id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dTYPE_002dNAME-1">Function: <strong>SCHEMATA:ATTRIBUTE-TYPE-NAME</strong> <em>(attribute)</em></dt>
+<span id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-function"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-1">Function: <strong>SCHEMATA:ATTRIBUTE-OPTIONAL-P</strong> <em>(attribute)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-1">Function: <strong>SCHEMATA:SCHEMA-CLASS-SCHEMA</strong> <em>(schema-class)</em></dt>
+<dd>
+<p>Generate a schema using the schema class meta info
+</p></dd></dl>
+
+<span id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aSERIALIZE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:SERIALIZE-WITH-SCHEMA</strong> <em>(schema input &amp;optional (serializer generic-serializer::*serializer*) (stream generic-serializer::*serializer-output*))</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dSPEC"></span>
+<span id="SCHEMATA_003aSCHEMA_002dSPEC-function"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dSPEC-1">Function: <strong>SCHEMATA:SCHEMA-SPEC</strong> <em>(schema)</em></dt>
+</dl>
+
+<span id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"></span>
+<span id="SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-function"></span><dl>
+<dt id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1">Function: <strong>SCHEMATA:FIND-OBJECT-ATTRIBUTE</strong> <em>(object attribute-name &amp;key (error-p t))</em></dt>
 </dl>
 
 <span id="index-SCHEMATA_003aPATCH_002dWITH_002dSCHEMA"></span>
@@ -587,18 +596,10 @@ DATA should be an association list.
 <dt id="index-SCHEMATA_003aATTRIBUTE_002dWRITER-1">Function: <strong>SCHEMATA:ATTRIBUTE-WRITER</strong> <em>(attribute)</em></dt>
 </dl>
 
-<span id="index-SCHEMATA_003aSCHEMA_002dSPEC"></span>
-<span id="SCHEMATA_003aSCHEMA_002dSPEC-function"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dSPEC-1">Function: <strong>SCHEMATA:SCHEMA-SPEC</strong> <em>(schema)</em></dt>
+<span id="index-SCHEMATA_003aVALIDATION_002dERROR"></span>
+<span id="SCHEMATA_003aVALIDATION_002dERROR-function"></span><dl>
+<dt id="index-SCHEMATA_003aVALIDATION_002dERROR-1">Function: <strong>SCHEMATA:VALIDATION-ERROR</strong> <em>(message &amp;rest args)</em></dt>
 </dl>
-
-<span id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA"></span>
-<span id="SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-function"></span><dl>
-<dt id="index-SCHEMATA_003aPOPULATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:POPULATE-WITH-SCHEMA</strong> <em>(schema object data &amp;key exclude)</em></dt>
-<dd>
-<p>Populate CLOS objects from data + schema.
-Attributes members of EXCLUDE parameter are not populated.
-</p></dd></dl>
 
 <span id="index-SCHEMATA_003aFIND_002dSCHEMA"></span>
 <span id="SCHEMATA_003aFIND_002dSCHEMA-function"></span><dl>
@@ -607,10 +608,21 @@ Attributes members of EXCLUDE parameter are not populated.
 <p>Find a schema definition by name
 </p></dd></dl>
 
-<span id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP"></span>
-<span id="SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-function"></span><dl>
-<dt id="index-SCHEMATA_003aATTRIBUTE_002dOPTIONAL_002dP-1">Function: <strong>SCHEMATA:ATTRIBUTE-OPTIONAL-P</strong> <em>(attribute)</em></dt>
-</dl>
+<span id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA"></span>
+<span id="SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-function"></span><dl>
+<dt id="index-SCHEMATA_003aVALIDATE_002dWITH_002dSCHEMA-1">Function: <strong>SCHEMATA:VALIDATE-WITH-SCHEMA</strong> <em>(schema data &amp;key (collect-errors *collect-validation-errors*) (error-p *signal-validation-errors*))</em></dt>
+<dd>
+<p>Validate input using schema.
+Useful for validating resource operations posted content (for :post and :put methods).
+Input can be a string or an association list.
+</p>
+<p>Args:
+  - schema (symbol or schema): The schema
+  - data (alist): The data to validate.
+  - format (keyword): The data format.
+  - collect-errors (boolean): If true, collect all the validation errors. If false, return the first validation error found. Default: true.
+  - error-p (boolean): If true, when validation errors are found, a validation error is signaled. If false, the validation errors are returned as the function result and no error is signaled.
+</p></dd></dl>
 
 <span id="index-SCHEMATA_003aGENERATE_002dSCHEMA_002dFROM_002dCLASS"></span>
 <span id="SCHEMATA_003aGENERATE_002dSCHEMA_002dFROM_002dCLASS-function"></span><dl>
@@ -619,19 +631,322 @@ Attributes members of EXCLUDE parameter are not populated.
 <p>Generate a schema from CLASS, using reflection.
 </p></dd></dl>
 
-<span id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA"></span>
-<span id="SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-function"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS_002dSCHEMA-1">Function: <strong>SCHEMATA:SCHEMA-CLASS-SCHEMA</strong> <em>(schema-class)</em></dt>
-<dd>
-<p>Generate a schema using the schema class meta info
-</p></dd></dl>
-
-<span id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE"></span>
-<span id="SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-function"></span><dl>
-<dt id="index-SCHEMATA_003aFIND_002dOBJECT_002dATTRIBUTE-1">Function: <strong>SCHEMATA:FIND-OBJECT-ATTRIBUTE</strong> <em>(object attribute-name &amp;key (error-p t))</em></dt>
-</dl>
-
 <span id="Classes"></span><h4 class="subheading">Classes</h4>
+<span id="index-SCHEMATA_003aOBJECT_002dSCHEMA"></span>
+<span id="SCHEMATA_003aOBJECT_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aOBJECT_002dSCHEMA-1">Class: <strong>SCHEMATA:OBJECT-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>object-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>name</code> &mdash; type: <code>(or&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-name)</span><!-- /@w --></code>
+
+<p>The name of the object.</p></li><li> <code>attributes</code> &mdash; type: <code>list<!-- /@w --></code>; initarg: <code>:attributes<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-attributes)</span><!-- /@w --></code>
+
+</li><li> <code>class</code> &mdash; type: <code>(or&nbsp;null&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:class<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-class</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-class)</span><!-- /@w --></code>
+
+</li><li> <code>ignore-unknown-attributes</code> &mdash; type: <code>boolean<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:ignore-unknown-attributes</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::ignore-unknown-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::ignore-unknown-attributes)</span><!-- /@w --></code>
+
+</li><li> <code>serializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-serializer)</span><!-- /@w --></code>
+
+</li><li> <code>unserializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-unserializer)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aCONS_002dSCHEMA"></span>
+<span id="SCHEMATA_003aCONS_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aCONS_002dSCHEMA-1">Class: <strong>SCHEMATA:CONS-SCHEMA</strong></dt>
+<dd>
+<p>Schema for CONSes.
+</p>
+<p>Syntax: (cons car-schema cdr-schema)
+</p>
+<p>Examples:
+</p>
+<p>(schema (cons symbol string))
+</p>
+<p>Class precedence list: <code>cons-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>car-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:car-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::car-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::car-schema)</span><!-- /@w --></code>
+
+<p>The schema of CAR.</p></li><li> <code>cdr-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:cdr-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::cdr-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::cdr-schema)</span><!-- /@w --></code>
+
+<p>The schema of CDR.</p></li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aLIST_002dOF_002dSCHEMA"></span>
+<span id="SCHEMATA_003aLIST_002dOF_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aLIST_002dOF_002dSCHEMA-1">Class: <strong>SCHEMATA:LIST-OF-SCHEMA</strong></dt>
+<dd>
+<p>Schema for list with elements of certain type/schema.
+</p>
+<p>Syntax: (list-of schema)
+</p>
+<p>Examples:
+</p>
+<p>(schema (list-of string))
+    (schema (list-of (or string number)))
+</p>
+<p>Class precedence list: <code>list-of-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>elements-schema</code> &mdash; type: <code>(not&nbsp;null)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:elements-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::elements-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::elements-schema)</span><!-- /@w --></code>
+
+<p>Schema of the elements of the list</p></li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aPLIST_002dOF_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPLIST_002dOF_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aPLIST_002dOF_002dSCHEMA-1">Class: <strong>SCHEMATA:PLIST-OF-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>plist-of-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>key-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:key-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::key-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::key-schema)</span><!-- /@w --></code>
+
+</li><li> <code>value-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:value-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::value-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::value-schema)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA-2"></span>
+<span id="SCHEMATA_003aSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA-3">Class: <strong>SCHEMATA:SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>documentation</code> &mdash; type: <code>(or&nbsp;null&nbsp;string)<!-- /@w --></code>; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
+
+</li><li> <code>generator</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:generator<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-generator</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-generator)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aALIST_002dOF_002dSCHEMA"></span>
+<span id="SCHEMATA_003aALIST_002dOF_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aALIST_002dOF_002dSCHEMA-1">Class: <strong>SCHEMATA:ALIST-OF-SCHEMA</strong></dt>
+<dd>
+<p>Schema for association lists with certain type of keys and values.
+</p>
+<p>Syntax: (alist-of (key-schema . value-schema) &amp;rest options)
+</p>
+<p>Examples:
+</p>
+<p>(schema (alist-of (keyword . string)))
+</p>
+<p>Class precedence list: <code>alist-of-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>key-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:key-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::key-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::key-schema)</span><!-- /@w --></code>
+
+</li><li> <code>value-schema</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:value-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::value-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::value-schema)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aPLIST_002dSCHEMA"></span>
+<span id="SCHEMATA_003aPLIST_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aPLIST_002dSCHEMA-1">Class: <strong>SCHEMATA:PLIST-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>plist-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>members</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:members<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::plist-members</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::plist-members)</span><!-- /@w --></code>
+
+</li><li> <code>required-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:required-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
+
+</li><li> <code>optional-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:optional-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
+
+</li><li> <code>allow-other-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:allow-other-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::allow-other-keys-p</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::allow-other-keys-p)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aLIST_002dSCHEMA"></span>
+<span id="SCHEMATA_003aLIST_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aLIST_002dSCHEMA-1">Class: <strong>SCHEMATA:LIST-SCHEMA</strong></dt>
+<dd>
+<p>Schema for lists.
+</p>
+<p>Syntax: (list &amp;rest schemas)
+</p>
+<p>Examples:
+</p>
+<p>(schema (list string number))
+    (schema (list symbol number boolean))
+</p>
+<p>Data matches when it is a list of the same size and the list schemas match.
+For instance, for the schema: (list symbol number symbol),
+&rsquo;(foo 33 bar) matches, but &rsquo;(foo 33) does not.
+</p>
+<p>Class precedence list: <code>list-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>schemas</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:schemas<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::list-schemas</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::list-schemas)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA"></span>
+<span id="SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-1">Class: <strong>SCHEMATA:SCHEMA-REFERENCE-SCHEMA</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema-reference-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>name</code> &mdash; type: <code>symbol<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aALIST_002dSCHEMA"></span>
+<span id="SCHEMATA_003aALIST_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aALIST_002dSCHEMA-1">Class: <strong>SCHEMATA:ALIST-SCHEMA</strong></dt>
+<dd>
+<p>Schema for association lists with certain keys and values.
+</p>
+<p>Syntax: (alist alist &amp;rest options)
+</p>
+<p>where alist is a list of conses with key and schema.
+</p>
+<p>Examples:
+</p>
+<p>(schema (alist ((:x . string)(:y . number))))
+    (schema (alist ((:x . string)(:y . number)) :optional-keys (:y)))
+</p>
+
+<p>Class precedence list: <code>alist-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>members</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:members<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::alist-members</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::alist-members)</span><!-- /@w --></code>
+
+</li><li> <code>required-keys</code> &mdash; type: <code>(or&nbsp;boolean&nbsp;list)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:required-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::required-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::required-keys)</span><!-- /@w --></code>
+
+<p>If T (default), all keys are considered required.
+If a list, only those listed are considered required.</p></li><li> <code>optional-keys</code> &mdash; type: <code>(or&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;boolean&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;list)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:optional-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::optional-keys</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::optional-keys)</span><!-- /@w --></code>
+
+<p>If T, then all keys are considered optional.
+If a list, then the keys listed are considered optional.</p></li><li> <code>allow-other-keys</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:allow-other-keys</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::allow-other-keys-p</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::allow-other-keys-p)</span><!-- /@w --></code>
+
+<p>Whether other keys than the specified are allowed in the data being checked.</p></li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dCLASS"></span>
+<span id="SCHEMATA_003aSCHEMA_002dCLASS-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS-1">Class: <strong>SCHEMATA:SCHEMA-CLASS</strong></dt>
+<dd>
+<p>Metaclass for schema objects
+</p>
+<p>Class precedence list: <code>schema-class, standard-class, class, specializer, metaobject, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>schema-name</code> &mdash; type: <code>(or&nbsp;null&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aSCHEMA_002dOBJECT"></span>
+<span id="SCHEMATA_003aSCHEMA_002dOBJECT-class"></span><dl>
+<dt id="index-SCHEMATA_003aSCHEMA_002dOBJECT-1">Class: <strong>SCHEMATA:SCHEMA-OBJECT</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>schema-object, standard-object, t</code>
+</p>
+</dd></dl>
+
+<span id="index-SCHEMATA_003aTYPE_002dSCHEMA"></span>
+<span id="SCHEMATA_003aTYPE_002dSCHEMA-class"></span><dl>
+<dt id="index-SCHEMATA_003aTYPE_002dSCHEMA-1">Class: <strong>SCHEMATA:TYPE-SCHEMA</strong></dt>
+<dd>
+<p>Schema for a Common Lisp type.
+</p>
+<p>Syntax: (schema type)
+</p>
+<p>Examples:
+</p>
+<p>(schema string)
+    (schema integer)
+</p>
+<p>Class precedence list: <code>type-schema, schema, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>type</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
+<span id="index-SCHEMATA_003aATTRIBUTE_002dPROPERTIES"></span>
+<span id="SCHEMATA_003aATTRIBUTE_002dPROPERTIES-class"></span><dl>
+<dt id="index-SCHEMATA_003aATTRIBUTE_002dPROPERTIES-1">Class: <strong>SCHEMATA:ATTRIBUTE-PROPERTIES</strong></dt>
+<dd>
+
+
+<p>Class precedence list: <code>attribute-properties, standard-object, t</code>
+</p>
+<p>Slots:
+</p><ul>
+<li> <code>required</code> &mdash; type: <code>boolean<!-- /@w --></code>; initarg: <code>:required<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-required-p</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-required-p)</span><!-- /@w --></code>
+
+</li><li> <code>required-message</code> &mdash; type: <code>(or&nbsp;string&nbsp;null)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:required-message</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-required-message</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-required-message)</span><!-- /@w --></code>
+
+</li><li> <code>default</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:default<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-default</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-default)</span><!-- /@w --></code>
+
+</li><li> <code>validator</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:validator<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-validator</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-validator)</span><!-- /@w --></code>
+
+</li><li> <code>add-validator</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code><span class="nolinebreak">:add-validator</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-add-validator</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-add-validator)</span><!-- /@w --></code>
+
+</li><li> <code>parser</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:parser<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-parser</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-parser)</span><!-- /@w --></code>
+
+</li><li> <code>formatter</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:formatter<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-formatter</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-formatter)</span><!-- /@w --></code>
+
+</li><li> <code>external-name</code> &mdash; type: <code>(or&nbsp;string&nbsp;null)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:external-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:attribute-external-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:attribute-external-name)</span><!-- /@w --></code>
+
+</li><li> <code>serializer</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-serializer)</span><!-- /@w --></code>
+
+</li><li> <code>unserializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::attribute-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::attribute-unserializer)</span><!-- /@w --></code>
+
+</li></ul>
+
+</dd></dl>
+
 <span id="index-SCHEMATA_003aVALIDATION_002dERROR-2"></span>
 <span id="SCHEMATA_003aVALIDATION_002dERROR-class"></span><dl>
 <dt id="index-SCHEMATA_003aVALIDATION_002dERROR-3">Class: <strong>SCHEMATA:VALIDATION-ERROR</strong></dt>
@@ -666,124 +981,6 @@ Attributes members of EXCLUDE parameter are not populated.
 
 </li></ul>
 
-</dd></dl>
-
-<span id="index-SCHEMATA_003aLIST_002dSCHEMA"></span>
-<span id="SCHEMATA_003aLIST_002dSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aLIST_002dSCHEMA-1">Class: <strong>SCHEMATA:LIST-SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>list-schema, schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>elements-schema</code> &mdash; type: <code>(not&nbsp;null)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:elements-schema</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::elements-schema</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::elements-schema)</span><!-- /@w --></code>
-
-<p>Schema of the elements of the list</p></li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aSCHEMA_002dCLASS"></span>
-<span id="SCHEMATA_003aSCHEMA_002dCLASS-class"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dCLASS-1">Class: <strong>SCHEMATA:SCHEMA-CLASS</strong></dt>
-<dd>
-<p>Metaclass for schema objects
-</p>
-<p>Class precedence list: <code>schema-class, standard-class, class, specializer, metaobject, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>schema-name</code> &mdash; type: <code>(or&nbsp;null&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aOBJECT_002dSCHEMA"></span>
-<span id="SCHEMATA_003aOBJECT_002dSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aOBJECT_002dSCHEMA-1">Class: <strong>SCHEMATA:OBJECT-SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>object-schema, schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>name</code> &mdash; type: <code>(or&nbsp;string&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:name<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-name)</span><!-- /@w --></code>
-
-<p>The name of the object.</p></li><li> <code>attributes</code> &mdash; type: <code>list<!-- /@w --></code>; initarg: <code>:attributes<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-attributes)</span><!-- /@w --></code>
-
-</li><li> <code>class</code> &mdash; type: <code>(or&nbsp;null&nbsp;symbol)<!-- /@w --></code>; initarg: <code>:class<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:object-class</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:object-class)</span><!-- /@w --></code>
-
-</li><li> <code>ignore-unknown-attributes</code> &mdash; type: <code>boolean<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:ignore-unknown-attributes</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::ignore-unknown-attributes</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::ignore-unknown-attributes)</span><!-- /@w --></code>
-
-</li><li> <code>serializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:serializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-serializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-serializer)</span><!-- /@w --></code>
-
-</li><li> <code>unserializer</code> &mdash; type: <code>(or&nbsp;null&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="nolinebreak">trivial-types:function-designator)</span><!-- /@w --></code>; initarg: <code>:unserializer<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::object-unserializer</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::object-unserializer)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA"></span>
-<span id="SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dREFERENCE_002dSCHEMA-1">Class: <strong>SCHEMATA:SCHEMA-REFERENCE-SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>schema-reference-schema, schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>name</code> &mdash; type: <code>symbol<!-- /@w --></code>; initarg: <code><span class="nolinebreak">:schema-name</span><!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata::schema-name</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata::schema-name)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aSCHEMA-2"></span>
-<span id="SCHEMATA_003aSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA-3">Class: <strong>SCHEMATA:SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>documentation</code> &mdash; type: <code>(or&nbsp;null&nbsp;string)<!-- /@w --></code>; initarg: <code>:documentation<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-documentation</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-documentation)</span><!-- /@w --></code>
-
-</li><li> <code>generator</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:generator<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-generator</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-generator)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aTYPE_002dSCHEMA"></span>
-<span id="SCHEMATA_003aTYPE_002dSCHEMA-class"></span><dl>
-<dt id="index-SCHEMATA_003aTYPE_002dSCHEMA-1">Class: <strong>SCHEMATA:TYPE-SCHEMA</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>type-schema, schema, standard-object, t</code>
-</p>
-<p>Slots:
-</p><ul>
-<li> <code>type</code> &mdash; type: <code>t<!-- /@w --></code>; initarg: <code>:type<!-- /@w --></code>; reader: <code><span class="nolinebreak">schemata:schema-type</span><!-- /@w --></code>; writer: <code>(setf&nbsp;<span class="nolinebreak">schemata:schema-type)</span><!-- /@w --></code>
-
-</li></ul>
-
-</dd></dl>
-
-<span id="index-SCHEMATA_003aSCHEMA_002dOBJECT"></span>
-<span id="SCHEMATA_003aSCHEMA_002dOBJECT-class"></span><dl>
-<dt id="index-SCHEMATA_003aSCHEMA_002dOBJECT-1">Class: <strong>SCHEMATA:SCHEMA-OBJECT</strong></dt>
-<dd>
-
-
-<p>Class precedence list: <code>schema-object, standard-object, t</code>
-</p>
 </dd></dl>
 
 
