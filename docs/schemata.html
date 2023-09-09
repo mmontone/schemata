@@ -94,9 +94,17 @@ ul.no-bullet {list-style: none}
       <li><a id="toc-plist_002dof" href="#plist_002dof">4.3.5 plist-of</a></li>
       <li><a id="toc-plist" href="#plist">4.3.6 plist</a></li>
     </ul></li>
-    <li><a id="toc-HASH_002dTABLE-schemas" href="#HASH_002dTABLE-schemas">4.4 HASH-TABLE schemas</a></li>
+    <li><a id="toc-HASH_002dTABLE-schemas" href="#HASH_002dTABLE-schemas">4.4 HASH-TABLE schemas</a>
+    <ul class="no-bullet">
+      <li><a id="toc-hash_002dtable_002dof" href="#hash_002dtable_002dof">4.4.1 hash-table-of</a></li>
+      <li><a id="toc-hash_002dtable" href="#hash_002dtable">4.4.2 hash-table</a></li>
+    </ul></li>
     <li><a id="toc-CONS-schema" href="#CONS-schema">4.5 CONS schema</a></li>
-    <li><a id="toc-AND-and-OR-schemas" href="#AND-and-OR-schemas">4.6 AND and OR schemas</a></li>
+    <li><a id="toc-AND-and-OR-schemas" href="#AND-and-OR-schemas">4.6 AND and OR schemas</a>
+    <ul class="no-bullet">
+      <li><a id="toc-or" href="#or">4.6.1 or</a></li>
+      <li><a id="toc-and" href="#and">4.6.2 and</a></li>
+    </ul></li>
     <li><a id="toc-Schema-references" href="#Schema-references">4.7 Schema references</a></li>
   </ul></li>
   <li><a id="toc-SATISFIES_002dSCHEMA-type" href="#SATISFIES_002dSCHEMA-type">5 SATISFIES-SCHEMA type</a></li>
@@ -395,9 +403,75 @@ NIL
 
 <span id="HASH_002dTABLE-schemas"></span><h3 class="section">4.4 HASH-TABLE schemas</h3>
 
+<span id="hash_002dtable_002dof"></span><h4 class="subsection">4.4.1 hash-table-of</h4>
+
+<p>Schema for hash-tables with certain type of keys and values.
+</p>
+<p>Syntax: (hash-table-of key-schema value-schema)
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">hash-table-of keyword string</span>)</span></span>)</span>
+</pre></div>
+
+<span id="hash_002dtable"></span><h4 class="subsection">4.4.2 hash-table</h4>
+
+<p>Schema for property lists with certain keys and values.
+</p>
+<p>Syntax: (hash-table property-list &amp;rest options)
+</p>
+<p>where property-list specifies the schemas for the keys and values.
+</p>
+<p>Options can be :required, :optional and :allow-other-keys, and other initargs that are passed to MAKE-HASH-TABLE.
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">hash-table <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span></span>)</span></span>)</span>
+</pre></div>
+
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">hash-table <span class="paren3">(<span class="lisp-bg"><span class="keyword">:x</span> string <span class="keyword">:y</span> number</span>)</span> <span class="keyword">:optional</span> <span class="paren3">(<span class="lisp-bg"><span class="keyword">:y</span></span>)</span></span>)</span></span>)</span>
+</pre></div>
+
 <span id="CONS-schema"></span><h3 class="section">4.5 CONS schema</h3>
 
+<p>Schema for CONSes.
+</p>
+<p>Syntax: (cons car-schema cdr-schema)
+</p>
+<p>Examples:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">cons symbol string</span>)</span></span>)</span>
+</pre></div>
+    
 <span id="AND-and-OR-schemas"></span><h3 class="section">4.6 AND and OR schemas</h3>
+
+<span id="or"></span><h4 class="subsection">4.6.1 or</h4>
+
+<p>Schemas disjunction.
+</p>
+<p>Syntax: (or &amp;rest schemas)
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">or string symbol</span>)</span></span>)</span>
+</pre></div>
+
+<span id="and"></span><h4 class="subsection">4.6.2 and</h4>
+
+<p>Schemas conjunction.
+</p>
+<p>Syntax: (and &amp;rest schemas)
+</p>
+<p>Example:
+</p>
+<div class="lisp">
+<pre class="lisp">  <span class="paren1">(<span class="lisp-bg">schema <span class="paren2">(<span class="lisp-bg">and integer <span class="paren3">(<span class="lisp-bg">satisfies evenp</span>)</span></span>)</span></span>)</span>
+</pre></div>
 
 <span id="Schema-references"></span><h3 class="section">4.7 Schema references</h3>
 

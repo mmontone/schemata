@@ -67,11 +67,25 @@ The schema can then be accessed via FIND-SCHEMA."
 
 (defclass or-schema (schema)
   ((schemas :initarg :schemas
-            :accessor schemas-of)))
+            :accessor schemas-of))
+  (:documentation "Schemas disjunction.
+
+Syntax: (or &rest schemas)
+
+Example:
+
+    (schema (or string symbol))"))
 
 (defclass and-schema (schema)
   ((schemas :initarg :schemas
-            :accessor schemas-of)))
+            :accessor schemas-of))
+  (:documentation "Schemas conjunction.
+
+Syntax: (and &rest schemas)
+
+Example:
+
+    (schema (and integer (satisfies evenp)))"))
 
 (defclass type-schema (schema)
   ((type :initarg :type

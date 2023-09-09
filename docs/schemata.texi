@@ -296,9 +296,75 @@ Examples:
 
 @section HASH-TABLE schemas
 
+@subsection hash-table-of
+
+Schema for hash-tables with certain type of keys and values.
+
+Syntax: (hash-table-of key-schema value-schema)
+
+Examples:
+
+@lisp
+(schema (hash-table-of keyword string))
+@end lisp
+
+@subsection hash-table
+
+Schema for property lists with certain keys and values.
+
+Syntax: (hash-table property-list &rest options)
+
+where property-list specifies the schemas for the keys and values.
+
+Options can be :required, :optional and :allow-other-keys, and other initargs that are passed to MAKE-HASH-TABLE.
+
+Examples:
+
+@lisp
+(schema (hash-table (:x string :y number)))
+@end lisp
+
+@lisp
+(schema (hash-table (:x string :y number) :optional (:y)))
+@end lisp
+
 @section CONS schema
 
+Schema for CONSes.
+
+Syntax: (cons car-schema cdr-schema)
+
+Examples:
+
+@lisp
+(schema (cons symbol string))
+@end lisp
+    
 @section AND and OR schemas
+
+@subsection or
+
+Schemas disjunction.
+
+Syntax: (or &rest schemas)
+
+Example:
+
+@lisp
+(schema (or string symbol))
+@end lisp
+
+@subsection and
+
+Schemas conjunction.
+
+Syntax: (and &rest schemas)
+
+Example:
+
+@lisp
+(schema (and integer (satisfies evenp)))
+@end lisp
 
 @section Schema references
 

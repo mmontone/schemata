@@ -274,11 +274,70 @@ Schema for property lists with certain keys and values.
 4.4 HASH-TABLE schemas
 ======================
 
+4.4.1 hash-table-of
+-------------------
+
+Schema for hash-tables with certain type of keys and values.
+
+   Syntax: (hash-table-of key-schema value-schema)
+
+   Examples:
+
+     (schema (hash-table-of keyword string))
+
+4.4.2 hash-table
+----------------
+
+Schema for property lists with certain keys and values.
+
+   Syntax: (hash-table property-list &rest options)
+
+   where property-list specifies the schemas for the keys and values.
+
+   Options can be :required, :optional and :allow-other-keys, and other
+initargs that are passed to MAKE-HASH-TABLE.
+
+   Examples:
+
+     (schema (hash-table (:x string :y number)))
+
+     (schema (hash-table (:x string :y number) :optional (:y)))
+
 4.5 CONS schema
 ===============
 
+Schema for CONSes.
+
+   Syntax: (cons car-schema cdr-schema)
+
+   Examples:
+
+     (schema (cons symbol string))
+
 4.6 AND and OR schemas
 ======================
+
+4.6.1 or
+--------
+
+Schemas disjunction.
+
+   Syntax: (or &rest schemas)
+
+   Example:
+
+     (schema (or string symbol))
+
+4.6.2 and
+---------
+
+Schemas conjunction.
+
+   Syntax: (and &rest schemas)
+
+   Example:
+
+     (schema (and integer (satisfies evenp)))
 
 4.7 Schema references
 =====================
@@ -982,60 +1041,60 @@ Ref: installation1148
 Node: Usage1197
 Ref: usage1303
 Node: Schema types4381
-Node: Data generation10091
-Node: Reference11049
-Ref: reference11163
-Node: SCHEMATA package11194
-Ref: SCHEMATA:SCHEMA macro11382
-Ref: SCHEMATA:DEFSCHEMA macro11467
-Ref: SCHEMATA:DEF-SCHEMA-CLASS macro11600
-Ref: SCHEMATA:SCHEMA-TYPE function11783
-Ref: SCHEMATA:OBJECT-NAME function11844
-Ref: SCHEMATA:OBJECT-CLASS function11905
-Ref: SCHEMATA:SCHEMA-GENERATOR function11967
-Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function12033
-Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function12103
-Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function12171
-Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function12244
-Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function12317
-Ref: SCHEMATA:ATTRIBUTE-FORMATTER function12404
-Ref: SCHEMATA:SCHEMA-DOCUMENTATION function12473
-Ref: SCHEMATA:PARSE-WITH-SCHEMA function12543
-Ref: SCHEMATA:ATTRIBUTE-TYPE function12681
-Ref: SCHEMATA:OBJECT-ATTRIBUTES function12745
-Ref: SCHEMATA:ATTRIBUTE-NAME function12812
-Ref: SCHEMATA:ATTRIBUTE-PARSER function12876
-Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function12942
-Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function13032
-Ref: SCHEMATA:ATTRIBUTE-READER function13088
-Ref: SCHEMATA:POPULATE-WITH-SCHEMA function13141
-Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function13343
-Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function13400
-Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function13516
-Ref: SCHEMATA:SCHEMA-SPEC function13702
-Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function13747
-Ref: SCHEMATA:PATCH-WITH-SCHEMA function13844
-Ref: SCHEMATA:ATTRIBUTE-WRITER function14125
-Ref: SCHEMATA:VALIDATION-ERROR function14178
-Ref: SCHEMATA:FIND-SCHEMA function14240
-Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function14343
-Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function15184
-Ref: SCHEMATA:OBJECT-SCHEMA class15314
-Ref: SCHEMATA:CONS-SCHEMA class16729
-Ref: SCHEMATA:LIST-OF-SCHEMA class17308
-Ref: SCHEMATA:PLIST-OF-SCHEMA class17834
-Ref: SCHEMATA:SCHEMA class18441
-Ref: SCHEMATA:ALIST-OF-SCHEMA class18890
-Ref: SCHEMATA:PLIST-SCHEMA class19510
-Ref: SCHEMATA:LIST-SCHEMA class20637
-Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class21251
-Ref: SCHEMATA:ALIST-SCHEMA class21550
-Ref: SCHEMATA:SCHEMA-CLASS class23297
-Ref: SCHEMATA:SCHEMA-OBJECT class23673
-Ref: SCHEMATA:TYPE-SCHEMA class23773
-Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class24139
-Ref: SCHEMATA:VALIDATION-ERROR class26549
-Ref: SCHEMATA:ATTRIBUTE class26680
-Node: Index27786
+Node: Data generation11134
+Node: Reference12092
+Ref: reference12206
+Node: SCHEMATA package12237
+Ref: SCHEMATA:SCHEMA macro12425
+Ref: SCHEMATA:DEFSCHEMA macro12510
+Ref: SCHEMATA:DEF-SCHEMA-CLASS macro12643
+Ref: SCHEMATA:SCHEMA-TYPE function12826
+Ref: SCHEMATA:OBJECT-NAME function12887
+Ref: SCHEMATA:OBJECT-CLASS function12948
+Ref: SCHEMATA:SCHEMA-GENERATOR function13010
+Ref: SCHEMATA:ATTRIBUTE-REQUIRED-P function13076
+Ref: SCHEMATA:ATTRIBUTE-ACCESSOR function13146
+Ref: SCHEMATA:ATTRIBUTE-ADD-VALIDATOR function13214
+Ref: SCHEMATA:ATTRIBUTE-EXTERNAL-NAME function13287
+Ref: SCHEMATA:UNSERIALIZE-WITH-SCHEMA function13360
+Ref: SCHEMATA:ATTRIBUTE-FORMATTER function13447
+Ref: SCHEMATA:SCHEMA-DOCUMENTATION function13516
+Ref: SCHEMATA:PARSE-WITH-SCHEMA function13586
+Ref: SCHEMATA:ATTRIBUTE-TYPE function13724
+Ref: SCHEMATA:OBJECT-ATTRIBUTES function13788
+Ref: SCHEMATA:ATTRIBUTE-NAME function13855
+Ref: SCHEMATA:ATTRIBUTE-PARSER function13919
+Ref: SCHEMATA:ATTRIBUTE-VALIDATOR function13985
+Ref: SCHEMATA:ATTRIBUTE-TYPE-NAME function14075
+Ref: SCHEMATA:ATTRIBUTE-READER function14131
+Ref: SCHEMATA:POPULATE-WITH-SCHEMA function14184
+Ref: SCHEMATA:ATTRIBUTE-OPTIONAL-P function14386
+Ref: SCHEMATA:SCHEMA-CLASS-SCHEMA function14443
+Ref: SCHEMATA:SERIALIZE-WITH-SCHEMA function14559
+Ref: SCHEMATA:SCHEMA-SPEC function14745
+Ref: SCHEMATA:FIND-OBJECT-ATTRIBUTE function14790
+Ref: SCHEMATA:PATCH-WITH-SCHEMA function14887
+Ref: SCHEMATA:ATTRIBUTE-WRITER function15168
+Ref: SCHEMATA:VALIDATION-ERROR function15221
+Ref: SCHEMATA:FIND-SCHEMA function15283
+Ref: SCHEMATA:VALIDATE-WITH-SCHEMA function15386
+Ref: SCHEMATA:GENERATE-SCHEMA-FROM-CLASS function16227
+Ref: SCHEMATA:OBJECT-SCHEMA class16357
+Ref: SCHEMATA:CONS-SCHEMA class17772
+Ref: SCHEMATA:LIST-OF-SCHEMA class18351
+Ref: SCHEMATA:PLIST-OF-SCHEMA class18877
+Ref: SCHEMATA:SCHEMA class19484
+Ref: SCHEMATA:ALIST-OF-SCHEMA class19933
+Ref: SCHEMATA:PLIST-SCHEMA class20553
+Ref: SCHEMATA:LIST-SCHEMA class21680
+Ref: SCHEMATA:SCHEMA-REFERENCE-SCHEMA class22294
+Ref: SCHEMATA:ALIST-SCHEMA class22593
+Ref: SCHEMATA:SCHEMA-CLASS class24340
+Ref: SCHEMATA:SCHEMA-OBJECT class24716
+Ref: SCHEMATA:TYPE-SCHEMA class24816
+Ref: SCHEMATA:ATTRIBUTE-PROPERTIES class25182
+Ref: SCHEMATA:VALIDATION-ERROR class27592
+Ref: SCHEMATA:ATTRIBUTE class27723
+Node: Index28829
 
 End Tag Table
