@@ -232,7 +232,16 @@ Examples:
   ((key-schema :initarg :key-schema
                :accessor key-schema)
    (value-schema :initarg :value-schema
-                 :accessor value-schema)))
+                 :accessor value-schema)
+   (options :initarg :options
+            :accessor hash-table-options))
+  (:documentation "Schema for hash-tables with certain type of keys and values.
+
+Syntax: (hash-table-of key-schema value-schema)
+
+Examples:
+
+    (schema (hash-table-of keyword string))"))
 
 (defclass hash-table-schema (schema)
   ((members :initarg :members
@@ -245,7 +254,22 @@ Examples:
                   :accessor optional-keys)
    (allow-other-keys :initarg :allow-other-keys
                      :accessor allow-other-keys-p
-                     :initform t)))
+                     :initform t)
+   (hash-table-options :initarg :hash-table-options
+                       :accessor hash-table-options))
+  (:documentation "Schema for property lists with certain keys and values.
+
+Syntax: (hash-table property-list &rest options)
+
+where property-list specifies the schemas for the keys and values.
+
+Options can be :required, :optional and :allow-other-keys, and other initargs that are passed to MAKE-HASH-TABLE.
+
+Examples:
+
+    (schema (hash-table (:x string :y number)))
+    (schema (hash-table (:x string :y number) :optional (:y)))
+"))
 
 (defclass object-schema (schema)
   ((name :initarg :name
@@ -419,6 +443,44 @@ Examples:
                           (cons (the (or symbol string) key)
                                 (parse-schema value)))
            options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'hash-table-of)) schema-spec)
+  (destructuring-bind (key-schema value-schema &rest options) (rest schema-spec)
+    (make-instance 'hash-table-of-schema
+                   :key-schema (parse-schema key-schema)
+                   :value-schema (parse-schema value-schema)
+                   :options options)))
+
+(defun remove-from-plist-if (predicate plist)
+  (loop for key in plist by #'cddr
+        for value in (cdr plist) by #'cddr
+        when (not (funcall predicate key value))
+          collect key
+        collect value))
+
+(defun remove-from-plist-if-not (predicate plist)
+  (loop for key in plist by #'cddr
+        for value in (cdr plist) by #'cddr
+        when (funcall predicate key value)
+          collect key
+        collect value))
+
+(defmethod parse-schema-type ((schema-type (eql 'hash-table)) schema-spec)
+  (destructuring-bind (plist &rest options) (rest schema-spec)
+    (let ((schema-options (remove-from-plist-if-not (lambda (k v)
+                                                      (declare (ignore v))
+                                                      (member k '(:required :optional :allow-other-keys))) options))
+          (hash-table-options (remove-from-plist-if (lambda (k v)
+                                                      (declare (ignore v))
+                                                      (member k '(:required :optional :allow-other-keys))) options)))
+      (apply #'make-instance 'hash-table-schema
+             :members (loop for key in plist by #'cddr
+                            for value in (rest plist) by #'cddr
+                            collect
+                            (cons (the (or symbol string) key)
+                                  (parse-schema value)))
+             :hash-table-options hash-table-options
+             schema-options))))
 
 (defmethod parse-schema-type ((schema-type (eql 'schema)) schema-spec)
   (make-instance 'schema-reference-schema :schema-name (cadr schema-spec)))
