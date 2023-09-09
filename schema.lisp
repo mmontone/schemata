@@ -245,7 +245,7 @@ Examples:
 
 (defclass hash-table-schema (schema)
   ((members :initarg :members
-            :accessor plist-members)
+            :accessor hash-table-members)
    (required-keys :initarg :required
                   :initform t
                   :accessor required-keys)

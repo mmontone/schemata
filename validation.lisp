@@ -233,6 +233,34 @@ Args:
       (when disallowed-keys
         (validation-error "Keys not allowed: ~s" disallowed-keys)))))
 
+(defmethod schema-validate ((schema hash-table-of-schema) data)
+  (unless (hash-table-p data)
+    (validation-error "~s is not a hash-table" data))
+  (loop for key being the hash-keys in data
+          using (hash-value val)
+        do
+           (schema-validate (key-schema schema) key)
+           (schema-validate (value-schema schema) val)))
+
+(defmethod schema-validate ((schema hash-table-schema) data)
+  (unless (hash-table-p data)
+    (validation-error "~s is not a hash-table" data))
+  (dolist (member (hash-table-members schema))
+    (multiple-value-bind (val foundp)
+        (gethash (car member) data)
+      (when (and (not foundp)
+                 (not (member (car member) (optional-keys schema))))
+        (validation-error "~s is required" (car member)))
+      (unless (and (member (car member) (optional-keys schema))
+                   (not foundp))
+        (schema-validate (cdr member) val))))
+  (unless (allow-other-keys-p schema)
+    (let* ((allowed-keys (mapcar #'car (hash-table-members schema)))
+           (data-keys (alexandria:hash-table-keys data))
+           (disallowed-keys (set-difference data-keys allowed-keys)))
+      (when disallowed-keys
+        (validation-error "Keys not allowed: ~s" disallowed-keys)))))
+
 
 (defmethod schema-validate ((schema schema-reference-schema) data)
   (schema-validate (referenced-schema schema) data))
