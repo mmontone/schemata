@@ -168,3 +168,7 @@ SCHEMATA> (generic-serializer:with-serializer :json
             (generic-serializer:serialize (make-instance 'person :name "Mariano" :age 44)))
 {"name":"Mariano","age":44}
 ```
+
+## More schema types
+
+[Read more](https://mmontone.github.io/schemata/#Schema-types) about other schema types, like association-lists, property-lists, hash-tables, etc.
