@@ -1,5 +1,8 @@
 (defpackage :schemata-generators
-  (:use :cl :schemata :check-it))
+  (:use :cl :schemata :check-it)
+  (:export #:maybe
+           #:func
+           #:member-of))
 
 (in-package :schemata-generators)
 
