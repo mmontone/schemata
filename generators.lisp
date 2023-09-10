@@ -30,6 +30,19 @@
 (defmethod check-it::generate ((generator function))
   (funcall generator))
 
+;; generator for choosing a member of the data structure
+(def-generator member-of (source)
+  (generator (func (lambda ()
+                     (etypecase source
+                       (list
+                        (let ((index (random (length source))))
+                          (nth index source)))
+                       (hash-table
+                        (let* ((keys (alexandria:hash-table-keys source))
+                               (index (random (length keys)))
+                               (key (nth index keys)))
+                          (cons key (gethash key source)))))))))               
+
 (defgeneric generator-for-schema (schema))
 (defgeneric generator-for-type (type type-schema))
 
