@@ -68,12 +68,12 @@
 
 (defun attribute-generator (attribute)
   (let ((assoc-generator
-          (lambda ()
+          (generator (func (lambda ()
             (cons (attribute-name attribute)
                   (generate
                    (if (schema-generator attribute)
-                       (schema-generator attribute)
-                       (attribute-type attribute)))))))
+                       (eval (schema-generator attribute))
+                       (attribute-type attribute)))))))))
     (if (attribute-required-p attribute)
         (generator assoc-generator)
         (generator (maybe assoc-generator)))))
