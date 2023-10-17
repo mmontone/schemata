@@ -160,6 +160,14 @@ Args:
   (schema-validate (car-schema schema) (car data))
   (schema-validate (cdr-schema schema) (cdr data)))
 
+(defmethod schema-validate ((schema const-schema) data)
+  (unless (equalp data (schema-value schema))
+    (validation-error "~s is not equal to ~s" data (schema-value schema))))
+
+(defmethod schema-validate ((schema member-schema) data)
+  (unless (member data (schema-members schema) :test #'equalp)
+    (validation-error "~s is not member of ~a" data (schema-members schema))))
+
 (defmethod schema-validate ((schema list-schema) data)
   (unless (listp data)
     (validation-error "~s is not a list" data))

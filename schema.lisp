@@ -242,6 +242,20 @@ Examples:
     (schema (plist (:x string :y number) :optional (:y)))
 "))
 
+(defclass const-schema (schema)
+  ((value :initarg :value
+          :accessor schema-value
+          :initform (error "Provide the const schema value"))))
+
+(defmethod print-object ((schema const-schema) stream)
+  (print-unreadable-object (schema stream :type t :identity t)
+    (prin1 (schema-value schema) stream)))
+
+(defclass member-schema (schema)
+  ((members :initarg :members
+            :accessor schema-members
+            :initform nil)))
+
 (defclass hash-table-of-schema (schema)
   ((key-schema :initarg :key-schema
                :accessor key-schema)
@@ -415,6 +429,12 @@ Examples:
     (make-instance 'cons-schema
                    :car-schema (parse-schema car-schema)
                    :cdr-schema (parse-schema cdr-schema))))
+
+(defmethod parse-schema-type ((schema-type (eql 'const)) schema-spec)
+  (make-instance 'const-schema :value (eval (cadr schema-spec))))
+
+(defmethod parse-schema-type ((schema-type (eql 'member-of)) schema-spec)
+  (make-instance 'member-schema :members (the list (eval (cadr schema-spec)))))
 
 (defmethod parse-schema-type ((schema-type (eql 'list)) schema-spec)
   (make-instance 'list-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
@@ -591,7 +611,11 @@ Examples:
     (list-of-schema
      (list 'list-of (schema-spec (elements-schema schema))))
     (or-schema
-     (list* 'or (mapcar #'schema-spec (schemas-of schema))))))
+     (list* 'or (mapcar #'schema-spec (schemas-of schema))))
+    (const-schema
+     (list 'const (schema-value schema)))
+    (member-schema
+     (list 'member-of (schema-members schema)))))
 
 (defun generate-schema-from-class (class)
   "Generate a schema from CLASS, using reflection."

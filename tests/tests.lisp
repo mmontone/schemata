@@ -464,6 +464,40 @@
     )
   )
 
+(deftest schemas-tests ()
+  (finishes
+    (validate-with-schema
+     (schema (member-of '(foo bar)))
+     'foo))
+  (signals validation-error
+    (validate-with-schema
+     (schema (member-of '(foo bar)))
+     'baz))
+
+  (validate-with-schema
+   (schema (const 'foo))
+   'foo)
+
+  (signals validation-error
+    (validate-with-schema
+     (schema (const 'foo))
+     'bar))
+
+  (finishes
+    (validate-with-schema
+     (schema (or (const 'foo) (const 'bar)))
+     'foo))
+
+  (finishes
+    (validate-with-schema
+     (schema (or (const 'foo) (const 'bar)))
+     'bar))
+
+  (signals validation-error
+    (validate-with-schema
+     (schema (or (const 'foo) (const 'bar)))
+     'baz)))
+
 (deftest plists-test ()
   (signals validation-error
     (validate-with-schema

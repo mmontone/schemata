@@ -21,6 +21,8 @@
            #:alist-of
            #:plist
            #:plist-of
+           #:const
+           #:member-of
            #:object-name
            #:object-attributes
            #:object-options
