@@ -213,14 +213,3 @@
                                             :serializer (attribute-serializer slot)
                                             :unserializer (attribute-unserializer slot))))
                             (list :class (class-name schema-class)))))))
-
-(defmethod generic-serializer::serialize ((object schema-object)
-                                          &optional
-                                            (serializer generic-serializer::*serializer*)
-                                            (stream generic-serializer::*serializer-output*)
-                                          &rest args)
-  (declare (ignore args))
-  (%serialize-with-schema (schema-class-schema (class-of object))
-                          serializer
-                          object
-                          stream))

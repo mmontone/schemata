@@ -69,3 +69,14 @@
                                            (stream generic-serializer::*serializer-output*) &rest args)
   (declare (ignore serializer args))
   (local-time:format-rfc1123-timestring stream thing))
+
+(defmethod generic-serializer:serialize ((object schema-object)
+                                          &optional
+                                            (serializer generic-serializer::*serializer*)
+                                            (stream generic-serializer::*serializer-output*)
+                                          &rest args)
+  (declare (ignore args))
+  (%serialize-with-schema (schema-class-schema (class-of object))
+                          serializer
+                          object
+                          stream))

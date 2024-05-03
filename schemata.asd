@@ -10,15 +10,12 @@
                :chronicity
                :net-telent-date
                :access
-               :generic-serializer
                :trivial-types
                :closer-mop)
   :components ((:file "package")
                (:file "schema")
                (:file "schema-class")
                (:file "validation")
-               (:file "serialization")
-               (:file "unserialization")
                (:file "parsing")
                (:file "schemata"))
   :in-order-to ((asdf:test-op (asdf:test-op :schemata.tests))))

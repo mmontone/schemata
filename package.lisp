@@ -2,8 +2,7 @@
 
 (defpackage #:schemata
   (:use #:cl)
-  (:export #:serialize-with-schema
-           #:find-schema
+  (:export #:find-schema
            #:schema
            #:defschema
            #:schema-type
@@ -11,6 +10,7 @@
            #:validation-error
            #:validate-with-schema
            #:parse-with-schema
+           #:serialize-with-schema
            #:unserialize-with-schema
            #:populate-with-schema
            #:patch-with-schema
