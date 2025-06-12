@@ -44,7 +44,7 @@ See: parse-api-input (function)"
 (defun unserialize-schema-attribute (attribute input format)
   (let ((unserializer (attribute-unserializer attribute)))
     (if unserializer
-        (funcall unserializer)
+        (funcall unserializer input format)
         (unserialize-with-schema (attribute-type attribute) input format))))
 
 (defmethod unserialize-with-schema ((schema type-schema) data format)
