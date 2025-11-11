@@ -15,7 +15,7 @@ It features:
 ## Example
 
 ```lisp
-(schemata:defschema customer
+(defschema customer
     (object "customer"
              ((id string :external-name "id" :accessor
                   customer-id :documentation "customer id")
