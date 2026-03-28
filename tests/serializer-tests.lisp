@@ -167,6 +167,16 @@
        (find-schema 'user-schema)
        data :json)))
 
+  ;; list
+  (unserialize-with-schema
+   (schema (list-of string))
+   (list "foo" "var") :json)
+
+  ;;vector
+  (unserialize-with-schema
+   (schema (vector-of string))
+   #("foo" "var") :json)
+
   )
 
 (defun serialize-to-json-string (schema data)
