@@ -4,6 +4,16 @@
 
 (defgeneric unserialize-with-schema (schema data format))
 
+(defmethod unserialize-with-schema ((schema or-schema) input format)
+  (when (null (schemas-of schema))
+    (error "Cannot unserialize: ~s with: ~s" input schema))
+  (let ((try-schema (first (schemas-of schema)))
+        (rest-schema (make-instance 'or-schema :schemas (rest (schemas-of schema)))))
+    (handler-case
+        (unserialize-with-schema try-schema input format)
+      (error ()
+        (unserialize-with-schema rest-schema input format)))))
+
 (defmethod unserialize-with-schema ((schema object-schema) input format)
   "Unserializes an schema object
 
