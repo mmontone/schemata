@@ -25,8 +25,8 @@
   "Unserializes an schema object
 
 Args: - object (list) : An schema object
-      - input (assoc-list) : An association list with values.
-                             Probably obtained from parse-api-input.
+      - input (or assoc-list hash-table) : An association list or a hash-table.
+                                           Probably obtained from parse-api-input.
 
 See: parse-api-input (function)"
 
@@ -38,20 +38,17 @@ See: parse-api-input (function)"
       (t input))))
 
 (defun unserialize-schema-object-to-class (object input class format)
-  (unless (trivial-types:association-list-p input)
-    (validation-error "Not an object data: ~s" input))
   (let ((instance (allocate-instance (find-class class))))
     (loop for attribute in (object-attributes object)
-          do (let ((attribute-input (assoc (string (attribute-name attribute))
-                                           input
-                                           :test #'equalp
-                                           :key #'string)))
+          do
+             (multiple-value-bind (attribute-input accessed-p)
+                 (access:access input (attribute-name attribute))
                (cond
-                 ((and (not attribute-input)
+                 ((and (not accessed-p)
                        (not (attribute-optional-p attribute)))
                   (validation-error "~A not provided" (attribute-name attribute)))
-                 (attribute-input
-                  (let ((attribute-value (unserialize-schema-attribute attribute (cdr attribute-input) format)))
+                 (accessed-p
+                  (let ((attribute-value (unserialize-schema-attribute attribute attribute-input format)))
                     (setf (slot-value instance (or (attribute-slot attribute)
                                                    (attribute-name attribute)))
                           attribute-value))))))

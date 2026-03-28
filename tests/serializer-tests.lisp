@@ -153,7 +153,21 @@
                   (best-friend . ((id . 34) (realname . "dfdf") (age . 44))))))
       (unserialize-with-schema
        (find-schema 'user-schema)
-       data :json))))
+       data :json)))
+
+  ;; hash-table input
+  (finishes
+    (let ((data (alexandria:alist-hash-table
+                 `((id . 22) (realname . "asdf") (age . "23")
+                   (best-friend . ,(alexandria:alist-hash-table
+                                    `((id . 34) (realname . "dfdf") (age . 44))
+                                    :test 'equalp)))
+                 :test 'equalp)))
+      (unserialize-with-schema
+       (find-schema 'user-schema)
+       data :json)))
+
+  )
 
 (defun serialize-to-json-string (schema data)
   (with-output-to-string (s)
