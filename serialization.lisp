@@ -57,6 +57,13 @@
        ;; else, serialize the attribute value
        (generic-serializer:serialize input serializer stream)))))
 
+(defmethod %serialize-with-schema ((schema or-schema) serializer input stream)
+  (unless (discriminator-of schema)
+    (error "Cannot serialize: ~s without a discriminator." schema))
+  (let* ((subschema-index (the integer (funcall (discriminator-of schema) input)))
+         (subschema (nth subschema-index (schemas-of schema))))
+    (%serialize-with-schema subschema serializer input stream)))
+
 (defmethod %serialize-with-schema ((schema list-of-schema) serializer input stream)
   (generic-serializer:with-list ("LIST" :serializer serializer
                                         :stream stream)
@@ -71,10 +78,10 @@
   (local-time:format-rfc1123-timestring stream thing))
 
 (defmethod generic-serializer:serialize ((object schema-object)
-                                          &optional
-                                            (serializer generic-serializer::*serializer*)
-                                            (stream generic-serializer::*serializer-output*)
-                                          &rest args)
+                                         &optional
+                                           (serializer generic-serializer::*serializer*)
+                                           (stream generic-serializer::*serializer-output*)
+                                         &rest args)
   (declare (ignore args))
   (%serialize-with-schema (schema-class-schema (class-of object))
                           serializer
