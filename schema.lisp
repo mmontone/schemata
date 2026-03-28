@@ -67,7 +67,11 @@ The schema can then be accessed via FIND-SCHEMA."
 
 (defclass or-schema (schema)
   ((schemas :initarg :schemas
-            :accessor schemas-of))
+            :accessor schemas-of)
+   (discriminator :initarg :discriminator
+                  :accessor discriminator-of
+                  :initform nil
+                  :documentation "A function designator that given either an object to serialize, or data to unserialize, returns the index of the subschema to use for serialization or unserialization respectively."))
   (:documentation "Schemas disjunction.
 
 Syntax: (or &rest schemas)
@@ -418,8 +422,20 @@ Examples:
            :attributes (mapcar #'parse-attribute attributes)
            options)))
 
+(defun take-until (predicate sequence)
+  (when sequence
+    (when (not (funcall predicate (car sequence)))
+      (cons (car sequence)
+            (take-until predicate (rest sequence))))))
+
+;;(take-until #'keywordp (list 2 3 :lala 22))
+;;(take-until #'keywordp (list))
+
 (defmethod parse-schema-type ((schema-type (eql 'or)) schema-spec)
-  (make-instance 'or-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
+  (let* ((subschemas-spec (take-until #'keywordp (rest schema-spec)))
+         (schema-args (subseq (rest schema-spec) (length subschemas-spec))))
+    (apply #'make-instance 'or-schema :schemas (mapcar #'parse-schema subschemas-spec)
+           schema-args)))
 
 (defmethod parse-schema-type ((schema-type (eql 'and)) schema-spec)
   (make-instance 'and-schema :schemas (mapcar #'parse-schema (rest schema-spec))))
