@@ -246,6 +246,24 @@ Examples:
     (schema (plist (:x string :y number) :optional (:y)))
 "))
 
+(defclass vector-of-schema (schema)
+  ((elements-schema :initarg :elements-schema
+                    :accessor elements-schema
+                    :type (not null)
+                    :documentation "Schema of the elements of the vector"))
+  (:documentation "Schema for vector with elements of certain type/schema.
+
+Syntax: (vector-of schema)
+
+Examples:
+
+    (schema (vector-of string))
+    (schema (vector-of (or string number)))"))
+
+(defmethod print-object ((schema vector-of-schema) stream)
+  (print-unreadable-object (schema stream :type t :identity t)
+    (print-object (elements-schema schema) stream)))
+
 (defclass const-schema (schema)
   ((value :initarg :value
           :accessor schema-value
@@ -493,6 +511,13 @@ Examples:
                           (cons (the (or symbol string) key)
                                 (parse-schema value)))
            options)))
+
+(defmethod parse-schema-type ((schema-type (eql 'vector-of)) schema-spec)
+  (destructuring-bind (elements-schema &rest args)
+      (rest schema-spec)
+    (apply #'make-instance 'vector-of-schema
+           :elements-schema (parse-schema elements-schema)
+           args)))
 
 (defmethod parse-schema-type ((schema-type (eql 'hash-table-of)) schema-spec)
   (destructuring-bind (key-schema value-schema &rest options) (rest schema-spec)
