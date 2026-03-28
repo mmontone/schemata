@@ -154,3 +154,13 @@
       (unserialize-with-schema
        (find-schema 'user-schema)
        data :json))))
+
+(defun serialize-to-json-string (schema data)
+  (with-output-to-string (s)
+    (generic-serializer:with-serializer-output s
+      (generic-serializer:with-serializer :json
+        (serialize-with-schema schema data)))))
+
+(serialize-to-json-string (schema integer) 22)
+(serialize-to-json-string (schema (list-of string)) (list "foo" "bar"))
+(serialize-to-json-string (schema (vector-of string)) (vector "foo" "bar"))

@@ -69,8 +69,17 @@
                                         :stream stream)
     (loop for elem in (coerce input 'list)
           do
-             (%serialize-with-schema (elements-schema schema) serializer elem stream))))
+             (generic-serializer:with-list-member ("MEMBER" :serializer serializer :stream stream)
+               (%serialize-with-schema (elements-schema schema) serializer elem stream)))))
 
+(defmethod %serialize-with-schema ((schema vector-of-schema) serializer input stream)
+  (generic-serializer:with-list ("VECTOR" :serializer serializer
+                                          :stream stream)
+    (loop for elem across (coerce input 'vector)
+          do
+             (generic-serializer:with-vector-member ("MEMBER" :serializer serializer :stream stream)
+               (%serialize-with-schema (elements-schema schema) serializer elem stream)))))
+  
 (defmethod generic-serializer:serialize ((thing local-time:timestamp)
                                          &optional (serializer generic-serializer::*serializer*)
                                            (stream generic-serializer::*serializer-output*) &rest args)
