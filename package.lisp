@@ -21,6 +21,7 @@
            #:alist-of
            #:plist
            #:plist-of
+           #:vector-of
            #:const
            #:member-of
            #:object-name

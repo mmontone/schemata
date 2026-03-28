@@ -241,6 +241,12 @@ Args:
       (when disallowed-keys
         (validation-error "Keys not allowed: ~s" disallowed-keys)))))
 
+(defmethod schema-validate ((schema vector-of-schema) data)
+  (unless (vectorp data)
+    (validation-error "~s is not a vector" data))
+  (loop for val across data
+    do (schema-validate (elements-schema schema) val)))
+
 (defmethod schema-validate ((schema hash-table-of-schema) data)
   (unless (hash-table-p data)
     (validation-error "~s is not a hash-table" data))

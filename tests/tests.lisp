@@ -267,6 +267,19 @@
     (is (= (age user) 30))
     (is (= (id user) 2))))
 
+(deftest list-test ()
+  (signals validation-error
+    (validate-with-schema
+     (schema (vector-of number))
+     (list 1 2 3)))
+  (validate-with-schema
+   (schema (vector-of number))
+   (vector 1 2 3))
+  (signals validation-error
+    (validate-with-schema
+     (schema (vector-of number))
+     (vector 1 2 "foo"))))
+
 (deftest alists-test ()
   (signals validation-error
     (validate-with-schema
