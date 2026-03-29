@@ -10,16 +10,13 @@
       (let* ((subschema-index (the integer (funcall (discriminator-of schema) input)))
              (subschema (nth subschema-index (schemas-of schema))))
         (unserialize-with-schema subschema input format))
-      ;; else
-      (progn
-        (when (null (schemas-of schema))
+      ;; else, use the first subschema that matches with the data
+      (let ((subschema (find-if-not (lambda (subschema)
+                                      (validate-with-schema subschema input :error-p nil))
+                                    (schemas-of schema))))
+        (when (null subschema)
           (error "Cannot unserialize: ~s with: ~s" input schema))
-        (let ((try-schema (first (schemas-of schema)))
-              (rest-schema (make-instance 'or-schema :schemas (rest (schemas-of schema)))))
-          (handler-case
-              (unserialize-with-schema try-schema input format)
-            (error ()
-              (unserialize-with-schema rest-schema input format)))))))
+        (unserialize-with-schema subschema input format))))
 
 (defmethod unserialize-with-schema ((schema object-schema) input format)
   "Unserializes an schema object
