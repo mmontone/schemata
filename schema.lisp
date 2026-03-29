@@ -379,7 +379,8 @@ Examples:
    (external-name :initarg :external-name
                   :accessor attribute-external-name
                   :type (or string null)
-                  :initform nil)
+                  :initform nil
+                  :documentation "An optional name for the attribute to access its value in serialization/unserialization.")
    (serializer :initarg :serializer
                :accessor attribute-serializer
                :initform nil)
