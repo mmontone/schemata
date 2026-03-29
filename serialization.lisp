@@ -58,11 +58,17 @@
        (generic-serializer:serialize input serializer stream)))))
 
 (defmethod %serialize-with-schema ((schema or-schema) serializer input stream)
-  (unless (discriminator-of schema)
-    (error "Cannot serialize: ~s without a discriminator." schema))
-  (let* ((subschema-index (the integer (funcall (discriminator-of schema) input)))
-         (subschema (nth subschema-index (schemas-of schema))))
-    (%serialize-with-schema subschema serializer input stream)))
+  (if (discriminator-of schema)
+      (let* ((subschema-index (the integer (funcall (discriminator-of schema) input)))
+             (subschema (nth subschema-index (schemas-of schema))))
+        (%serialize-with-schema subschema serializer input stream))
+      ;; else, use the first subschema that matches with the data
+      (let ((subschema (find-if-not (lambda (subschema)
+                                      (validate-with-schema subschema input :error-p nil))
+                                    (schemas-of schema))))
+        (when (null subschema)
+          (error "Cannot serialize: ~s with: ~s" input schema))
+        (%serialize-with-schema subschema serializer input stream))))
 
 (defmethod %serialize-with-schema ((schema list-of-schema) serializer input stream)
   (generic-serializer:with-list ("LIST" :serializer serializer
@@ -79,7 +85,7 @@
           do
              (generic-serializer:with-vector-member ("MEMBER" :serializer serializer :stream stream)
                (%serialize-with-schema (elements-schema schema) serializer elem stream)))))
-  
+
 (defmethod generic-serializer:serialize ((thing local-time:timestamp)
                                          &optional (serializer generic-serializer::*serializer*)
                                            (stream generic-serializer::*serializer-output*) &rest args)
