@@ -34,15 +34,16 @@
            ;; distinguishing between "false" and "unset" boolean attributes (both are nil)
            (not (eql (attribute-type attribute) 'boolean))
            (not (and (attribute-optional-p attribute) (null-value attribute-value))))
-      (generic-serializer:with-attribute ((attribute-name attribute) :serializer serializer
-                                                                     :stream stream)
-        (cond
-          ((attribute-serializer attribute)
-           (generic-serializer:serialize (funcall (attribute-serializer attribute) attribute-value stream) serializer stream))
-          ((attribute-formatter attribute)
-           (generic-serializer:serialize (funcall (attribute-formatter attribute) attribute-value) serializer stream))
-          (t
-           (%serialize-with-schema (attribute-type attribute) serializer attribute-value stream)))))))
+      (let ((attribute-name (or (attribute-external-name attribute)
+                                (attribute-name attribute))))
+        (generic-serializer:with-attribute (attribute-name :serializer serializer :stream stream)
+          (cond
+            ((attribute-serializer attribute)
+             (generic-serializer:serialize (funcall (attribute-serializer attribute) attribute-value stream) serializer stream))
+            ((attribute-formatter attribute)
+             (generic-serializer:serialize (funcall (attribute-formatter attribute) attribute-value) serializer stream))
+            (t
+             (%serialize-with-schema (attribute-type attribute) serializer attribute-value stream))))))))
 
 (defmethod %serialize-with-schema ((schema schema-reference-schema) serializer input stream)
   (%serialize-with-schema (find-schema (schema-name schema)) serializer input stream))

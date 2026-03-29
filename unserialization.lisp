@@ -38,17 +38,19 @@ See: parse-api-input (function)"
   (let ((instance (allocate-instance (find-class class))))
     (loop for attribute in (object-attributes object)
           do
-             (multiple-value-bind (attribute-input accessed-p)
-                 (access:access input (attribute-name attribute))
-               (cond
-                 ((and (not accessed-p)
-                       (not (attribute-optional-p attribute)))
-                  (validation-error "~A not provided" (attribute-name attribute)))
-                 (accessed-p
-                  (let ((attribute-value (unserialize-schema-attribute attribute attribute-input format)))
-                    (setf (slot-value instance (or (attribute-slot attribute)
-                                                   (attribute-name attribute)))
-                          attribute-value))))))
+             (let ((attribute-name (or (attribute-external-name attribute)
+                                       (attribute-name attribute))))
+               (multiple-value-bind (attribute-input accessed-p)
+                   (access:access input attribute-name)
+                 (cond
+                   ((and (not accessed-p)
+                         (not (attribute-optional-p attribute)))
+                    (validation-error "~A not provided" attribute-name))
+                   (accessed-p
+                    (let ((attribute-value (unserialize-schema-attribute attribute attribute-input format)))
+                      (setf (slot-value instance (or (attribute-slot attribute)
+                                                     (attribute-name attribute)))
+                            attribute-value)))))))
     (initialize-instance instance)
     instance))
 
