@@ -148,7 +148,7 @@ Args:
                                  (format nil "Attribute required: ~a" attribute-name))))
               (validation-error error-msg)))
            (accessed-p
-            (schema-validate attribute attribute-value))))))
+            (apply #'schema-validate attribute attribute-value options))))))
 
 (defmethod schema-validate ((schema or-schema) data &rest options)
   ;; if there's a discriminator, use it
