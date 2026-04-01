@@ -29,6 +29,11 @@
           :format-control message
           :format-arguments args))
 
+(define-condition composite-validation-error (validation-error)
+  ((validation-errors :initarg :validation-errors
+                      :initform nil))
+  (:documentation "Validation error from OR and AND schemas with intermediate validation errors kept in VALIDATION-ERRORS slots."))
+
 (defun simple-condition-message (condition)
   (apply #'format
          (simple-condition-format-control condition)
@@ -142,13 +147,19 @@ Args:
             (schema-validate attribute attribute-value))))))
 
 (defmethod schema-validate ((schema or-schema) data)
-  (labels ((validate-or (or-schema)
-             (if (schemas-of or-schema)
-                 (handler-case (schema-validate (first (schemas-of or-schema)) data)
-                   (validation-error ()
-                     (validate-or (make-instance 'or-schema :schemas (rest (schemas-of or-schema))))))
-                 (validation-error "~s does not conform to: ~a" data (schema-spec schema)))))
-    (validate-or schema)))
+  (let ((validation-errors (list)))
+    (labels ((validate-or (or-schema)
+               (if (schemas-of or-schema)
+                   (handler-case (schema-validate (first (schemas-of or-schema)) data)
+                     (validation-error (validation-error)
+                       (push validation-error validation-errors)
+                       (validate-or (make-instance 'or-schema :schemas (rest (schemas-of or-schema))))))
+                   (cerror "Continue"
+                           'composite-validation-error
+                           :format-control "~s does not conform to: ~a"
+                           :format-arguments (list data (schema-spec schema))
+                           :validation-errors validation-errors))))
+      (validate-or schema))))
 
 (defmethod schema-validate ((schema and-schema) data)
   (loop for subschema in (schemas-of schema)
