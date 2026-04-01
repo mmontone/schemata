@@ -68,4 +68,5 @@
            #:schema-class
            #:schema-class-schema
 
-           #:generate-schema-from-class))
+           #:generate-schema-from-class
+           #:*ignore-unknown-object-attributes*))
