@@ -102,17 +102,23 @@ Args:
                                       (or (attribute-external-name schema)
                                           (attribute-name schema)))))))))
 
+(defun object-data-keys (data)
+  (etypecase data
+    (hash-table (alexandria:hash-table-keys data))
+    (list (mapcar #'car data))))
+
 (defmethod schema-validate ((schema object-schema) data)
   "Validate data using schema object. "
 
-  (unless (trivial-types:association-list-p data)
+  (unless (or (trivial-types:association-list-p data)
+              (hash-table-p data))
     (validation-error "Not an object data: ~s" data))
 
   ;; Check unknown attributes first
   (unless (or *ignore-unknown-object-attributes*
               (ignore-unknown-attributes schema))
     (alexandria:when-let ((unknown-attributes
-                           (set-difference (mapcar 'car data)
+                           (set-difference (object-data-keys data)
                                            (mapcar 'attribute-name (object-attributes schema))
                                            :test 'equalp
                                            :key 'string)))
@@ -120,27 +126,20 @@ Args:
 
   ;; Validate each attribute of object
   (loop
-    :for schema-attribute :in (object-attributes schema)
-    :for data-attribute := (assoc (string (attribute-name schema-attribute))
-                                  data
-                                  :test #'equalp
-                                  :key #'string)
+    :for attribute :in (object-attributes schema)
+    :for attribute-name := (or (attribute-external-name attribute)
+                               (attribute-name attribute))
     :do
-       (cond
-         ((and (not data-attribute)
-               (not (attribute-optional-p schema-attribute)))
-          (let ((error-msg (or (attribute-required-message schema-attribute)
-                               (format nil "Attribute required: ~a"
-                                       (or (attribute-external-name schema-attribute)
-                                           (attribute-name schema-attribute))))))
-            (validation-error error-msg)))
-         ((not data-attribute)
-          ;; Nothing to validate
-          )
-         ((not (and (attribute-optional-p schema-attribute)
-                    (null data-attribute)))
-          (schema-validate schema-attribute
-                           (cdr data-attribute))))))
+       (multiple-value-bind (attribute-value accessed-p)
+           (access:access data attribute-name)
+         (cond
+           ((and (not accessed-p)
+                 (not (attribute-optional-p attribute)))
+            (let ((error-msg (or (attribute-required-message attribute)
+                                 (format nil "Attribute required: ~a" attribute-name))))
+              (validation-error error-msg)))
+           (accessed-p
+            (schema-validate attribute attribute-value))))))
 
 (defmethod schema-validate ((schema or-schema) data)
   (labels ((validate-or (or-schema)
