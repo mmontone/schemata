@@ -147,19 +147,25 @@ Args:
             (schema-validate attribute attribute-value))))))
 
 (defmethod schema-validate ((schema or-schema) data)
-  (let ((validation-errors (list)))
-    (labels ((validate-or (or-schema)
-               (if (schemas-of or-schema)
-                   (handler-case (schema-validate (first (schemas-of or-schema)) data)
-                     (validation-error (validation-error)
-                       (push validation-error validation-errors)
-                       (validate-or (make-instance 'or-schema :schemas (rest (schemas-of or-schema))))))
-                   (cerror "Continue"
-                           'composite-validation-error
-                           :format-control "~s does not conform to: ~a"
-                           :format-arguments (list data (schema-spec schema))
-                           :validation-errors validation-errors))))
-      (validate-or schema))))
+  ;; if there's a discriminator, use it
+  (if (discriminator-of schema)
+      (let* ((subschema-index (the integer (funcall (discriminator-of schema) data)))
+             (subschema (nth subschema-index (schemas-of schema))))
+        (validate-with-schema subschema data))
+      ;; otherwise, try with the subschemas
+      (let ((validation-errors (list)))
+        (labels ((validate-or (or-schema)
+                   (if (schemas-of or-schema)
+                       (handler-case (schema-validate (first (schemas-of or-schema)) data)
+                         (validation-error (validation-error)
+                           (push validation-error validation-errors)
+                           (validate-or (make-instance 'or-schema :schemas (rest (schemas-of or-schema))))))
+                       (cerror "Continue"
+                               'composite-validation-error
+                               :format-control "~s does not conform to: ~a"
+                               :format-arguments (list data (schema-spec schema))
+                               :validation-errors validation-errors))))
+          (validate-or schema)))))
 
 (defmethod schema-validate ((schema and-schema) data)
   (loop for subschema in (schemas-of schema)
