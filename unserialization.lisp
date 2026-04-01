@@ -72,7 +72,7 @@ See: parse-api-input (function)"
 
 (defmethod unserialize-with-schema ((schema vector-of-schema) data format)
   (apply #'vector
-         (loop for elem across (the vector data)
+         (loop for elem across (coerce data 'vector)
                collect (unserialize-with-schema (elements-schema schema) elem format))))
 
 (defgeneric unserialize-with-type (type input format)
