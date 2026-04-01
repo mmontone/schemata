@@ -2,7 +2,7 @@
 
 (defvar *schemas* (make-hash-table)
   "Table with defined schemas.")
-(defvar *ignore-unknown-object-attributes* nil
+(defvar *ignore-unknown-attributes* nil
   "If T, unknown object attributes are ignored when validating using a schema. Default is NIL.")
 (defvar *null-values* (list nil)
   "The list of values considered null. Attribute with these values are not

@@ -69,4 +69,4 @@
            #:schema-class-schema
 
            #:generate-schema-from-class
-           #:*ignore-unknown-object-attributes*))
+           #:*ignore-unknown-attributes*))
