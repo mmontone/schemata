@@ -6,7 +6,8 @@
 (defvar *validation-errors-collection*)
 
 (define-condition validation-error (simple-error)
-  ())
+  ()
+  (:documentation "A schema validation error"))
 
 (defmethod print-object ((validation-error validation-error) stream)
   (print-unreadable-object (validation-error stream :type t :identity t)
@@ -245,7 +246,7 @@ Args:
   (unless (vectorp data)
     (validation-error "~s is not a vector" data))
   (loop for val across data
-    do (schema-validate (elements-schema schema) val)))
+        do (schema-validate (elements-schema schema) val)))
 
 (defmethod schema-validate ((schema hash-table-of-schema) data)
   (unless (hash-table-p data)
