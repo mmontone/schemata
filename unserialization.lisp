@@ -41,7 +41,7 @@ See: parse-api-input (function)"
              (let ((attribute-name (or (attribute-external-name attribute)
                                        (attribute-name attribute))))
                (multiple-value-bind (attribute-input accessed-p)
-                   (access:access input attribute-name)
+                   (access:access input attribute-name :skip-call? t)
                  (cond
                    ((and (not accessed-p)
                          (not (attribute-optional-p attribute)))

@@ -409,3 +409,57 @@
       (validate-with-schema plist-schema '(:x 22 :y "foo")))
     )
   )
+
+(defschema types-schema
+    (object types
+            ((number number)
+             (string string)
+             (required number)
+             (optional number :required nil)
+             (disjunction (or null number))
+             (external-name number :required nil :external-name "external_name"))))
+
+(deftest object-schema-test ()
+  (signals validation-error
+    (validate-with-schema 'types-schema '()))
+  (signals validation-error
+    (validate-with-schema 'types-schema '((number . "lala"))))
+  (signals validation-error
+    (validate-with-schema 'types-schema '((number . 22)
+                                          (string . "sadf"))))
+  (signals validation-error
+    (validate-with-schema 'types-schema '((number . 22)
+                                          (string . "sadf")
+                                          (required . 22))))
+  (signals validation-error
+    (validate-with-schema 'types-schema '((number . nil))))
+
+  (finishes
+    (validate-with-schema 'types-schema '((number . 22)
+                                          (string . "sadf")
+                                          (required . 22)
+                                          (disjunction . nil))))
+  (finishes
+    (validate-with-schema 'types-schema '((number . 22)
+                                          (string . "sadf")
+                                          (required . 22)
+                                          (disjunction . 22))))
+
+  ;; test external names
+  (signals validation-error
+    (validate-with-schema 'types-schema
+                        '((number . 22)
+                          (string . "sadf")
+                          (required . 22)
+                          (disjunction . 22)
+                          (external-name . 44))))
+
+  (finishes
+    (validate-with-schema 'types-schema
+                        '((number . 22)
+                          (string . "sadf")
+                          (required . 22)
+                          (disjunction . 22)
+                          ("external_name" . 44))))
+  
+  )

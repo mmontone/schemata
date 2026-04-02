@@ -128,7 +128,10 @@ Args:
               (ignore-unknown-attributes schema))
     (alexandria:when-let ((unknown-attributes
                            (set-difference (object-data-keys data)
-                                           (mapcar 'attribute-name (object-attributes schema))
+                                           (mapcar (lambda (attribute)
+                                                     (or (attribute-external-name attribute)
+                                                         (attribute-name attribute)))
+                                                   (object-attributes schema))
                                            :test 'equalp
                                            :key 'string)))
       (validation-error "Attributes not part of schema: ~a" unknown-attributes)))
@@ -140,7 +143,7 @@ Args:
                                (attribute-name attribute))
     :do
        (multiple-value-bind (attribute-value accessed-p)
-           (access:access data attribute-name)
+           (access:access data attribute-name :skip-call? t)
          (cond
            ((and (not accessed-p)
                  (not (attribute-optional-p attribute)))
