@@ -272,9 +272,10 @@
     (validate-with-schema
      (schema (vector-of number))
      (list 1 2 3)))
-  (validate-with-schema
-   (schema (vector-of number))
-   (vector 1 2 3))
+  (finishes
+    (validate-with-schema
+     (schema (vector-of number))
+     (vector 1 2 3)))
   (signals validation-error
     (validate-with-schema
      (schema (vector-of number))
@@ -320,6 +321,20 @@
       (validate-with-schema alist-schema '((:x . 22) (:y . "foo"))))
     )
   )
+
+(deftest vector-test ()
+  (finishes
+    (validate-with-schema
+     (schema (vector-of number))
+     (vector 1 2 3)))
+  (signals validation-error
+    (validate-with-schema
+     (schema (vector-of number))
+     (list 1 2 3)))
+  (signals validation-error
+    (validate-with-schema
+     (schema (vector-of number))
+     (vector 1 2 "foo"))))
 
 (deftest schemas-tests ()
   (finishes
