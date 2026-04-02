@@ -71,7 +71,8 @@ The schema can then be accessed via FIND-SCHEMA."
    (discriminator :initarg :discriminator
                   :accessor discriminator-of
                   :initform nil
-                  :documentation "A function designator that given either an object to serialize, or data to unserialize, returns the index of the subschema to use for serialization or unserialization respectively."))
+                  :documentation "A function designator that given either an object to serialize, or data to unserialize, returns the index of the subschema to use for serialization or unserialization respectively.
+If the input data of the discriminator is not valid data, then the discriminator function is expected to signal a VALIDATION-ERROR error."))
   (:documentation "Schemas disjunction.
 
 Syntax: (or &rest schemas)
