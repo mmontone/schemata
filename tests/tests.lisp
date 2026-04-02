@@ -9,6 +9,16 @@
 (defun run-tests ()
   (schemata))
 
+(defmacro with-test-schema (schema &body body)
+  `(let ((test-schema ,schema))
+     (flet ((fails (x)
+              (signals validation-error
+                (validate-with-schema test-schema x)))
+            (ok (x)
+              (finishes
+                (validate-with-schema test-schema x))))
+       ,@body)))
+
 (defparameter *schema*
   (schema
    (object user
@@ -448,18 +458,46 @@
   ;; test external names
   (signals validation-error
     (validate-with-schema 'types-schema
-                        '((number . 22)
-                          (string . "sadf")
-                          (required . 22)
-                          (disjunction . 22)
-                          (external-name . 44))))
+                          '((number . 22)
+                            (string . "sadf")
+                            (required . 22)
+                            (disjunction . 22)
+                            (external-name . 44))))
 
   (finishes
     (validate-with-schema 'types-schema
-                        '((number . 22)
-                          (string . "sadf")
-                          (required . 22)
-                          (disjunction . 22)
-                          ("external_name" . 44))))
-  
+                          '((number . 22)
+                            (string . "sadf")
+                            (required . 22)
+                            (disjunction . 22)
+                            ("external_name" . 44))))
+
   )
+
+(deftest and-schema-test ()
+  (signals validation-error
+    (validate-with-schema
+     (schema (and integer (satisfies evenp)))
+     23))
+
+  (finishes
+    (validate-with-schema
+     (schema (and integer (satisfies evenp)))
+     22)))
+
+(defun string/number-discriminator (thing)
+  (typecase thing
+    (string 0)
+    (integer 1)
+    (t (validation-error "Invalid discriminator"))))
+
+(deftest or-schema-test ()
+  (with-test-schema (schema (or integer string))
+    (ok 22)
+    (ok "foo")
+    (fails #p"lala"))
+
+  (with-test-schema (schema (or string integer :discriminator string/number-discriminator))
+    (ok 22)
+    (ok "foo")
+    (fails #p"lala")))
